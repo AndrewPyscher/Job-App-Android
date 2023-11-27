@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#CCCCCC">
+
+    <TextView
+        android:id="@+id/tvInfoTitleLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvInfoTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:text="Title Example"
+        app:layout_constraintBottom_toBottomOf="@+id/tvInfoTitleLabel"
+        app:layout_constraintStart_toEndOf="@+id/tvInfoTitleLabel"
+        app:layout_constraintTop_toTopOf="@+id/tvInfoTitleLabel" />
+
+    <TextView
+        android:id="@+id/tvInfoSalaryLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Salary"
+        app:layout_constraintStart_toStartOf="@+id/tvInfoTitleLabel"
+        app:layout_constraintTop_toBottomOf="@+id/tvInfoTitleLabel" />
+
+    <TextView
+        android:id="@+id/tvInfoSalary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="Salary Example"
+        app:layout_constraintBottom_toBottomOf="@+id/tvInfoSalaryLabel"
+        app:layout_constraintStart_toEndOf="@+id/tvInfoSalaryLabel"
+        app:layout_constraintTop_toTopOf="@+id/tvInfoSalaryLabel" />
+
+    <TextView
+        android:id="@+id/tvInfoTypeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Type:"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvInfoSalaryLabel"
+        app:layout_constraintTop_toBottomOf="@+id/tvInfoSalaryLabel" />
+
+    <TextView
+        android:id="@+id/tvInfoType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="Type Example"
+        app:layout_constraintBottom_toBottomOf="@+id/tvInfoTypeLabel"
+        app:layout_constraintStart_toEndOf="@+id/tvInfoTypeLabel"
+        app:layout_constraintTop_toTopOf="@+id/tvInfoTypeLabel" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
