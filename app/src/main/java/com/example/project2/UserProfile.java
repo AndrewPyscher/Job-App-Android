@@ -27,7 +27,7 @@ public class UserProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_user_profile);
 
-        // --------------<<<   INITIALIZE VIEWS   >>>-------------- \\
+        // --------------<<<   GET VIEWS   >>>-------------- \\
 
         btnEdit = findViewById(R.id.btnEdit);
         btnCancel = findViewById(R.id.btnCancel);

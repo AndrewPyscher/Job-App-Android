@@ -5,6 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <View
+        android:id="@+id/horizontal_line_list"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:background="#808080"
+        app:layout_constraintEnd_toEndOf="@+id/txtOrganization"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etDateStart" />
+
+    <View
+        android:id="@+id/vertical_line_list"
+        android:layout_width="2dp"
+        android:layout_height="0dp"
+        android:background="#808080"
+        app:layout_constraintBottom_toBottomOf="@+id/horizontal_line_list"
+        app:layout_constraintEnd_toStartOf="@+id/horizontal_line_list"
+        app:layout_constraintTop_toTopOf="@+id/txtTitle" />
+
     <TextView
         android:id="@+id/txtTitle"
         android:layout_width="0dp"
@@ -14,18 +34,12 @@
         android:layout_marginEnd="32dp"
         android:fontFamily="sans-serif-light"
         android:text="Job Title"
-        android:textSize="20sp"
+        android:textColor="#494949"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.17" />
 
     <TextView
         android:id="@+id/txtOrganization"
@@ -34,7 +48,7 @@
         android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-light"
         android:text="Place of Establishment"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/txtTitle"
         app:layout_constraintStart_toStartOf="@+id/txtTitle"
         app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
@@ -47,7 +61,8 @@
         android:ems="10"
         android:fontFamily="sans-serif-light"
         android:inputType="date"
-        android:textSize="16sp"
+        android:textSize="14sp"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="@+id/txtOrganization"
         app:layout_constraintTop_toBottomOf="@+id/txtOrganization" />
 
@@ -59,7 +74,29 @@
         android:ems="10"
         android:fontFamily="sans-serif-light"
         android:inputType="date"
-        android:textSize="16sp"
+        android:textSize="14sp"
+        android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/etDateStart"
         app:layout_constraintTop_toTopOf="@+id/etDateStart" />
+
+    <TextView
+        android:id="@+id/txtDateStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:text="Started: Date"
+        android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/etDateStart"
+        app:layout_constraintStart_toStartOf="@+id/etDateStart" />
+
+    <TextView
+        android:id="@+id/txtDateEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:text="Ended: Date"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/etDateEnd"
+        app:layout_constraintTop_toTopOf="@+id/txtDateStart" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
