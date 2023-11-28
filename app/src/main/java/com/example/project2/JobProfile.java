@@ -7,57 +7,29 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Date;
-
-public class UserProfile extends AppCompatActivity {
+public class JobProfile extends AppCompatActivity {
     ImageButton btnEdit, btnCancel;
-    TextView txtName, txtDescription, txtPhone, txtEmail;
+    TextView txtJobName, txtDescription, txtPhone, txtEmail;
     EditText etPhone, etEmail, etDescription;
-    ListView lstExperience, lstEducation;
-    EmploymentAdapter jobAdapter;
-    EducationAdapter educationAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_profile);
+        setContentView(R.layout.activity_job_profile);
 
         // --------------<<<   GET VIEWS   >>>-------------- \\
 
-        btnEdit = findViewById(R.id.btnEdit);
-        btnCancel = findViewById(R.id.btnCancel);
-        txtName = findViewById(R.id.txtName);
-        txtDescription = findViewById(R.id.txtDescription);
-        txtPhone = findViewById(R.id.txtPhone);
-        txtEmail = findViewById(R.id.txtEmail);
-        etPhone = findViewById(R.id.etPhone);
-        etEmail = findViewById(R.id.etEmail);
-        etDescription = findViewById(R.id.etDescription);
-        lstExperience = findViewById(R.id.lstExperience);
-        lstEducation = findViewById(R.id.lstEducation);
-
-        // --------------<<<   LIST VIEW SECTION   >>>-------------- \\
-
-        ArrayList<Job> jobHistory = new ArrayList<>();
-        jobHistory.add(new Job("Shift Manager", "McDonalds"));
-
-        jobAdapter = new EmploymentAdapter(this, jobHistory);
-
-        lstExperience.setAdapter(jobAdapter);
-
-        // ------ \\
-
-        ArrayList<School> educationHistory = new ArrayList<>();
-        educationHistory.add(new School("Saginaw Valley State University", "Computer Science", new Date(124,4,4)));
-
-        educationAdapter = new EducationAdapter(this, educationHistory);
-
-        lstEducation.setAdapter(educationAdapter);
-
+        btnEdit = findViewById(R.id.btnEditJob);
+        btnCancel = findViewById(R.id.btnCancelEdit);
+        txtJobName = findViewById(R.id.txtJobName);
+        txtDescription = findViewById(R.id.txtJobDescription);
+        txtPhone = findViewById(R.id.txtJobPhone);
+        txtEmail = findViewById(R.id.txtJobEmail);
+        etPhone = findViewById(R.id.etJobPhone);
+        etEmail = findViewById(R.id.etJobEmail);
+        etDescription = findViewById(R.id.etJobDescription);
 
         // --------------<<<   LISTENERS   >>>-------------- \\
 
@@ -72,19 +44,9 @@ public class UserProfile extends AppCompatActivity {
                 txtDescription.setText(etDescription.getText().toString().trim());
                 setProfileStatic();
             }
-            EmploymentAdapter.isEditable = !EmploymentAdapter.isEditable;
-            EducationAdapter.isEditable = !EducationAdapter.isEditable;
-            jobAdapter.notifyDataSetChanged();
-            educationAdapter.notifyDataSetChanged();
         });
 
-        btnCancel.setOnClickListener(v -> {
-            setProfileStatic();
-            EmploymentAdapter.isEditable = !EmploymentAdapter.isEditable;
-            EducationAdapter.isEditable = !EducationAdapter.isEditable;
-            jobAdapter.notifyDataSetChanged();
-            educationAdapter.notifyDataSetChanged();
-        });
+        btnCancel.setOnClickListener(v -> setProfileStatic());
     }
 
     // --------------<<<   UTILITY METHODS   >>>-------------- \\

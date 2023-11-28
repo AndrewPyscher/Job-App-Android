@@ -16,6 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class EducationAdapter extends BaseAdapter {
+    public static boolean isEditable = false;
     ArrayList<School> educationHistory;
     Context context;
 
@@ -48,9 +49,29 @@ public class EducationAdapter extends BaseAdapter {
         // --------------<<<   GET VIEWS   >>>-------------- \\
 
         TextView txtTitle = view.findViewById(R.id.txtTitle);
-        TextView txtOrganization = view.findViewById(R.id.txtOrganization);
+        TextView txtDepartment = view.findViewById(R.id.txtOrganization);
         TextView txtDateGraduate = view.findViewById(R.id.txtDateStart);
+        EditText etTitle = view.findViewById(R.id.etTitle);
+        EditText etDepartment = view.findViewById(R.id.etOrganization);
         EditText etDateGraduate = view.findViewById(R.id.etDateStart);
+
+        // --------------<<<   SET VIEW VISIBILITY   >>>-------------- \\
+
+        int txtVisibility = View.VISIBLE;
+        int etVisibility = View.INVISIBLE;
+
+        if(isEditable) {
+            txtVisibility = View.INVISIBLE;
+            etVisibility = View.VISIBLE;
+        }
+
+        txtTitle.setVisibility(txtVisibility);
+        txtDepartment.setVisibility(txtVisibility);
+        txtDateGraduate.setVisibility(txtVisibility);
+
+        etTitle.setVisibility(etVisibility);
+        etDepartment.setVisibility(etVisibility);
+        etDateGraduate.setVisibility(etVisibility);
 
         // Extra views that need to be removed
         TextView txtDateEnd = view.findViewById(R.id.txtDateEnd);
@@ -68,8 +89,10 @@ public class EducationAdapter extends BaseAdapter {
 
         // Set institution
         txtTitle.setText(mySchool.getInstitution());
+        etTitle.setText(mySchool.getInstitution());
         // Set department name (if exists)
-        txtOrganization.setText(mySchool.getDepartment());
+        txtDepartment.setText(mySchool.getDepartment());
+        etDepartment.setText(mySchool.getDepartment());
         // Set date started (if applicable)
         if(mySchool.getGraduationDate() != null && txtDateGraduate.getVisibility() == View.VISIBLE) {
             Log.d("WE_IN", "we should be in, ladies and gentlemen");

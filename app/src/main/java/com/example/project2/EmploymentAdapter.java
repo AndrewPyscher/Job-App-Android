@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class EmploymentAdapter extends BaseAdapter {
+    public static boolean isEditable = false;
     ArrayList<Job> employmentHistory;
     Context context;
 
@@ -50,9 +51,32 @@ public class EmploymentAdapter extends BaseAdapter {
         TextView txtOrganization = view.findViewById(R.id.txtOrganization);
         TextView txtDateStart = view.findViewById(R.id.txtDateStart);
         TextView txtDateEnd = view.findViewById(R.id.txtDateEnd);
+        EditText etTitle = view.findViewById(R.id.etTitle);
+        EditText etOrganization = view.findViewById(R.id.etOrganization);
         EditText etDateStart = view.findViewById(R.id.etDateStart);
         EditText etDateEnd = view.findViewById(R.id.etDateEnd);
         ImageButton btnSave = parent.getRootView().findViewById(R.id.btnEdit);    // Save button to update dates ;)
+
+
+        // --------------<<<   SET VIEW VISIBILITY   >>>-------------- \\
+
+        int txtVisibility = View.VISIBLE;
+        int etVisibility = View.INVISIBLE;
+
+        if(isEditable) {
+            txtVisibility = View.INVISIBLE;
+            etVisibility = View.VISIBLE;
+        }
+
+        txtTitle.setVisibility(txtVisibility);
+        txtOrganization.setVisibility(txtVisibility);
+        txtDateStart.setVisibility(txtVisibility);
+        txtDateEnd.setVisibility(txtVisibility);
+
+        etTitle.setVisibility(etVisibility);
+        etOrganization.setVisibility(etVisibility);
+        etDateStart.setVisibility(etVisibility);
+        etDateEnd.setVisibility(etVisibility);
 
         // Remove start date fields if no start date exists
         if(myJob.getDateStart() == null) {
@@ -70,9 +94,12 @@ public class EmploymentAdapter extends BaseAdapter {
 
         // Set Title
         txtTitle.setText(myJob.getTitle());
+        etTitle.setText(myJob.getTitle());
         // Set Organization name (if exists)
-        if(!myJob.getOrganization().equals(""))
+        if(!myJob.getOrganization().equals("")) {
             txtOrganization.setText(myJob.getOrganization());
+            etOrganization.setText(myJob.getOrganization());
+        }
         // Set date started (if applicable)
         if(myJob.getDateStart() != null && txtDateStart.getVisibility() == View.VISIBLE) {
             if(etDateStart.getText().toString().equals(""))
@@ -87,8 +114,8 @@ public class EmploymentAdapter extends BaseAdapter {
         } else
             etDateEnd.setText((new Date()).toString());
 
-        // --------------<<<   LISTENERS   >>>-------------- \\
 
+        // --------------<<<   LISTENERS   >>>-------------- \\
 
         return view;
     }
@@ -99,5 +126,13 @@ public class EmploymentAdapter extends BaseAdapter {
 
         return  c.get(Calendar.MONTH) + "/" +
                 c.get(Calendar.YEAR);
+    }
+
+    private void generateStaticList() {
+
+    }
+
+    private void generateEditableList() {
+
     }
 }
