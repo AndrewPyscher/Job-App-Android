@@ -3,7 +3,9 @@ package com.example.project2;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -42,12 +44,32 @@ public class UserProfile extends AppCompatActivity {
 
         // --------------<<<   LIST VIEW SECTION   >>>-------------- \\
 
+        // TODO: Get the user's real job history from backend
         ArrayList<Job> jobHistory = new ArrayList<>();
         jobHistory.add(new Job("Shift Manager", "McDonalds"));
+        jobHistory.add(new Job("Frying Cook", "Krusty Krab"));
+        jobHistory.add(new Job(false));
+
+        Log.d("USER_PROFILE", "Size of jobHistory: " + jobHistory.size());
 
         jobAdapter = new EmploymentAdapter(this, jobHistory);
 
         lstExperience.setAdapter(jobAdapter);
+
+        //set listAdapter in loop for getting final size
+        int totalHeight=0;
+        for (int i=0; i < jobAdapter.getCount(); i++) {
+            View listItem=jobAdapter.getView(i, null, lstExperience);
+            listItem.measure(0, 0);
+            Log.d("USER_PROFILE","Measured height: " + listItem.getMeasuredHeight());
+            totalHeight+=listItem.getMeasuredHeight();
+        }
+        //setting listview item in adapter
+        ViewGroup.LayoutParams params=lstExperience.getLayoutParams();
+        params.height=(totalHeight + (jobAdapter.getCount() - 1))/4;
+        lstExperience.setLayoutParams(params);
+        // print height of adapter on log
+        Log.i("height of listItem:", String.valueOf(totalHeight));
 
         // ------ \\
 
@@ -67,9 +89,10 @@ public class UserProfile extends AppCompatActivity {
                 setProfileEditable();
             else {
                 // Save Changes
-                txtPhone.setText(etPhone.getText().toString().trim());
-                txtEmail.setText(etEmail.getText().toString().trim());
-                txtDescription.setText(etDescription.getText().toString().trim());
+//                txtPhone.setText(etPhone.getText().toString().trim());
+//                txtEmail.setText(etEmail.getText().toString().trim());
+//                txtDescription.setText(etDescription.getText().toString().trim());
+                jobAdapter.saveJobData();
                 setProfileStatic();
             }
             EmploymentAdapter.isEditable = !EmploymentAdapter.isEditable;
@@ -79,6 +102,7 @@ public class UserProfile extends AppCompatActivity {
         });
 
         btnCancel.setOnClickListener(v -> {
+            jobAdapter.cancelChanges();
             setProfileStatic();
             EmploymentAdapter.isEditable = !EmploymentAdapter.isEditable;
             EducationAdapter.isEditable = !EducationAdapter.isEditable;
