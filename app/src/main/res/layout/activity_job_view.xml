@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".JobViewActivity">
+
+    <TextView
+        android:id="@+id/tvJVTitleLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Job: "
+        android:textSize="36sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvJVTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Job Example"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvJVTitleLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvJVTitleLabel"
+        app:layout_constraintTop_toTopOf="@+id/tvJVTitleLabel" />
+
+    <TextView
+        android:id="@+id/tvJVCompanyLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="company: "
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvJVTitleLabel" />
+
+    <TextView
+        android:id="@+id/tvJVCompany"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="company example"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvJVCompanyLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvJVCompanyLabel"
+        app:layout_constraintTop_toTopOf="@+id/tvJVCompanyLabel" />
+
+    <TextView
+        android:id="@+id/tvJVCoordinatesLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="coordinates: "
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvJVCompanyLabel" />
+
+    <TextView
+        android:id="@+id/tvJVCoordiantes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="coordinate example"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvJVCoordinatesLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvJVCoordinatesLabel"
+        app:layout_constraintTop_toTopOf="@+id/tvJVCoordinatesLabel"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/tvJVSalaryLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="salary:"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvJVCoordinatesLabel" />
+
+    <TextView
+        android:id="@+id/tvJVSalary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="salary example"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvJVSalaryLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvJVSalaryLabel"
+        app:layout_constraintTop_toTopOf="@+id/tvJVSalaryLabel"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/tvJVTypeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="type: "
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvJVSalaryLabel" />
+
+    <TextView
+        android:id="@+id/tvJVType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="type example"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvJVTypeLabel"
+        app:layout_constraintStart_toEndOf="@+id/tvJVTypeLabel"
+        app:layout_constraintTop_toTopOf="@+id/tvJVTypeLabel" />
+
+    <TextView
+        android:id="@+id/tvJVRatingLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="rating: "
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvJVTypeLabel" />
+
+    <TextView
+        android:id="@+id/tvJVRating"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="123"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvJVRatingLabel"
+        app:layout_constraintEnd_toStartOf="@+id/btnJVApply"
+        app:layout_constraintStart_toEndOf="@+id/tvJVRatingLabel"
+        app:layout_constraintTop_toTopOf="@+id/tvJVRatingLabel"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/tvJVDescriptionLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="description: "
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvJVRatingLabel" />
+
+    <TextView
+        android:id="@+id/tvJVDescription"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:scrollbars="vertical"
+        android:text="description example"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvJVDescriptionLabel" />
+
+    <Button
+        android:id="@+id/btnJVApply"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Apply"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/tvJVDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvJVType"
+        app:layout_constraintTop_toBottomOf="@+id/tvJVSalary" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
