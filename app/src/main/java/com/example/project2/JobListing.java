@@ -3,38 +3,46 @@ package com.example.project2;
 import com.google.android.gms.maps.model.LatLng;
 
 public class JobListing {
-    String title, company, type;
-    Double salary, rating;
+    int id;
+    String title, description, category;
+    Double salary;
     LatLng location;
 
-    public JobListing(String title, String company, LatLng location, String type, Double salary,
-                      Double rating) {
+    // Parametrized constructor
+    public JobListing(int id, String title, String description, String category, Double salary,
+                      LatLng location) {
+        this.id = id;
         this.title = title;
-        this.company = company;
-        this.location = location;
-        this.type = type;
+        this.description = description;
+        this.category = category;
         this.salary = salary;
-        this.rating = rating;
+        this.location = location;
+    }
+
+    // Parametrized constructor for errors
+    public JobListing(String title, String description) {
+        this.title = title;
+        this.description = description;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public String getCompany() {
-        return company;
+    public int getId() {
+        return id;
     }
 
-    public String getType() {
-        return type;
+    public String getDescription() {
+        return description;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     public Double getSalary() {
         return salary;
-    }
-
-    public Double getRating() {
-        return rating;
     }
 
     public LatLng getLocation() {
