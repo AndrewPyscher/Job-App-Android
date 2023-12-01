@@ -2,6 +2,8 @@ package com.example.project2;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
+
 public class JobListing {
     String title, company, type;
     Double salary, rating;
@@ -39,5 +41,11 @@ public class JobListing {
 
     public LatLng getLocation() {
         return location;
+    }
+
+    public ArrayList<JobListing> getAllJobs(){
+
+
+        return null;
     }
 }
