@@ -4,63 +4,102 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#CCCCCC">
-
-    <TextView
-        android:id="@+id/tvInfoTitleLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Title: "
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/tvInfoTitle"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="4dp"
         android:text="Title Example"
-        app:layout_constraintBottom_toBottomOf="@+id/tvInfoTitleLabel"
-        app:layout_constraintStart_toEndOf="@+id/tvInfoTitleLabel"
-        app:layout_constraintTop_toTopOf="@+id/tvInfoTitleLabel" />
-
-    <TextView
-        android:id="@+id/tvInfoSalaryLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Salary"
-        app:layout_constraintStart_toStartOf="@+id/tvInfoTitleLabel"
-        app:layout_constraintTop_toBottomOf="@+id/tvInfoTitleLabel" />
+        app:layout_constraintBottom_toTopOf="@+id/tvInfoSalary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tvInfoSalary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
         android:text="Salary Example"
-        app:layout_constraintBottom_toBottomOf="@+id/tvInfoSalaryLabel"
-        app:layout_constraintStart_toEndOf="@+id/tvInfoSalaryLabel"
-        app:layout_constraintTop_toTopOf="@+id/tvInfoSalaryLabel" />
+        app:layout_constraintBottom_toTopOf="@+id/tvInfoCategory"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/tvInfoTypeLabel"
+        android:id="@+id/tvInfoCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Type:"
+        android:text="Category Example"
+        app:layout_constraintBottom_toTopOf="@+id/ivStar1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivStar1"
+        android:layout_width="32dp"
+        android:layout_height="31dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/tvInstructions"
+        app:layout_constraintEnd_toStartOf="@+id/ivStar2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/rating_star_off" />
+
+    <ImageView
+        android:id="@+id/ivStar2"
+        android:layout_width="32dp"
+        android:layout_height="31dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/ivStar1"
+        app:layout_constraintEnd_toStartOf="@+id/ivStar3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ivStar1"
+        app:layout_constraintTop_toTopOf="@+id/ivStar1"
+        app:srcCompat="@drawable/rating_star_off" />
+
+    <ImageView
+        android:id="@+id/ivStar3"
+        android:layout_width="32dp"
+        android:layout_height="31dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/ivStar2"
+        app:layout_constraintEnd_toStartOf="@+id/ivStar4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ivStar2"
+        app:layout_constraintTop_toTopOf="@+id/ivStar2"
+        app:srcCompat="@drawable/rating_star_off" />
+
+    <ImageView
+        android:id="@+id/ivStar4"
+        android:layout_width="32dp"
+        android:layout_height="31dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/ivStar3"
+        app:layout_constraintEnd_toStartOf="@+id/ivStar5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ivStar3"
+        app:layout_constraintTop_toTopOf="@+id/ivStar3"
+        app:srcCompat="@drawable/rating_star_off" />
+
+    <ImageView
+        android:id="@+id/ivStar5"
+        android:layout_width="32dp"
+        android:layout_height="31dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/ivStar4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivStar4"
+        app:layout_constraintTop_toTopOf="@+id/ivStar4"
+        app:srcCompat="@drawable/rating_star_off" />
+
+    <TextView
+        android:id="@+id/tvInstructions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click for more infomation"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tvInfoSalaryLabel"
-        app:layout_constraintTop_toBottomOf="@+id/tvInfoSalaryLabel" />
-
-    <TextView
-        android:id="@+id/tvInfoType"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="Type Example"
-        app:layout_constraintBottom_toBottomOf="@+id/tvInfoTypeLabel"
-        app:layout_constraintStart_toEndOf="@+id/tvInfoTypeLabel"
-        app:layout_constraintTop_toTopOf="@+id/tvInfoTypeLabel" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
