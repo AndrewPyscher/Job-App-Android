@@ -1,6 +1,10 @@
 package com.example.project2;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -126,6 +130,25 @@ public class UserProfile extends AppCompatActivity {
             jobAdapter.notifyDataSetChanged();
             educationAdapter.notifyDataSetChanged();
         });
+
+
+        ArrayList<String> animalNames = new ArrayList<>();
+        animalNames.add("Horse");
+        animalNames.add("Cow");
+        animalNames.add("Camel");
+        animalNames.add("Sheep");
+        animalNames.add("Goat");
+
+        // set up the RecyclerView
+        AnimalAdapter adapter;
+
+        RecyclerView recyclerView = findViewById(R.id.rv_animals);
+//       recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+//        recyclerView.setLayoutManager(new GridLayoutManager(this,1,GridLayoutManager.HORIZONTAL,false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new AnimalAdapter(this, animalNames);
+
+        recyclerView.setAdapter(adapter);
     }
 
     // --------------<<<   UTILITY METHODS   >>>-------------- \\
