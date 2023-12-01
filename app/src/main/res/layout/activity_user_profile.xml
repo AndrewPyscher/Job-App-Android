@@ -159,6 +159,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
+
             <ListView
                 android:id="@+id/lstExperience"
                 android:layout_width="0dp"
@@ -167,7 +168,10 @@
                 android:paddingHorizontal="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                app:layout_constraintTop_toBottomOf="@+id/textView3"
+                />
+
+
 
             <TextView
                 android:id="@+id/textView723"
@@ -219,7 +223,8 @@
                 android:layout_marginTop="16dp"
                 android:background="#000000"
                 android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@id/scroll_view"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/lstEducation" />
 
             <TextView

@@ -48,28 +48,37 @@ public class UserProfile extends AppCompatActivity {
         ArrayList<Job> jobHistory = new ArrayList<>();
         jobHistory.add(new Job("Shift Manager", "McDonalds"));
         jobHistory.add(new Job("Frying Cook", "Krusty Krab"));
-        jobHistory.add(new Job(false));
+
 
         Log.d("USER_PROFILE", "Size of jobHistory: " + jobHistory.size());
 
         jobAdapter = new EmploymentAdapter(this, jobHistory);
 
         lstExperience.setAdapter(jobAdapter);
+        // Calculate height of listview
+        // TODO: Create the actual function
+        //  Ensure 2 sizes are calculated.
+        //      - Static list of complete entries
+        //      - Extra template view
+        //  Could use percentage of view height.
+        //      Ensure guideline in XML is ABSOLUTE endpoint.
+//        setListViewHeight();
+        lstExperience.setNestedScrollingEnabled(false);
 
         //set listAdapter in loop for getting final size
-        int totalHeight=0;
-        for (int i=0; i < jobAdapter.getCount(); i++) {
-            View listItem=jobAdapter.getView(i, null, lstExperience);
-            listItem.measure(0, 0);
-            Log.d("USER_PROFILE","Measured height: " + listItem.getMeasuredHeight());
-            totalHeight+=listItem.getMeasuredHeight();
-        }
-        //setting listview item in adapter
-        ViewGroup.LayoutParams params=lstExperience.getLayoutParams();
-        params.height=(totalHeight + (jobAdapter.getCount() - 1))/4;
-        lstExperience.setLayoutParams(params);
-        // print height of adapter on log
-        Log.i("height of listItem:", String.valueOf(totalHeight));
+//        int totalHeight=0;
+//        for (int i=0; i < jobAdapter.getCount(); i++) {
+//            View listItem=jobAdapter.getView(i, null, lstExperience);
+//            listItem.measure(0, 0);
+//            Log.d("USER_PROFILE","Measured height: " + listItem.getMeasuredHeight());
+//            totalHeight+=listItem.getMeasuredHeight();
+//        }
+//        //setting listview item in adapter
+//        ViewGroup.LayoutParams params=lstExperience.getLayoutParams();
+//        params.height=(totalHeight + (jobAdapter.getCount() - 1))/4;
+//        lstExperience.setLayoutParams(params);
+//        // print height of adapter on log
+//        Log.i("height of listItem:", String.valueOf(totalHeight));
 
         // ------ \\
 
@@ -85,14 +94,22 @@ public class UserProfile extends AppCompatActivity {
 
         // 'Edit' button dual-functions as 'Save' button
         btnEdit.setOnClickListener(v -> {
-            if(etDescription.getVisibility() == View.INVISIBLE)
+            if(etDescription.getVisibility() == View.INVISIBLE) {
                 setProfileEditable();
+                jobHistory.add(new Job(false));
+                jobAdapter = new EmploymentAdapter(this, jobHistory);
+                lstExperience.setAdapter(jobAdapter);
+            }
+
             else {
                 // Save Changes
 //                txtPhone.setText(etPhone.getText().toString().trim());
 //                txtEmail.setText(etEmail.getText().toString().trim());
 //                txtDescription.setText(etDescription.getText().toString().trim());
                 jobAdapter.saveJobData();
+                jobHistory.remove(jobHistory.size()-1);
+                jobAdapter = new EmploymentAdapter(this, jobHistory);
+                lstExperience.setAdapter(jobAdapter);
                 setProfileStatic();
             }
             EmploymentAdapter.isEditable = !EmploymentAdapter.isEditable;
