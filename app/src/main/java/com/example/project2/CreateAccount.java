@@ -1,9 +1,7 @@
 package com.example.project2;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ContextParams;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,18 +10,10 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class CreateAccount extends AppCompatActivity {
     Button btnConfirmAccount;
@@ -93,8 +83,10 @@ public class CreateAccount extends AppCompatActivity {
                 role = "employer";
             }
             UseServer useServer = new UseServer(this);
+            AtomicReference<String> saveResponse = new AtomicReference<>("");
             useServer.createAccount(response -> {
                 Log.d("test", "onCreate: " +response);
+                saveResponse.set(response);
             }, role, etUsername1.getText().toString(), etConfirmPassword.getText().toString() );
         });
 
