@@ -46,72 +46,48 @@ public class SignInPage extends AppCompatActivity {
         sp = getSharedPreferences("user", MODE_PRIVATE);
         ed = sp.edit();
 
-        if(sp.getBoolean("stay",false)){
-            String user = sp.getString("user","");
-            if(!user.equals("")){
-                Intent i = new Intent(this, MapActivity.class);
-                startActivity(i);
-            }
-        }
 
 
 
+//        if(sp.getBoolean("stay",false)){
+//            String user = sp.getString("user","");
+//            if(!user.equals("")){
+//                Intent i = new Intent(this, MapActivity.class);
+//                startActivity(i);
+//            }
+//        }
         btnCreateAccount.setOnClickListener(e->{
             Intent i = new Intent(this, CreateAccount.class);
             startActivity(i);
         });
 
-        btnSignIn.setOnClickListener(e->{
-        try {
-            String url = "http://162.243.172.218:5000/login";
-            StringRequest createAccountRequest = new StringRequest(Request.Method.POST, url,
-                    response -> {
-                        Log.d("test", "onCreate: " + response);
-                        tvError.setText(response);
-                        if(response.equals("login")){
-                            if(chkStaySignedIn.isChecked()){
-                                ed.putBoolean("stay",true);
-                            }
-                            ed.putString("user", etUsername.getText().toString());
-                            ed.commit();
-                            Intent i = new Intent(this, MapActivity.class);
-                            startActivity(i);
-                        }
-                        else{
-                            tvError.setVisibility(View.VISIBLE);
-                            tvError.setText("Incorrect username or password");
-                        }
-
-                    },
-                    error -> Log.d("test", "onErrorResponse: " + error)
-            ) {
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    JSONObject jsonParams = new JSONObject();
-                    try {
-                        jsonParams.put("username", etUsername.getText().toString());
-                        jsonParams.put("password", etPassword1.getText().toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+        btnSignIn.setOnClickListener(e -> {
+            UseServer use = UseServer.getInstance(this);
+            use.login(response -> {
+                Log.d("test", "onCreate: " + response);
+                tvError.setText(response);
+                if (response.equals("login")) {
+                    if (chkStaySignedIn.isChecked()) {
+                        ed.putBoolean("stay", true);
                     }
-                    return jsonParams.toString().getBytes();
+                    ed.putString("user", etUsername.getText().toString());
+                    ed.commit();
+
+                    Intent i = new Intent(this, MapActivity.class);
+                    startActivity(i);
+                } else {
+                    tvError.setVisibility(View.VISIBLE);
+                    tvError.setText("Incorrect username or password");
                 }
-                @Override
-                public Map<String, String> getHeaders() {
-                    Map<String, String> headers = new HashMap<>();
-                    headers.put("Content-Type", "application/json");
-                    return headers;
-                }
-            };
-            queue.add(createAccountRequest);
-        }catch (Exception err){
-            err.printStackTrace();
-        }
+
+            }, etUsername.getText().toString(), etPassword1.getText().toString());
+
+
         });
+
+
+
+
 
     }
 }
