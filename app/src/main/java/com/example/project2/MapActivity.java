@@ -74,7 +74,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         btnMapApply = findViewById(R.id.btnMapApply);
         pbInfo = findViewById(R.id.pbMapInfo);
         pbMap = findViewById(R.id.pbMapFragment);
-
         // Make info progress bar visible
         pbMap.setVisibility(View.VISIBLE);
 

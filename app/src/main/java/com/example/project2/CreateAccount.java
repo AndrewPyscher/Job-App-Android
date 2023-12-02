@@ -1,9 +1,7 @@
 package com.example.project2;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ContextParams;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,18 +10,10 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class CreateAccount extends AppCompatActivity {
     Button btnConfirmAccount;
@@ -85,52 +75,19 @@ public class CreateAccount extends AppCompatActivity {
                 return;
             }
 
-            String url = "http://162.243.172.218:5000/createUser";
-            StringRequest createAccountRequest = new StringRequest(Request.Method.POST, url,
-                    response -> {
-                        Log.d("test", "onCreate: " + response);
-                        if(response.equals("Username Already Exists!")){
-                            Log.d("tests", "onCreate: user exists" );
-                        }
-
-                        //account created successfully
-
-                    },
-                    error -> Log.d("test", "onErrorResponse: " + error)
-            ) {
-
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    JSONObject jsonParams = new JSONObject();
-                    String role = "";
-                    if(rdbApplicant.isChecked()){
-                        role = "applicant";
-                    }
-                    if(rdbEmployer.isChecked()){
-                        role = "employer";
-                    }
-                    try {
-                        jsonParams.put("role", role);
-                        jsonParams.put("username", etUsername1.getText()+"");
-                        jsonParams.put("password", etConfirmPassword.getText()+"");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    return jsonParams.toString().getBytes();
-                }
-
-                @Override
-                protected Map<String, String> getParams() {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("Content-Type", "application/json");
-                    return params;
-                }
-            };
-        queue.add(createAccountRequest);
+            String role = "";
+            if(rdbApplicant.isChecked()){
+                role = "applicant";
+            }
+            if(rdbEmployer.isChecked()){
+                role = "employer";
+            }
+            UseServer useServer = new UseServer(this);
+            AtomicReference<String> saveResponse = new AtomicReference<>("");
+            useServer.createAccount(response -> {
+                Log.d("test", "onCreate: " +response);
+                saveResponse.set(response);
+            }, role, etUsername1.getText().toString(), etConfirmPassword.getText().toString() );
         });
 
 
