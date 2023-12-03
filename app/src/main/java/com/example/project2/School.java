@@ -6,16 +6,54 @@ public class School {
     private String institution;
     private String department;
     private Date graduationDate;
+    private boolean isVisible;
+    private School temp;
+
+    // Used for creating clones
+    public School() {
+        this.institution = "";
+        this.department = "";
+        this.graduationDate = null;
+    }
+
+    public School(boolean isVisible) {
+        this("","");
+        this.isVisible = isVisible;
+    }
 
     public School(String institution, String department) {
         this.institution = institution;
         this.department = department;
+        this.isVisible = true;
+        this.temp = cloneSchool(this);
     }
 
     public School(String institution, String department, Date graduationDate) {
-        this.institution = institution;
-        this.department = department;
+        this(institution, department);
         this.graduationDate = graduationDate;
+    }
+
+
+
+    private School cloneSchool(School parent) {
+        School newSchool = new School();
+        newSchool.institution = parent.institution;
+        newSchool.department = parent.department;
+        if(parent.graduationDate != null)
+            newSchool.graduationDate = parent.graduationDate;
+
+        return newSchool;
+    }
+
+    public void saveChanges() {
+        this.institution = temp.institution;
+        this.department = temp.department;
+        this.graduationDate = temp.graduationDate;
+        this.isVisible = true;
+    }
+
+    public void cancelChanges() {
+        this.temp = cloneSchool(this);
     }
 
     // --------------<<<   GETTERS AND SETTERS   >>>-------------- \\
@@ -25,7 +63,7 @@ public class School {
     }
 
     public void setInstitution(String institution) {
-        this.institution = institution;
+        temp.institution = institution;
     }
 
     public String getDepartment() {
@@ -33,7 +71,7 @@ public class School {
     }
 
     public void setDepartment(String department) {
-        this.department = department;
+        temp.department = department;
     }
 
     public Date getGraduationDate() {
@@ -41,6 +79,17 @@ public class School {
     }
 
     public void setGraduationDate(Date graduationDate) {
-        this.graduationDate = graduationDate;
+        temp.graduationDate = graduationDate;
+    }
+
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    public void setVisible(boolean visible) {
+        isVisible = visible;
+    }
+    public boolean isEmpty() {
+        return (this.institution == null && this.department == null);
     }
 }

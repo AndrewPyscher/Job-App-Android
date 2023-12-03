@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <View
         android:id="@+id/horizontal_line_list"
@@ -32,14 +32,13 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="8dp"
         android:layout_marginStart="12dp"
-        android:layout_marginEnd="32dp"
         android:fontFamily="sans-serif-light"
-        android:text="Job Title"
+        android:hint="Job Title"
         android:textColor="#494949"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@+id/etTitle"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imgDelete"
         app:layout_constraintStart_toStartOf="@+id/guideline4" />
 
     <TextView
@@ -49,11 +48,10 @@
         android:layout_marginVertical="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
         android:fontFamily="sans-serif-light"
-        android:text="Place of Establishment"
+        android:hint="Place of Establishment"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imgDelete"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
 
@@ -62,7 +60,6 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
         android:ems="10"
         android:fontFamily="sans-serif-light"
         android:inputType="date"
@@ -92,7 +89,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-light"
-        android:text="Started: Date"
+        android:hint="Started: Date"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/txtOrganization" />
@@ -101,11 +98,11 @@
         android:id="@+id/txtDateEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"
+        android:layout_marginStart="32dp"
         android:fontFamily="sans-serif-light"
-        android:text="Ended: Date"
+        android:hint="Ended: Date"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/etDateEnd"
+        app:layout_constraintStart_toEndOf="@id/etDateStart"
         app:layout_constraintTop_toTopOf="@+id/txtDateStart" />
 
     <EditText
@@ -113,13 +110,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="8dp"
         android:ems="10"
         android:fontFamily="sans-serif-light"
         android:inputType="text"
         android:textSize="16sp"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/imgDelete"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/etTitle" />
 
@@ -129,13 +126,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="8dp"
         android:ems="10"
         android:fontFamily="sans-serif-light"
         android:inputType="text"
         android:textSize="16sp"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imgDelete"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -144,6 +141,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.08272506" />
+        app:layout_constraintGuide_begin="34dp" />
+
+    <ImageView
+        android:id="@+id/imgDelete"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="16dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/txtOrganization"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtTitle"
+        app:srcCompat="@drawable/cancel_button_temp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
