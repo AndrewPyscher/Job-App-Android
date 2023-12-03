@@ -8,6 +8,7 @@ public class Formatting {
     public Formatting() {
     }
     String delimiter = "!@#";
+
     String delimiter2 = "\\$%\\^";
     public ArrayList<JobListing> recieveJob(String input){
         ArrayList<JobListing> jobListings = new ArrayList<>();
