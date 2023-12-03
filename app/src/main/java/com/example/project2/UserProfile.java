@@ -19,7 +19,7 @@ public class UserProfile extends AppCompatActivity {
 
     public static final String TAG = "USER_PROFILE";
     ImageButton btnEdit, btnCancel;
-    TextView txtName, txtDescription, txtPhone, txtEmail;
+    TextView txtName, txtDescription, txtPhone, txtEmail , txtExperience, txtEducation;
     EditText etName, etPhone, etEmail, etDescription;
 //    ListView lstExperience, lstEducation;
     RecyclerView rvEmployment, rvEducation;
@@ -39,6 +39,8 @@ public class UserProfile extends AppCompatActivity {
         txtDescription = findViewById(R.id.txtDescription);
         txtPhone = findViewById(R.id.txtPhone);
         txtEmail = findViewById(R.id.txtEmail);
+        txtExperience = findViewById(R.id.txtExperience);
+        txtEducation = findViewById(R.id.txtEducation);
         etName = findViewById(R.id.etName);
         etPhone = findViewById(R.id.etPhone);
         etEmail = findViewById(R.id.etEmail);
@@ -59,11 +61,12 @@ public class UserProfile extends AppCompatActivity {
         Log.d(TAG, "Size of jobHistory: " + jobHistory.size());
 
         // ------ \\
-
+//        txtExperience.setVisibility(View.INVISIBLE);
 //        rvEmployment.setAdapter(jobAdapter);
         jobAdapter = new JobAdapter(this, jobHistory);
         rvEmployment.setLayoutManager(new LinearLayoutManager(this));
         rvEmployment.setAdapter(jobAdapter);
+
 
         // ------ \\
 
@@ -71,9 +74,14 @@ public class UserProfile extends AppCompatActivity {
         educationHistory.add(new School("Saginaw Valley State University", "Computer Science", new Date(124,4,4)));
         educationHistory.add(new School("Georgia Tech", "Computer Science", new Date(125,4,4)));
 
+//        if(educationHistory.size() == 0)
+//            txtEducation.setVisibility(View.INVISIBLE);
+//        else {
         educationAdapter = new EducationAdapter(this, educationHistory);
         rvEducation.setLayoutManager(new LinearLayoutManager(this));
         rvEducation.setAdapter(educationAdapter);
+//        }
+
 
 
         // --------------<<<   LISTENERS   >>>-------------- \\
