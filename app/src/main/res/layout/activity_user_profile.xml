@@ -1,294 +1,310 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scroll_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:fillViewport="true"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="@+id/imgProfilePic">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/txtExperience"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="Experience:"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.15"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/section_separator1" />
+            <androidx.constraintlayout.widget.ConstraintLayout
 
-            <TextView
-                android:id="@+id/txtEducation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="Education:"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.151"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rvEmployment" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/imgProfilePic"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:scaleType="centerCrop"
-                app:layout_constraintBottom_toTopOf="@+id/guideline"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/unique_profile_stencil" />
+                <TextView
+                    android:id="@+id/txtExperience"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="Experience:"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.15"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/section_separator1" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_begin="242dp" />
+                <TextView
+                    android:id="@+id/txtEducation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="Education:"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.151"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rvEmployment" />
 
+                <ImageView
+                    android:id="@+id/imgProfilePic"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/unique_profile_stencil" />
 
-            <ImageButton
-                android:id="@+id/btnEdit"
-                android:layout_width="82dp"
-                android:layout_height="62dp"
-                android:background="@null"
-                android:scaleType="centerInside"
-                app:layout_constraintBottom_toTopOf="@+id/guideline"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.9"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guideline"
-                app:srcCompat="@drawable/edit_button_temp" />
-
-            <ImageButton
-                android:id="@+id/btnCancel"
-                android:layout_width="82dp"
-                android:layout_height="62dp"
-                android:background="@null"
-                android:scaleType="centerInside"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toTopOf="@+id/guideline"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guideline"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/cancel_button_temp" />
-
-            <TextView
-                android:id="@+id/txtName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
-                android:fontFamily="sans-serif-smallcaps"
-                android:letterSpacing=".25"
-                android:text="Smelly Shelly"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imgProfilePic" />
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="242dp" />
 
 
-            <View
-                android:id="@+id/section_separator1"
-                android:layout_width="320dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="32dp"
-                android:background="#000000"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.494"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtDescription" />
+                <ImageButton
+                    android:id="@+id/btnEdit"
+                    android:layout_width="82dp"
+                    android:layout_height="62dp"
+                    android:background="@null"
+                    android:scaleType="centerInside"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.9"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/guideline"
+                    app:srcCompat="@drawable/edit_button_temp" />
 
-            <TextView
-                android:id="@+id/txtDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:fontFamily="sans-serif-light"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="25dp"
-                android:text="Hi! I'm Smelly Shelly, a student at Saginaw Valley State University.\nI want to make a positive difference in the local area, and am open to any odd-job.\n\nI'm the ultimate employee!"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+                <ImageButton
+                    android:id="@+id/btnCancel"
+                    android:layout_width="82dp"
+                    android:layout_height="62dp"
+                    android:background="@null"
+                    android:scaleType="centerInside"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/guideline"
+                    app:layout_constraintVertical_bias="0.0"
+                    app:srcCompat="@drawable/cancel_button_temp" />
 
-            <EditText
-                android:id="@+id/etDescription"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:ems="10"
-                android:fontFamily="sans-serif-light"
-                android:gravity="start|top"
-                android:inputType="textMultiLine"
-                android:paddingHorizontal="25dp"
-                android:textSize="16sp"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+                <TextView
+                    android:id="@+id/txtName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="48dp"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:letterSpacing=".25"
+                    android:text="Smelly Shelly"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imgProfilePic" />
 
 
-            <TextView
-                android:id="@+id/textView723"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="64dp"
-                android:layout_marginTop="24dp"
-                android:fontFamily="sans-serif-medium"
-                android:paddingHorizontal="15dp"
-                android:text="Phone:"
-                android:textSize="16sp"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtName" />
+                <View
+                    android:id="@+id/section_separator1"
+                    android:layout_width="320dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="32dp"
+                    android:background="#000000"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.494"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtDescription" />
 
-            <TextView
-                android:id="@+id/txtPhone"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="32dp"
-                android:fontFamily="sans-serif-light"
-                android:paddingHorizontal="15dp"
-                android:text="(123) 456-7890"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/textView723"
-                app:layout_constraintTop_toTopOf="@+id/textView723" />
+                <TextView
+                    android:id="@+id/txtDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="25dp"
+                    android:text="Hi! I'm Smelly Shelly, a student at Saginaw Valley State University.\nI want to make a positive difference in the local area, and am open to any odd-job.\n\nI'm the ultimate employee!"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="64dp"
-                android:layout_marginTop="16dp"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:paddingHorizontal="15dp"
-                android:text="Email:"
-                android:textSize="16sp"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView723" />
+                <EditText
+                    android:id="@+id/etDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:ems="10"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="start|top"
+                    android:inputType="textMultiLine"
+                    android:paddingHorizontal="25dp"
+                    android:textSize="16sp"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-            <View
-                android:id="@+id/section_separator2"
-                android:layout_width="320dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="8dp"
-                android:background="#000000"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rvEducation" />
 
-            <TextView
-                android:id="@+id/txtEmail"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="32dp"
-                android:fontFamily="sans-serif-light"
-                android:paddingHorizontal="15dp"
-                android:text="shellysmells@aol.com"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/textView7"
-                app:layout_constraintTop_toTopOf="@+id/textView7" />
+                <TextView
+                    android:id="@+id/textView723"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="64dp"
+                    android:layout_marginTop="24dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:paddingHorizontal="15dp"
+                    android:text="Phone:"
+                    android:textSize="16sp"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtName" />
 
-            <EditText
-                android:id="@+id/etPhone"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="32dp"
-                android:ems="10"
-                android:fontFamily="sans-serif-light"
-                android:inputType="phone"
-                android:textSize="14sp"
-                android:visibility="invisible"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textView723"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView723" />
+                <TextView
+                    android:id="@+id/txtPhone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="32dp"
+                    android:fontFamily="sans-serif-light"
+                    android:paddingHorizontal="15dp"
+                    android:text="(123) 456-7890"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/textView723"
+                    app:layout_constraintTop_toTopOf="@+id/textView723" />
 
-            <EditText
-                android:id="@+id/etEmail"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="5dp"
-                android:layout_marginEnd="32dp"
-                android:ems="10"
-                android:fontFamily="sans-serif-light"
-                android:hint="example@domain.com"
-                android:inputType="text"
-                android:textSize="14sp"
-                android:visibility="invisible"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textView7"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView7" />
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="64dp"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:paddingHorizontal="15dp"
+                    android:text="Email:"
+                    android:textSize="16sp"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView723" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvEmployment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtExperience" />
+                <View
+                    android:id="@+id/section_separator2"
+                    android:layout_width="320dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#000000"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rvEducation" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvEducation"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtEducation" />
+                <TextView
+                    android:id="@+id/txtEmail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="32dp"
+                    android:fontFamily="sans-serif-light"
+                    android:paddingHorizontal="15dp"
+                    android:text="shellysmells@aol.com"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/textView7"
+                    app:layout_constraintTop_toTopOf="@+id/textView7" />
 
-            <EditText
-                android:id="@+id/etName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:fontFamily="sans-serif-smallcaps"
-                android:gravity="center"
-                android:inputType="text"
-                android:letterSpacing=".25"
-                android:textAlignment="gravity"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:visibility="invisible"
-                app:layout_constraintBaseline_toBaselineOf="@+id/txtName"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                <EditText
+                    android:id="@+id/etPhone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="32dp"
+                    android:ems="10"
+                    android:fontFamily="sans-serif-light"
+                    android:inputType="phone"
+                    android:textSize="14sp"
+                    android:visibility="invisible"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textView723"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView723" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <EditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginEnd="32dp"
+                    android:ems="10"
+                    android:fontFamily="sans-serif-light"
+                    android:hint="example@domain.com"
+                    android:inputType="text"
+                    android:textSize="14sp"
+                    android:visibility="invisible"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textView7"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView7" />
 
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvEmployment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="32dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtExperience" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvEducation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="32dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtEducation" />
+
+                <EditText
+                    android:id="@+id/etName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:gravity="center"
+                    android:inputType="text"
+                    android:letterSpacing=".25"
+                    android:textAlignment="gravity"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:visibility="invisible"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/txtName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 

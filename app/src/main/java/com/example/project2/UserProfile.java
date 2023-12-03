@@ -61,6 +61,7 @@ public class UserProfile extends AppCompatActivity {
         Log.d(TAG, "Size of jobHistory: " + jobHistory.size());
 
         // ------ \\
+
 //        txtExperience.setVisibility(View.INVISIBLE);
 //        rvEmployment.setAdapter(jobAdapter);
         jobAdapter = new JobAdapter(this, jobHistory);
