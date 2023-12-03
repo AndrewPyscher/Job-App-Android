@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -68,9 +69,12 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
             holder.etDateGraduate.setVisibility(View.GONE);
         }
 
+        if(holder.getAdapterPosition() == educationHistory.size()-1 && !mySchool.isVisible())
+            holder.imgDelete.setVisibility(View.INVISIBLE);
+
         // These should be gone always. Only one date for schools
         holder.txtDateEnd.setVisibility(View.GONE);
-        holder.txtDateEnd.setVisibility(View.GONE);
+        holder.etDateEnd.setVisibility(View.GONE);
 
         // --------------<<<   POPULATE VIEWS   >>>-------------- \\
 
@@ -81,10 +85,10 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         holder.txtDepartment.setText(mySchool.getDepartment());
         holder.txtDepartment.setText(mySchool.getDepartment());
         // Set date started (if applicable)
-        if(mySchool.getGraduationDate() != null && holder.etDateGraduate.getVisibility() == View.VISIBLE) {
+        if(mySchool.getGraduationDate() != null) {
             Log.d(TAG, "we should be in, ladies and gentlemen");
-            if(holder.etDateGraduate.getText().toString().equals(""))
-                holder.etDateGraduate.setText(getReadableDate(mySchool.getGraduationDate()));
+            holder.txtDateGraduate.setText(getReadableDate(mySchool.getGraduationDate()));
+            holder.etDateGraduate.setText(getReadableDate(mySchool.getGraduationDate()));
             if(mySchool.getGraduationDate().after(new Date()))
                 holder.txtDateGraduate.setText("Anticipated: " + holder.etDateGraduate.getText().toString());
             else
@@ -100,6 +104,12 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         //  - On Save, the temp job overwrites the original job
         //  - TODO: Send saved profile to server
         //  - On Cancel, the temp job is reverted to the original job object.
+
+        holder.imgDelete.setOnClickListener(v -> {
+            int removedIdx = educationHistory.indexOf(mySchool);
+            educationHistory.remove(mySchool);
+            notifyItemRemoved(removedIdx);
+        });
 
         holder.etInstitution.addTextChangedListener(new TextWatcher() {
             @Override
@@ -175,7 +185,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
 
         TextView txtDateEnd;
         EditText etDateEnd;
-
+        ImageView imgDelete;
 
         ViewHolder(View itemView)  {
             super(itemView);
@@ -193,24 +203,29 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
             txtDateEnd = itemView.findViewById(R.id.txtDateEnd);
             etDateEnd = itemView.findViewById(R.id.etDateEnd);
 
+            imgDelete = itemView.findViewById(R.id.imgDelete);
+
 
             // --------------<<<   SET VIEW VISIBILITY   >>>-------------- \\
 
-            int txtVisibility = View.VISIBLE;
-            int etVisibility = View.INVISIBLE;
+            int staticVisibility = View.VISIBLE;
+            int editVisibility = View.INVISIBLE;
 
             if(isEditable) {
-                txtVisibility = View.INVISIBLE;
-                etVisibility = View.VISIBLE;
+                staticVisibility = View.INVISIBLE;
+                editVisibility = View.VISIBLE;
             }
 
-            txtInstitution.setVisibility(txtVisibility);
-            txtDepartment.setVisibility(txtVisibility);
-            txtDateGraduate.setVisibility(txtVisibility);
+            txtInstitution.setVisibility(staticVisibility);
+            txtDepartment.setVisibility(staticVisibility);
+            txtDateGraduate.setVisibility(staticVisibility);
 
-            etInstitution.setVisibility(etVisibility);
-            etDepartment.setVisibility(etVisibility);
-            etDateGraduate.setVisibility(etVisibility);
+            etInstitution.setVisibility(editVisibility);
+            etDepartment.setVisibility(editVisibility);
+            etDateGraduate.setVisibility(editVisibility);
+
+            // Also ImageView
+            imgDelete.setVisibility(editVisibility);
 
             // Extra views that need to be removed
             txtDateEnd.setVisibility(View.INVISIBLE);
@@ -240,6 +255,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
                 && arrIdx == educationHistory.size() - 1
         ) {
             mySchool.setVisible(true);
+            holder.imgDelete.setVisibility(View.VISIBLE);
 
             School newSchool = new School(false);
             educationHistory.add(newSchool);

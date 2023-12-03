@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -64,16 +65,19 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ViewHolder> {
         } else holder.itemView.setVisibility(View.VISIBLE);
 
         // Remove start date fields if no start date exists
-        if(myJob.getDateStart() == null && myJob.isVisible()) {
+        if(myJob.getDateStart() == null && myJob.isVisible() && !isEditable) {
             holder.txtDateStart.setVisibility(View.GONE);
             holder.etDateStart.setVisibility(View.GONE);
         }
 
         // Remove end date fields if no start date exists
-        if(myJob.getDateEnd() == null && myJob.isVisible()) {
+        if(myJob.getDateEnd() == null && myJob.isVisible() && !isEditable) {
             holder.txtDateEnd.setVisibility(View.GONE);
             holder.etDateEnd.setVisibility(View.GONE);
         }
+
+        if(holder.getAdapterPosition() == jobHistory.size()-1 && !myJob.isVisible())
+            holder.imgDelete.setVisibility(View.INVISIBLE);
 
         // --------------<<<   POPULATE VIEWS   >>>-------------- \\
 
@@ -86,14 +90,14 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ViewHolder> {
             holder.etOrganization.setText(myJob.getOrganization());
         }
         // Set date started (if applicable)
-        if(myJob.getDateStart() != null && holder.txtDateStart.getVisibility() == View.VISIBLE) {
+        if(myJob.getDateStart() != null) {
             holder.txtDateStart.setText(getReadableDate(myJob.getDateStart()));
             holder.etDateStart.setText(getReadableDate(myJob.getDateStart()));
         }
         // Set date ended (if applicable)
-        if(myJob.getDateEnd() != null && holder.txtDateEnd.getVisibility() == View.VISIBLE) {
-            holder.txtDateEnd.setText(getReadableDate(myJob.getDateStart()));
-            holder.etDateEnd.setText(getReadableDate(myJob.getDateStart()));
+        if(myJob.getDateEnd() != null) {
+            holder.txtDateEnd.setText(getReadableDate(myJob.getDateEnd()));
+            holder.etDateEnd.setText(getReadableDate(myJob.getDateEnd()));
         }
 //        else
 //            holder.etDateEnd.setText((new Date()).toString());
@@ -107,6 +111,12 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ViewHolder> {
         //  - On Save, the temp job overwrites the original job
         //  - TODO: Send saved profile to server
         //  - On Cancel, the temp job is reverted to the original job object.
+
+        holder.imgDelete.setOnClickListener(v -> {
+            int removedIdx = jobHistory.indexOf(myJob);
+            jobHistory.remove(myJob);
+            notifyItemRemoved(removedIdx);
+        });
 
         holder.etTitle.addTextChangedListener(new TextWatcher() {
             @Override
@@ -188,6 +198,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ViewHolder> {
         EditText etOrganization;
         EditText etDateStart;
         EditText etDateEnd;
+        ImageView imgDelete;
 
         ViewHolder(View itemView)  {
             super(itemView);
@@ -202,30 +213,33 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ViewHolder> {
             etOrganization = itemView.findViewById(R.id.etOrganization);
             etDateStart = itemView.findViewById(R.id.etDateStart);
             etDateEnd = itemView.findViewById(R.id.etDateEnd);
+            imgDelete = itemView.findViewById(R.id.imgDelete);
 
             // --------------<<<   SET VIEW VISIBILITY   >>>-------------- \\
 
             // Default visibility values
-            int txtVisibility = View.VISIBLE;
-            int etVisibility = View.INVISIBLE;
+            int staticVisibility = View.VISIBLE;
+            int editVisibility = View.INVISIBLE;
 
             // Flip visibility values if editing profile
             if(isEditable) {
-                txtVisibility = View.INVISIBLE;
-                etVisibility = View.VISIBLE;
+                staticVisibility = View.INVISIBLE;
+                editVisibility = View.VISIBLE;
             }
 
             // Set all static TextViews to the appropriate visibility
-            txtTitle.setVisibility(txtVisibility);
-            txtOrganization.setVisibility(txtVisibility);
-            txtDateStart.setVisibility(txtVisibility);
-            txtDateEnd.setVisibility(txtVisibility);
+            txtTitle.setVisibility(staticVisibility);
+            txtOrganization.setVisibility(staticVisibility);
+            txtDateStart.setVisibility(staticVisibility);
+            txtDateEnd.setVisibility(staticVisibility);
 
             // Set all EditTexts to the appropriate visibility
-            etTitle.setVisibility(etVisibility);
-            etOrganization.setVisibility(etVisibility);
-            etDateStart.setVisibility(etVisibility);
-            etDateEnd.setVisibility(etVisibility);
+            etTitle.setVisibility(editVisibility);
+            etOrganization.setVisibility(editVisibility);
+            etDateStart.setVisibility(editVisibility);
+            etDateEnd.setVisibility(editVisibility);
+            // Also ImageView
+            imgDelete.setVisibility(editVisibility);
         }
     }
 
@@ -251,10 +265,12 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ViewHolder> {
                 && arrIdx == jobHistory.size() - 1
         ) {
             myJob.setVisible(true);
+            holder.imgDelete.setVisibility(View.VISIBLE);
 
             Job newJob = new Job(false);
             jobHistory.add(newJob);
             notifyItemInserted(jobHistory.indexOf(newJob));
+//            notifyItemInserted(jobHistory.size()-1);
         }
     }
 

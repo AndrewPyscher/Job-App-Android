@@ -53,7 +53,7 @@ public class UserProfile extends AppCompatActivity {
         // TODO: Get the user's real job history from backend
         ArrayList<Job> jobHistory = new ArrayList<>();
         jobHistory.add(new Job("Shift Manager", "McDonalds"));
-        jobHistory.add(new Job("Frying Cook", "Krusty Krab"));
+        jobHistory.add(new Job("Frying Cook", "Krusty Krab", new Date(122,7,24), new Date(123,4,4)));
 
 
         Log.d(TAG, "Size of jobHistory: " + jobHistory.size());
