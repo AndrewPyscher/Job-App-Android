@@ -1,26 +1,29 @@
 package com.example.project2;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 public class UserProfile extends AppCompatActivity {
+
+    public static final String TAG = "USER_PROFILE";
     ImageButton btnEdit, btnCancel;
-    TextView txtName, txtDescription, txtPhone, txtEmail;
-    EditText etPhone, etEmail, etDescription;
-    ListView lstExperience, lstEducation;
-    EmploymentAdapter jobAdapter;
+    TextView txtName, txtDescription, txtPhone, txtEmail , txtExperience, txtEducation;
+    EditText etName, etPhone, etEmail, etDescription;
+//    ListView lstExperience, lstEducation;
+    RecyclerView rvEmployment, rvEducation;
+    JobAdapter jobAdapter;
     EducationAdapter educationAdapter;
 
     @Override
@@ -36,66 +39,86 @@ public class UserProfile extends AppCompatActivity {
         txtDescription = findViewById(R.id.txtDescription);
         txtPhone = findViewById(R.id.txtPhone);
         txtEmail = findViewById(R.id.txtEmail);
+        txtExperience = findViewById(R.id.txtExperience);
+        txtEducation = findViewById(R.id.txtEducation);
+        etName = findViewById(R.id.etName);
         etPhone = findViewById(R.id.etPhone);
         etEmail = findViewById(R.id.etEmail);
         etDescription = findViewById(R.id.etDescription);
-        lstExperience = findViewById(R.id.lstExperience);
-        lstEducation = findViewById(R.id.lstEducation);
+//        lstExperience = findViewById(R.id.lstExperience);
+        rvEmployment = findViewById(R.id.rvEmployment);
+//        lstEducation = findViewById(R.id.lstEducation);
+        rvEducation = findViewById(R.id.rvEducation);
 
         // --------------<<<   LIST VIEW SECTION   >>>-------------- \\
 
         // TODO: Get the user's real job history from backend
         ArrayList<Job> jobHistory = new ArrayList<>();
         jobHistory.add(new Job("Shift Manager", "McDonalds"));
-        jobHistory.add(new Job("Frying Cook", "Krusty Krab"));
-        jobHistory.add(new Job(false));
+        jobHistory.add(new Job("Frying Cook", "Krusty Krab", new Date(122,7,24), new Date(123,4,4)));
 
-        Log.d("USER_PROFILE", "Size of jobHistory: " + jobHistory.size());
 
-        jobAdapter = new EmploymentAdapter(this, jobHistory);
+        Log.d(TAG, "Size of jobHistory: " + jobHistory.size());
 
-        lstExperience.setAdapter(jobAdapter);
+        // ------ \\
+//        txtExperience.setVisibility(View.INVISIBLE);
+//        rvEmployment.setAdapter(jobAdapter);
+        jobAdapter = new JobAdapter(this, jobHistory);
+        rvEmployment.setLayoutManager(new LinearLayoutManager(this));
+        rvEmployment.setAdapter(jobAdapter);
 
-        //set listAdapter in loop for getting final size
-        int totalHeight=0;
-        for (int i=0; i < jobAdapter.getCount(); i++) {
-            View listItem=jobAdapter.getView(i, null, lstExperience);
-            listItem.measure(0, 0);
-            Log.d("USER_PROFILE","Measured height: " + listItem.getMeasuredHeight());
-            totalHeight+=listItem.getMeasuredHeight();
-        }
-        //setting listview item in adapter
-        ViewGroup.LayoutParams params=lstExperience.getLayoutParams();
-        params.height=(totalHeight + (jobAdapter.getCount() - 1))/4;
-        lstExperience.setLayoutParams(params);
-        // print height of adapter on log
-        Log.i("height of listItem:", String.valueOf(totalHeight));
 
         // ------ \\
 
         ArrayList<School> educationHistory = new ArrayList<>();
         educationHistory.add(new School("Saginaw Valley State University", "Computer Science", new Date(124,4,4)));
+        educationHistory.add(new School("Georgia Tech", "Computer Science", new Date(125,4,4)));
 
+//        if(educationHistory.size() == 0)
+//            txtEducation.setVisibility(View.INVISIBLE);
+//        else {
         educationAdapter = new EducationAdapter(this, educationHistory);
+        rvEducation.setLayoutManager(new LinearLayoutManager(this));
+        rvEducation.setAdapter(educationAdapter);
+//        }
 
-        lstEducation.setAdapter(educationAdapter);
 
 
         // --------------<<<   LISTENERS   >>>-------------- \\
 
         // 'Edit' button dual-functions as 'Save' button
         btnEdit.setOnClickListener(v -> {
-            if(etDescription.getVisibility() == View.INVISIBLE)
+            if(etDescription.getVisibility() == View.INVISIBLE) {
                 setProfileEditable();
+                jobHistory.add(new Job(false));
+                jobAdapter = new JobAdapter(this, jobHistory);
+                rvEmployment.setAdapter(jobAdapter);
+
+                educationHistory.add(new School(false));
+                educationAdapter = new EducationAdapter(this, educationHistory);
+                rvEducation.setAdapter(educationAdapter);
+            }
+
             else {
                 // Save Changes
-//                txtPhone.setText(etPhone.getText().toString().trim());
-//                txtEmail.setText(etEmail.getText().toString().trim());
-//                txtDescription.setText(etDescription.getText().toString().trim());
+                // TODO: Move saving to separate method call
+                txtName.setText(etName.getText().toString().trim());
+                txtPhone.setText(etPhone.getText().toString().trim());
+                txtEmail.setText(etEmail.getText().toString().trim());
+                txtDescription.setText(etDescription.getText().toString().trim());
+
                 jobAdapter.saveJobData();
+                jobHistory.remove(jobHistory.size()-1);
+                jobAdapter = new JobAdapter(this, jobHistory);
+                rvEmployment.setAdapter(jobAdapter);
+
+                educationAdapter.saveSchoolData();
+                educationHistory.remove(educationHistory.size()-1);
+                educationAdapter = new EducationAdapter(this, educationHistory);
+                rvEducation.setAdapter(educationAdapter);
                 setProfileStatic();
             }
-            EmploymentAdapter.isEditable = !EmploymentAdapter.isEditable;
+            JobAdapter.isEditable = !JobAdapter.isEditable;
             EducationAdapter.isEditable = !EducationAdapter.isEditable;
             jobAdapter.notifyDataSetChanged();
             educationAdapter.notifyDataSetChanged();
@@ -103,11 +126,14 @@ public class UserProfile extends AppCompatActivity {
 
         btnCancel.setOnClickListener(v -> {
             jobAdapter.cancelChanges();
+            educationAdapter.cancelChanges();
             setProfileStatic();
-            EmploymentAdapter.isEditable = !EmploymentAdapter.isEditable;
+            JobAdapter.isEditable = !JobAdapter.isEditable;
             EducationAdapter.isEditable = !EducationAdapter.isEditable;
             jobAdapter.notifyDataSetChanged();
+            rvEmployment.setAdapter(jobAdapter);
             educationAdapter.notifyDataSetChanged();
+            rvEducation.setAdapter(educationAdapter);
         });
     }
 
@@ -119,12 +145,14 @@ public class UserProfile extends AppCompatActivity {
      */
     private void setProfileEditable() {
         // Hide Static Fields
+        txtName.setVisibility(View.INVISIBLE);
         txtPhone.setVisibility(View.INVISIBLE);
         txtEmail.setVisibility(View.INVISIBLE);
         txtDescription.setVisibility(View.INVISIBLE);
 
 
         // Display Editable Fields
+        etName.setVisibility(View.VISIBLE);
         etPhone.setVisibility(View.VISIBLE);
         etEmail.setVisibility(View.VISIBLE);
         etDescription.setVisibility(View.VISIBLE);
@@ -133,6 +161,7 @@ public class UserProfile extends AppCompatActivity {
 
 
         // Populate fields w/ current text
+        etName.setText(txtName.getText());
         etPhone.setText(txtPhone.getText());
         etEmail.setText(txtEmail.getText());
         etDescription.setText(txtDescription.getText());
@@ -143,17 +172,20 @@ public class UserProfile extends AppCompatActivity {
      * displayed just as an employer would see the profile.
      */
     private void setProfileStatic() {
-        // Hide Static Fields
-        etPhone.setVisibility(View.INVISIBLE);
-        etEmail.setVisibility(View.INVISIBLE);
-        etDescription.setVisibility(View.INVISIBLE);
-        btnCancel.setVisibility(View.INVISIBLE);
-        btnEdit.setImageResource(R.drawable.edit_button_temp);
-
         // Display Editable Fields
+        txtName.setVisibility(View.VISIBLE);
         txtPhone.setVisibility(View.VISIBLE);
         txtEmail.setVisibility(View.VISIBLE);
         txtDescription.setVisibility(View.VISIBLE);
+
+        // Hide Static Fields
+        etName.setVisibility(View.INVISIBLE);
+        etPhone.setVisibility(View.INVISIBLE);
+        etEmail.setVisibility(View.INVISIBLE);
+        etDescription.setVisibility(View.INVISIBLE);
+
+        btnCancel.setVisibility(View.INVISIBLE);
+        btnEdit.setImageResource(R.drawable.edit_button_temp);
 
         // Hide keyboard - Signifies editing finished
         hideKeyboard();

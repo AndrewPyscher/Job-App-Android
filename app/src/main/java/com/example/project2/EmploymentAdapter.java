@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class EmploymentAdapter extends BaseAdapter {
+    public static final String TAG = "EMPLOYMENT_ADAPTER";
     public static boolean isEditable = false;
     ArrayList<Job> jobHistory;
     Job addedJob; // Ease of access getting 'invisible' information
@@ -51,8 +52,8 @@ public class EmploymentAdapter extends BaseAdapter {
             view = LayoutInflater.from(context).inflate(R.layout.layout_employment,parent,false);
         Job myJob = jobHistory.get(i);
 
-        Log.d("USER_PROFILE", "New View in List: " + i);
-        Log.d("USER_PROFILE", "Count method: " + getCount());
+        Log.d(TAG, "New View in List: " + i);
+        Log.d(TAG, "Count method: " + getCount());
 
         // --------------<<<   GET VIEWS   >>>-------------- \\
 
