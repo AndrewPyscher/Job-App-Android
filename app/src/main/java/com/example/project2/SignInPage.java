@@ -58,7 +58,7 @@ public class SignInPage extends AppCompatActivity {
 //            }
 //        }
         btnCreateAccount.setOnClickListener(e->{
-            Intent m = new Intent(this, Settings.class);
+            Intent m = new Intent(this, CreateAccount.class);
             startActivity(m);
         });
 
@@ -67,7 +67,7 @@ public class SignInPage extends AppCompatActivity {
             use.login(response -> {
                 Log.d("test", "onCreate: " + response);
                 tvError.setText(response);
-                if (response.equals("login")) {
+                if (response.equals("1")) {
                     if (chkStaySignedIn.isChecked()) {
                         ed.putBoolean("stay", true);
                     }
@@ -75,7 +75,7 @@ public class SignInPage extends AppCompatActivity {
                     ed.commit();
 
                     Intent i = new Intent(this, MainActivity.class);
-                  //  startActivity(i);
+                    startActivity(i);
                 } else {
                     tvError.setVisibility(View.VISIBLE);
                     tvError.setText("Incorrect username or password");

@@ -215,7 +215,7 @@ public class UseServer {
 
     // status should be (approved/pending/denied)
     void updateApplication(HandleResponse callback, int jobPostingID, int applicant_id, String message, String status) {
-        String url = "http://162.243.172.218:5000/updateApp";
+        String url = "http://162.243.172.218:5000/updateApplication";
         StringRequest updateApplication = new StringRequest(Request.Method.POST, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -573,5 +573,52 @@ public class UseServer {
         };
                     queue.add(createAccountRequest);
     }
+
+    void createPosting(HandleResponse callback, int employer_id, String job_title, String description, String salary, String type){
+        String url = "http://162.243.172.218:5000/createPosting";
+        StringRequest createAccountRequest = new StringRequest(Request.Method.POST, url,
+                response -> callback.response(response),
+                error -> callback.response(error.getMessage())
+        ) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                JSONObject jsonParams = new JSONObject();
+                try {
+                    jsonParams.put("employer_id", employer_id);
+                    jsonParams.put("job_title", job_title);
+                    jsonParams.put("description", description);
+                    jsonParams.put("salary", salary);
+                    jsonParams.put("type",type);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return jsonParams.toString().getBytes();
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Connection", "keep-alive");
+                headers.put("Cookie", session);
+                return headers;
+            }
+
+            @Override
+            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                Map<String, String> headers = response.headers;
+                String cookies = headers.get("Set-Cookie");
+                session = cookies.split(";")[0];
+                return super.parseNetworkResponse(response);
+            }
+        };
+        queue.add(createAccountRequest);
+    }
+
+
+
 
 }
