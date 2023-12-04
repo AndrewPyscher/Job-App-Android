@@ -547,8 +547,10 @@ public class UseServer {
                         public byte[] getBody() throws AuthFailureError {
                             JSONObject jsonParams = new JSONObject();
                             try {
-                                jsonParams.put("username", username);
-                                jsonParams.put("password", password);
+                                Log.d("test", "getBody: " + username);
+                                Log.d("test", "getBody: " + password);
+                                jsonParams.put("username", username.trim());
+                                jsonParams.put("password", password.trim());
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

@@ -1,5 +1,8 @@
 package com.example.project2;
 
+import androidx.annotation.NonNull;
+
+import java.util.Calendar;
 import java.util.Date;
 
 public class School {
@@ -56,6 +59,24 @@ public class School {
         this.temp = cloneSchool(this);
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        String result = "";
+
+        result += "{";
+
+        result+=this.institution;
+        result+="!@#";
+        result+=this.department;
+        result+="!@#";
+        result+=this.getGradDateString();
+
+        result += "}";
+
+        return result;
+    }
+
     // --------------<<<   GETTERS AND SETTERS   >>>-------------- \\
 
     public String getInstitution() {
@@ -80,6 +101,17 @@ public class School {
 
     public void setGraduationDate(Date graduationDate) {
         temp.graduationDate = graduationDate;
+    }
+
+    public String getGradDateString() {
+        if(this.graduationDate == null)
+            return "";
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(this.graduationDate);
+
+        return  c.get(Calendar.MONTH) + "/" +
+                c.get(Calendar.YEAR);
     }
 
     public boolean isVisible() {

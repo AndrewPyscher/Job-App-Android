@@ -1,5 +1,8 @@
 package com.example.project2;
 
+import androidx.annotation.NonNull;
+
+import java.util.Calendar;
 import java.util.Date;
 
 public class Job {
@@ -65,6 +68,29 @@ public class Job {
 
     // ---
 
+    @NonNull
+    @Override
+    public String toString() {
+       String result = "";
+
+       result += "{";
+
+       result+=this.title;
+       result+="!@#";
+       result+=this.organization;
+       result+="!@#";
+       result+=this.getDateStartString();
+       result+="!@#";
+       result+=this.getDateEndString();
+
+       result += "}";
+
+       return result;
+    }
+
+
+    // ---
+
     public String getTitle() {
         return title;
     }
@@ -91,6 +117,23 @@ public class Job {
 
     public Date getDateEnd() {
         return dateEnd;
+    }
+    public String getDateStartString() {
+        return getDateString(this.getDateStart());
+    }
+    public String getDateEndString() {
+        return getDateString(this.getDateEnd());
+    }
+
+    private String getDateString(Date date) {
+        if(date == null)
+            return "";
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+
+        return  c.get(Calendar.MONTH) + "/" +
+                c.get(Calendar.YEAR);
     }
 
     public void setDateEnd(Date dateEnd) {
