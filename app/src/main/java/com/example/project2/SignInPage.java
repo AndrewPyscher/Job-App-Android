@@ -67,10 +67,11 @@ public class SignInPage extends AppCompatActivity {
             use.login(response -> {
                 Log.d("test", "onCreate: " + response);
                 tvError.setText(response);
-                if (response.equals("1")) {
+                if (!response.equals("Username or Password is incorrect!")) {
                     if (chkStaySignedIn.isChecked()) {
                         ed.putBoolean("stay", true);
                     }
+                    ed.putInt("id", Integer.parseInt(response));
                     ed.putString("user", etUsername.getText().toString());
                     ed.commit();
 
