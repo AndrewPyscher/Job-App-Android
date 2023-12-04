@@ -32,6 +32,7 @@ public class SignInPage extends AppCompatActivity {
     SharedPreferences.Editor ed;
     EditText etUsername, etPassword1;
     CheckBox chkStaySignedIn;
+    UseServer use;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +46,7 @@ public class SignInPage extends AppCompatActivity {
         chkStaySignedIn = findViewById(R.id.chkStaySignedIn);
         sp = getSharedPreferences("user", MODE_PRIVATE);
         ed = sp.edit();
+        use = UseServer.getInstance(this);
 
 //        Intent j = new Intent(this, Settings.class);
 //        startActivity(j);
@@ -63,7 +65,6 @@ public class SignInPage extends AppCompatActivity {
         });
 
         btnSignIn.setOnClickListener(e -> {
-            UseServer use = UseServer.getInstance(this);
             use.login(response -> {
                 Log.d("test", "onCreate: " + response);
                 tvError.setText(response);
@@ -92,4 +93,16 @@ public class SignInPage extends AppCompatActivity {
 
 
     }
+    @Override
+    protected void onDestroy() {
+        use.logout(new HandleResponse() {
+            @Override
+            public void response(String response) {
+                Log.d("test", "response: " + response);
+            }
+        });
+        super.onDestroy();
+    }
+
+
 }
