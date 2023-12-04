@@ -46,7 +46,8 @@ public class SignInPage extends AppCompatActivity {
         sp = getSharedPreferences("user", MODE_PRIVATE);
         ed = sp.edit();
 
-
+//        Intent j = new Intent(this, Settings.class);
+//        startActivity(j);
 
 
 //        if(sp.getBoolean("stay",false)){
@@ -57,8 +58,8 @@ public class SignInPage extends AppCompatActivity {
 //            }
 //        }
         btnCreateAccount.setOnClickListener(e->{
-            Intent i = new Intent(this, CreateAccount.class);
-            startActivity(i);
+            Intent m = new Intent(this, Settings.class);
+            startActivity(m);
         });
 
         btnSignIn.setOnClickListener(e -> {
@@ -73,8 +74,8 @@ public class SignInPage extends AppCompatActivity {
                     ed.putString("user", etUsername.getText().toString());
                     ed.commit();
 
-                    Intent i = new Intent(this, MapActivity.class);
-                    startActivity(i);
+                    Intent i = new Intent(this, MainActivity.class);
+                  //  startActivity(i);
                 } else {
                     tvError.setVisibility(View.VISIBLE);
                     tvError.setText("Incorrect username or password");

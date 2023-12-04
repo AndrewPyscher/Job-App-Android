@@ -5,15 +5,16 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 
 public class JobListing {
-    int id;
+    int id, employer_id;
     String title, description, category;
-    Double salary;
+    String salary;
     LatLng location;
 
     // Parametrized constructor
-    public JobListing(int id, String title, String description, String category, Double salary,
+    public JobListing(int id, int employer_id,String title, String description, String category, String salary,
                       LatLng location) {
         this.id = id;
+        this.employer_id =employer_id;
         this.title = title;
         this.description = description;
         this.category = category;
@@ -43,7 +44,7 @@ public class JobListing {
         return category;
     }
 
-    public Double getSalary() {
+    public String getSalary() {
         return salary;
     }
 
@@ -52,8 +53,6 @@ public class JobListing {
     }
 
     public ArrayList<JobListing> getAllJobs(){
-
-
         return null;
     }
 }

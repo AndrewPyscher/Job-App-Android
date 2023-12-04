@@ -253,18 +253,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             // Split location values by commas
             String[] cordArray = jobArray[5].split(",");
 
-            // Add new JobListing to job list
-            jobListings.add(
-                    new JobListing(
-                            Integer.parseInt(jobArray[0])
-                            ,jobArray[1]
-                            ,jobArray[2]
-                            ,jobArray[4]
-                            ,Double.parseDouble(jobArray[3])
-                            ,new LatLng(Double.parseDouble(cordArray[0]),
-                                Double.parseDouble(cordArray[1]))
-                    )
-            );
+            // Add new JobListing to job listz
+
+            // I commented this out because i did this in the formatting class
+//            jobListings.add(
+//                    new JobListing(
+//                            Integer.parseInt(jobArray[0])
+//                            ,jobArray[1]
+//                            ,jobArray[2]
+//                            ,jobArray[4]
+//                            ,Double.parseDouble(jobArray[3])
+//                            ,new LatLng(Double.parseDouble(cordArray[0]),
+//                                Double.parseDouble(cordArray[1]))
+//                    )
+//            );
         }
 
         // Return ArrayList
