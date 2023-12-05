@@ -26,16 +26,18 @@ public class JobProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_profile);
 
+        // Account unable to be lcoated
+        // Default value
         accountID = -1;
 
         serverDAO = UseServer.getInstance(this);
         saveResponse = new AtomicReference<>();
 
+        // Get saved account ID from login
         accountID = getSharedPreferences("user", MODE_PRIVATE).getInt("id", -1);
         Log.d(TAG, "Account ID: "+accountID);
 
-        // Find active account and initialize if necessary
-
+        // Find active account and initialize blank profile if necessary
         String encodedStoredProfile = accountLookup();
         String[] profileData;
         try {
@@ -159,6 +161,7 @@ public class JobProfile extends AppCompatActivity {
             Log.d(TAG, "VERIFY LOGIN : "+response);
         });
 
+        // TODO: Find a way to check applicant/employer viewing page
         serverDAO.myAccount(response -> {
             Log.d(TAG, "serverDAO onCreate: " + response);
             saveResponse.set(response);
