@@ -92,7 +92,7 @@ public class UseServer {
                     jsonParams.put("name", name);
                     jsonParams.put("phone", phone);
                     jsonParams.put("email", email);
-                    jsonParams.put("workhistory", workHistory);
+                    jsonParams.put("workHistory", workHistory);
                     jsonParams.put("education", education);
                 } catch (JSONException e) {
                     e.printStackTrace();
