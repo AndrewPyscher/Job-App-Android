@@ -12,8 +12,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.text.Normalizer;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class UserProfile extends AppCompatActivity {
 
@@ -25,11 +30,36 @@ public class UserProfile extends AppCompatActivity {
     RecyclerView rvEmployment, rvEducation;
     JobAdapter jobAdapter;
     EducationAdapter educationAdapter;
+    UseServer serverDAO;
+    AtomicReference<String> saveResponse;
+
+    ArrayList<Job> jobHistory;
+    ArrayList<School> educationHistory;
+
+    int accountID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+
+        accountID = -1;
+
+        serverDAO = UseServer.getInstance(this);
+        saveResponse = new AtomicReference<>();
+
+        accountID = getSharedPreferences("user", MODE_PRIVATE).getInt("id", -1);
+        Log.d(TAG, "Account ID: "+accountID);
+
+        // Find active account and initialize if necessary
+
+        String encodedStoredProfile = accountLookup();
+        String[] profileData;
+        try {
+            profileData = encodedStoredProfile.split(Formatting.DELIMITER_1);
+        } catch (Exception e) {
+            profileData = new String[]{String.valueOf(accountID),"","","","","","",""};
+        }
 
         // --------------<<<   GET VIEWS   >>>-------------- \\
 
@@ -50,15 +80,30 @@ public class UserProfile extends AppCompatActivity {
 //        lstEducation = findViewById(R.id.lstEducation);
         rvEducation = findViewById(R.id.rvEducation);
 
+        // --------------<<<   POPULATE VIEWS FROM BACKEND   >>>-------------- \\
+
+        //  ------------------------- Index Table -------------------------  \\
+        // |  id: 0     |  address: 1 |  aboutMe: 2      |  name: 3        | \\
+        // |  phone: 4  |  email: 5   |  workHistory:  6 |  education : 7  | \\
+
+        txtName.setText(profileData[3]);
+        txtPhone.setText(profileData[4]);
+        txtEmail.setText(profileData[5]);
+        txtDescription.setText(profileData[2]);
+
+
         // --------------<<<   LIST VIEW SECTION   >>>-------------- \\
 
         // TODO: Get the user's real job history from backend
-        ArrayList<Job> jobHistory = new ArrayList<>();
+        jobHistory = new ArrayList<>();
         jobHistory.add(new Job("Shift Manager", "McDonalds"));
         jobHistory.add(new Job("Frying Cook", "Krusty Krab", new Date(122,7,24), new Date(123,4,4)));
+        // Use as backup somehow???
 
+        jobHistory = getJobHistoryFromDAO("input");
 
         Log.d(TAG, "Size of jobHistory: " + jobHistory.size());
+        Log.d(TAG, "Contents of jobHistory: " + jobHistory);
 
         // ------ \\
 
@@ -71,9 +116,15 @@ public class UserProfile extends AppCompatActivity {
 
         // ------ \\
 
-        ArrayList<School> educationHistory = new ArrayList<>();
+        educationHistory = new ArrayList<>();
         educationHistory.add(new School("Saginaw Valley State University", "Computer Science", new Date(124,4,4)));
         educationHistory.add(new School("Georgia Tech", "Computer Science", new Date(125,4,4)));
+
+        // Get Education History for User
+        educationHistory = getEducationHistoryFromDAO("input");
+
+        Log.d(TAG, "Size of educationHistory: " + educationHistory.size());
+        Log.d(TAG, "Contents of educationHistory: " + educationHistory);
 
 //        if(educationHistory.size() == 0)
 //            txtEducation.setVisibility(View.INVISIBLE);
@@ -117,6 +168,24 @@ public class UserProfile extends AppCompatActivity {
                 educationHistory.remove(educationHistory.size()-1);
                 educationAdapter = new EducationAdapter(this, educationHistory);
                 rvEducation.setAdapter(educationAdapter);
+
+                // Get encoding of profile for backend
+                String[] encodedProfile = generateEncodedProfileData();
+                // Update profile
+                serverDAO.updateProfile(response -> {
+                    Log.d(TAG, "UPDATING PROFILE: "+response);
+                }, Integer.parseInt(encodedProfile[0]),encodedProfile[1],encodedProfile[2],encodedProfile[3],
+                        encodedProfile[4],encodedProfile[5],encodedProfile[6],encodedProfile[7]);
+
+                Log.d(TAG, "-- Now showing detailed update info --");
+                Log.d(TAG, encodedProfile[0]);
+                Log.d(TAG, encodedProfile[1]);
+                Log.d(TAG, encodedProfile[2]);
+                Log.d(TAG, encodedProfile[3]);
+                Log.d(TAG, encodedProfile[4]);
+                Log.d(TAG, encodedProfile[5]);
+                Log.d(TAG, encodedProfile[6]);
+                Log.d(TAG, encodedProfile[7]);
                 setProfileStatic();
             }
             JobAdapter.isEditable = !JobAdapter.isEditable;
@@ -190,6 +259,156 @@ public class UserProfile extends AppCompatActivity {
 
         // Hide keyboard - Signifies editing finished
         hideKeyboard();
+    }
+
+    private void callbackFnct() {
+        callbackFnct(0);
+    }
+
+    private void callbackFnct(int n) {
+        AtomicBoolean isFinished = new AtomicBoolean(false);
+        serverDAO.myAccount(response -> {
+            if (response == null) return;
+            Log.d(TAG, "serverDAO onCreate: " + response);
+            saveResponse.set(response);
+            isFinished.set(true);
+        }, "");
+        if(n < 15 && !isFinished.get())
+            callbackFnct(n+1);
+    }
+
+    private String accountLookup() {
+        String result = "";
+        serverDAO.verifyLogin(response -> {
+            Log.d(TAG, "VERIFY LOGIN : "+response);
+        });
+
+        serverDAO.myAccount(response -> {
+            Log.d(TAG, "serverDAO onCreate: " + response);
+            saveResponse.set(response);
+        }, "");
+
+        // Get account ID if possible
+        if(saveResponse.get() != null && !saveResponse.get().equals(""))
+            accountID = Integer.parseInt(saveResponse.get().split(Formatting.DELIMITER_1)[0]);
+
+        result = saveResponse.get();
+
+        // If no information exists
+//        if(accountID != -1 && result = null)
+//            serverDAO.updateProfile(response -> {
+//                Log.d(TAG, "UPDATE:");
+//            },accountID,"","About Me","New User","","","","");
+
+        return result;
+    }
+
+    private ArrayList<Job> getJobHistoryFromDAO(String input) {
+        // Create job container to be returned
+        ArrayList<Job> jobs = new ArrayList<>();
+
+        // Get list of job encodings
+        String[] encodedJobs = input.split(Formatting.DELIMITER_2);
+
+        // Iterate through encodings
+        // Adding new jobs to ArrayList
+        try {
+            for (String curJobEncoding : encodedJobs) {
+                String[] jobData = curJobEncoding.split(Formatting.DELIMITER_1);
+
+                // Create new job - Title + Company
+                Job newJob = new Job(jobData[0],jobData[1]);
+
+                // Manually add startDate if applicable
+                if(jobData[2].length() > 1)
+                    try {
+                        newJob.setDateStart(new SimpleDateFormat("MM/yyyy").parse(jobData[2]));
+                    } catch (Exception ignored) {}
+
+                // Manually add endDate if applicable
+                if(jobData[3].length() > 1)
+                    try {
+                        newJob.setDateStart(new SimpleDateFormat("MM/yyyy").parse(jobData[3]));
+                    } catch (Exception ignored) {}
+
+                // Add new job to ArrayList
+                jobs.add(newJob);
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Corrupt job encoding. Skipping...");
+        }
+
+        // Return list of decoded jobs :)
+        return jobs;
+    }
+
+    private ArrayList<School> getEducationHistoryFromDAO(String input) {
+        // Create job container to be returned
+        ArrayList<School> schools = new ArrayList<>();
+
+        // Get list of school encodings
+        String[] encodedSchools = input.split(Formatting.DELIMITER_2);
+
+        // Iterate through encodings
+        // Adding new schools to ArrayList
+        try {
+            for (String curSchoolEncoding : encodedSchools) {
+                String[] schoolData = curSchoolEncoding.split(Formatting.DELIMITER_1);
+
+                // Create new job - Title + Company
+                School newSchool = new School(schoolData[0],schoolData[1]);
+
+                // Manually add gradDate if applicable
+                if(schoolData[2].length() > 1)
+                    try {
+                        newSchool.setGraduationDate(new SimpleDateFormat("MM/yyyy").parse(schoolData[2]));
+                    } catch (Exception ignored) {}
+
+                // Add new job to ArrayList
+                schools.add(newSchool);
+            }
+        } catch (Exception e) {
+
+        }
+
+
+        // Return list of decoded schools :)
+        return schools;
+    }
+
+    private String[] generateEncodedProfileData() {
+        //  ------------------------- Index Table -------------------------  \\
+        // |  id: 0     |  address: 1 |  aboutMe: 2      |  name: 3        | \\
+        // |  phone: 4  |  email: 5   |  workHistory:  6 |  education : 7  | \\
+
+        String[] result = new String[8];
+
+        result[0] = String.valueOf(accountID); // Gotta actually get this somehow...
+        result[1] = "";
+        result[2] += txtDescription.getText().toString();
+        result[3] += txtName.getText().toString();
+        result[4] += txtPhone.getText().toString();
+        result[5] += txtEmail.getText().toString();
+
+        // Add jobHistory
+        String encodedHistory = "";
+        for (Job job : jobHistory) {
+            encodedHistory += job;
+            if(jobHistory.indexOf(job) != jobHistory.size()-1)
+                encodedHistory += Formatting.DELIMITER_2;
+        }
+        result[6] = encodedHistory;
+
+        // Add educationHistory
+        encodedHistory = "";
+        for (School school : educationHistory) {
+            encodedHistory += school;
+            if(jobHistory.indexOf(school) != jobHistory.size()-1)
+                encodedHistory += Formatting.DELIMITER_2;
+        }
+        result[7] = encodedHistory;
+
+        return result;
     }
 
     /**

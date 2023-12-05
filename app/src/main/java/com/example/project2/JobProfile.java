@@ -9,10 +9,16 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class JobProfile extends AppCompatActivity {
+    public static final String TAG = "JOB_PROFILE";
     ImageButton btnEdit, btnCancel;
     TextView txtJobName, txtDescription, txtPhone, txtEmail;
     EditText etPhone, etEmail, etDescription;
+    UseServer serverDAO;
+    AtomicReference<String> saveResponse;
+    int accountID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

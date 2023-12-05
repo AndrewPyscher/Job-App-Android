@@ -32,7 +32,8 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ViewHolder> {
     JobAdapter(Context context, ArrayList<Job> jobHistory) {
         this.context=context;
         this.jobHistory = jobHistory;
-        addedJob = jobHistory.get(jobHistory.size() - 1);
+        if(jobHistory.size() > 0)
+            addedJob = jobHistory.get(jobHistory.size() - 1);
         Log.d(TAG,"Added Job index: " + jobHistory.size());
     }
 

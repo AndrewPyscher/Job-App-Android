@@ -3,6 +3,7 @@ package com.example.project2;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -91,7 +92,7 @@ public class UseServer {
                     jsonParams.put("name", name);
                     jsonParams.put("phone", phone);
                     jsonParams.put("email", email);
-                    jsonParams.put("workHistory", workHistory);
+                    jsonParams.put("workhistory", workHistory);
                     jsonParams.put("education", education);
                 } catch (JSONException e) {
                     e.printStackTrace();
