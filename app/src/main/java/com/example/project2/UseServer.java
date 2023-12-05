@@ -535,7 +535,7 @@ public class UseServer {
 
     void login(HandleResponse callback, String username, String password){
         String url = "http://162.243.172.218:5000/login";
-        StringRequest createAccountRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest loginRequest = new StringRequest(Request.Method.POST, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
             ) {
@@ -573,12 +573,12 @@ public class UseServer {
                             return super.parseNetworkResponse(response);
                         }
         };
-                    queue.add(createAccountRequest);
+                    queue.add(loginRequest);
     }
 
     void createPosting(HandleResponse callback, int employer_id, String job_title, String description, String salary, String type){
         String url = "http://162.243.172.218:5000/createPosting";
-        StringRequest createAccountRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest createPostingRequest = new StringRequest(Request.Method.POST, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
         ) {
@@ -617,7 +617,7 @@ public class UseServer {
                 return super.parseNetworkResponse(response);
             }
         };
-        queue.add(createAccountRequest);
+        queue.add(createPostingRequest);
     }
 
 
