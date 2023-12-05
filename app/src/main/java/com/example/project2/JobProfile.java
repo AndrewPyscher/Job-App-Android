@@ -3,6 +3,7 @@ package com.example.project2;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -25,6 +26,24 @@ public class JobProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_profile);
 
+        accountID = -1;
+
+        serverDAO = UseServer.getInstance(this);
+        saveResponse = new AtomicReference<>();
+
+        accountID = getSharedPreferences("user", MODE_PRIVATE).getInt("id", -1);
+        Log.d(TAG, "Account ID: "+accountID);
+
+        // Find active account and initialize if necessary
+
+        String encodedStoredProfile = accountLookup();
+        String[] profileData;
+        try {
+            profileData = encodedStoredProfile.split(Formatting.DELIMITER_1);
+        } catch (Exception e) {
+            profileData = new String[]{String.valueOf(accountID),"","","","","","",""};
+        }
+
         // --------------<<<   GET VIEWS   >>>-------------- \\
 
         btnEdit = findViewById(R.id.btnEditJob);
@@ -37,6 +56,17 @@ public class JobProfile extends AppCompatActivity {
         etEmail = findViewById(R.id.etJobEmail);
         etDescription = findViewById(R.id.etJobDescription);
 
+        // --------------<<<   POPULATE VIEWS FROM BACKEND   >>>-------------- \\
+
+        //  ------------------------- Index Table -------------------------  \\
+        // |  id: 0     |  address: 1 |  aboutMe: 2      |  name: 3        | \\
+        // |  phone: 4  |  email: 5   |  workHistory:  6 |  education : 7  | \\
+
+        txtJobName.setText(profileData[3]);
+        txtPhone.setText(profileData[4]);
+        txtEmail.setText(profileData[5]);
+        txtDescription.setText(profileData[2]);
+
         // --------------<<<   LISTENERS   >>>-------------- \\
 
         // 'Edit' button dual-functions as 'Save' button
@@ -48,6 +78,26 @@ public class JobProfile extends AppCompatActivity {
                 txtPhone.setText(etPhone.getText().toString().trim());
                 txtEmail.setText(etEmail.getText().toString().trim());
                 txtDescription.setText(etDescription.getText().toString().trim());
+
+                // Get encoding of profile for backend
+                String[] encodedProfile = generateEncodedProfileData();
+                // Update profile
+                // TODO: Actually make this data populate correctly
+                serverDAO.updateJobPosting(response -> {
+                            Log.d(TAG, "UPDATING PROFILE: "+response);
+                        }, Integer.parseInt(encodedProfile[0]),encodedProfile[1],encodedProfile[2],encodedProfile[3],
+                        Boolean.parseBoolean(encodedProfile[4]));
+
+                Log.d(TAG, "-- Now showing detailed update info --");
+                Log.d(TAG, encodedProfile[0]);
+                Log.d(TAG, encodedProfile[1]);
+                Log.d(TAG, encodedProfile[2]);
+                Log.d(TAG, encodedProfile[3]);
+                Log.d(TAG, encodedProfile[4]);
+                Log.d(TAG, encodedProfile[5]);
+                Log.d(TAG, encodedProfile[6]);
+                Log.d(TAG, encodedProfile[7]);
+
                 setProfileStatic();
             }
         });
@@ -101,6 +151,49 @@ public class JobProfile extends AppCompatActivity {
 
         // Hide keyboard - Signifies editing finished
         hideKeyboard();
+    }
+
+    private String accountLookup() {
+        String result = "";
+        serverDAO.verifyLogin(response -> {
+            Log.d(TAG, "VERIFY LOGIN : "+response);
+        });
+
+        serverDAO.myAccount(response -> {
+            Log.d(TAG, "serverDAO onCreate: " + response);
+            saveResponse.set(response);
+        }, "");
+
+        // Get account ID if possible
+        if(saveResponse.get() != null && !saveResponse.get().equals(""))
+            accountID = Integer.parseInt(saveResponse.get().split(Formatting.DELIMITER_1)[0]);
+
+        result = saveResponse.get();
+
+        // If no information exists
+//        if(accountID != -1 && result = null)
+//            serverDAO.updateProfile(response -> {
+//                Log.d(TAG, "UPDATE:");
+//            },accountID,"","About Me","New User","","","","");
+
+        return result;
+    }
+
+    private String[] generateEncodedProfileData() {
+        //  ------------------------- Index Table -------------------------  \\
+        // |  id: 0     |  address: 1 |  aboutMe: 2      |  name: 3        | \\
+        // |  phone: 4  |  email: 5   |  workHistory:  6 |  education : 7  | \\
+
+        String[] result = new String[8];
+
+        result[0] = String.valueOf(accountID); // Gotta actually get this somehow...
+        result[1] = "myAddress";
+        result[2] = txtDescription.getText().toString();
+        result[3] = txtJobName.getText().toString();
+        result[4] = txtPhone.getText().toString();
+        result[5] = txtEmail.getText().toString();
+
+        return result;
     }
 
     /**
