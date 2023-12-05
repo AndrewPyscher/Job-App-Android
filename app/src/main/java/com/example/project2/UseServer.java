@@ -331,7 +331,7 @@ public class UseServer {
     // active = all    : gets all jobs (active and inactive)
     // active = ""     : all active jobs
     // active = false  : all inactive jobs
-    public void allJobs(HandleResponse callback, String active){
+    void allJobs(HandleResponse callback, String active){
         String url = "http://162.243.172.218:5000/allJobs";
         if(!active.equals(""))
             url = "http://162.243.172.218:5000/allJobs?active=" + active;
@@ -544,8 +544,8 @@ public class UseServer {
 
     void login(HandleResponse callback, String username, String password){
         String url = "http://162.243.172.218:5000/login";
-        StringRequest createAccountRequest = new StringRequest(Request.Method.POST, url,
-                response -> callback.response(response + "<><>"+session),
+        StringRequest loginRequest = new StringRequest(Request.Method.POST, url,
+                response -> callback.response(response),
                 error -> callback.response(error.getMessage())
             ) {
                         @Override
@@ -582,12 +582,12 @@ public class UseServer {
                             return super.parseNetworkResponse(response);
                         }
         };
-                    queue.add(createAccountRequest);
+                    queue.add(loginRequest);
     }
 
     void createPosting(HandleResponse callback, int employer_id, String job_title, String description, String salary, String type){
         String url = "http://162.243.172.218:5000/createPosting";
-        StringRequest createAccountRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest createPostingRequest = new StringRequest(Request.Method.POST, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
         ) {
@@ -627,7 +627,7 @@ public class UseServer {
                 return super.parseNetworkResponse(response);
             }
         };
-        queue.add(createAccountRequest);
+        queue.add(createPostingRequest);
     }
 
 
