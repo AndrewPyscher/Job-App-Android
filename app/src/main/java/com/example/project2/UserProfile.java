@@ -23,6 +23,8 @@ import java.util.concurrent.atomic.AtomicReference;
 public class UserProfile extends AppCompatActivity {
 
     public static final String TAG = "USER_PROFILE";
+    public static final String DELIMITER_CUSTOM_OUTER = "#@#";
+    public static final String DELIMITER_CUSTOM_INNER = "@#@";
     ImageButton btnEdit, btnCancel;
     TextView txtName, txtDescription, txtPhone, txtEmail , txtExperience, txtEducation;
     EditText etName, etPhone, etEmail, etDescription;
@@ -100,7 +102,7 @@ public class UserProfile extends AppCompatActivity {
         jobHistory.add(new Job("Frying Cook", "Krusty Krab", new Date(122,7,24), new Date(123,4,4)));
         // Use as backup somehow???
 
-        jobHistory = getJobHistoryFromDAO("input");
+        jobHistory = getJobHistoryFromDAO(profileData[6]);
 
         Log.d(TAG, "Size of jobHistory: " + jobHistory.size());
         Log.d(TAG, "Contents of jobHistory: " + jobHistory);
@@ -121,7 +123,7 @@ public class UserProfile extends AppCompatActivity {
         educationHistory.add(new School("Georgia Tech", "Computer Science", new Date(125,4,4)));
 
         // Get Education History for User
-        educationHistory = getEducationHistoryFromDAO("input");
+        educationHistory = getEducationHistoryFromDAO(profileData[7]);
 
         Log.d(TAG, "Size of educationHistory: " + educationHistory.size());
         Log.d(TAG, "Contents of educationHistory: " + educationHistory);
@@ -308,13 +310,13 @@ public class UserProfile extends AppCompatActivity {
         ArrayList<Job> jobs = new ArrayList<>();
 
         // Get list of job encodings
-        String[] encodedJobs = input.split(Formatting.DELIMITER_2);
+        String[] encodedJobs = input.split(DELIMITER_CUSTOM_OUTER);
 
         // Iterate through encodings
         // Adding new jobs to ArrayList
         try {
             for (String curJobEncoding : encodedJobs) {
-                String[] jobData = curJobEncoding.split(Formatting.DELIMITER_1);
+                String[] jobData = curJobEncoding.split(DELIMITER_CUSTOM_INNER);
 
                 // Create new job - Title + Company
                 Job newJob = new Job(jobData[0],jobData[1]);
@@ -347,13 +349,13 @@ public class UserProfile extends AppCompatActivity {
         ArrayList<School> schools = new ArrayList<>();
 
         // Get list of school encodings
-        String[] encodedSchools = input.split(Formatting.DELIMITER_2);
+        String[] encodedSchools = input.split(DELIMITER_CUSTOM_OUTER);
 
         // Iterate through encodings
         // Adding new schools to ArrayList
         try {
             for (String curSchoolEncoding : encodedSchools) {
-                String[] schoolData = curSchoolEncoding.split(Formatting.DELIMITER_1);
+                String[] schoolData = curSchoolEncoding.split(DELIMITER_CUSTOM_INNER);
 
                 // Create new job - Title + Company
                 School newSchool = new School(schoolData[0],schoolData[1]);
@@ -384,29 +386,30 @@ public class UserProfile extends AppCompatActivity {
         String[] result = new String[8];
 
         result[0] = String.valueOf(accountID); // Gotta actually get this somehow...
-        result[1] = "";
-        result[2] += txtDescription.getText().toString();
-        result[3] += txtName.getText().toString();
-        result[4] += txtPhone.getText().toString();
-        result[5] += txtEmail.getText().toString();
+        result[1] = "myAddress";
+        result[2] = txtDescription.getText().toString();
+        result[3] = txtName.getText().toString();
+        result[4] = txtPhone.getText().toString();
+        result[5] = txtEmail.getText().toString();
 
         // Add jobHistory
         String encodedHistory = "";
         for (Job job : jobHistory) {
             encodedHistory += job;
             if(jobHistory.indexOf(job) != jobHistory.size()-1)
-                encodedHistory += Formatting.DELIMITER_2;
+                encodedHistory += DELIMITER_CUSTOM_OUTER;
         }
         result[6] = encodedHistory;
+        Log.d("Look", encodedHistory);
 
         // Add educationHistory
-        encodedHistory = "";
+        String encodedEducation = "";
         for (School school : educationHistory) {
-            encodedHistory += school;
-            if(jobHistory.indexOf(school) != jobHistory.size()-1)
-                encodedHistory += Formatting.DELIMITER_2;
+            encodedEducation += school;
+            if(educationHistory.indexOf(school) != educationHistory.size()-1)
+                encodedEducation += DELIMITER_CUSTOM_OUTER;
         }
-        result[7] = encodedHistory;
+        result[7] = encodedEducation;
 
         return result;
     }

@@ -73,17 +73,13 @@ public class Job {
     public String toString() {
        String result = "";
 
-       result += "{";
-
        result+=this.title;
-       result+="!@#";
+       result+="@#@";
        result+=this.organization;
-       result+="!@#";
+       result+="@#@";
        result+=this.getDateStartString();
-       result+="!@#";
+       result+="@#@";
        result+=this.getDateEndString();
-
-       result += "}";
 
        return result;
     }
