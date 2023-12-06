@@ -2,10 +2,8 @@ package com.example.project2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -36,7 +34,7 @@ public class Settings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         seekRadius = findViewById(R.id.seekRadius);
-        botNavBar = findViewById(R.id.botNavBar);
+        botNavBar = findViewById(R.id.navBar);
         txtRadius = findViewById(R.id.txtRadius);
         switchNotifications = findViewById(R.id.switchNotifications);
         sp = getSharedPreferences("settings", MODE_PRIVATE);

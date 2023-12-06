@@ -29,9 +29,23 @@ public class Formatting {
                             )
             );
 
-
         }
 
         return jobListings;
+    }
+
+    // TODO NEED TO CHECK IF WILL BREAK
+    public int receiveRating(String input) {
+        double ratingCounter = 0;
+
+        // Split input by delimiter value then loop through ratings summing them together
+        String[] splitRatings = input.split(delimiter);
+        for (int i = 0; i < splitRatings.length; i++) {
+            // Add up all ratings
+            ratingCounter = ratingCounter + Integer.parseInt(splitRatings[i]);
+        }
+
+        // Divide by number of ratings, round, and return value
+        return (int) Math.round(ratingCounter/splitRatings.length);
     }
 }
