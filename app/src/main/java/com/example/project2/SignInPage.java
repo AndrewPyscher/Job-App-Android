@@ -79,6 +79,7 @@ public class SignInPage extends AppCompatActivity {
                 tvError.setText(response);
                 if (!response.equals("Username or Password is incorrect!")) {
                     String[] split = response.split("<><>");
+                    Log.d("Garbage",split[1]);
                     ed.putString("session", split[1]);
                     ed.commit();
                     if (chkStaySignedIn.isChecked()) {
@@ -96,7 +97,7 @@ public class SignInPage extends AppCompatActivity {
                     ed.putInt("id", Integer.parseInt(split[0]));
                     ed.commit();
 
-                    Intent i = new Intent(this, MainActivity.class);
+                    Intent i = new Intent(this, JobListing.class);
                     startActivity(i);
                 } else {
                     tvError.setVisibility(View.VISIBLE);

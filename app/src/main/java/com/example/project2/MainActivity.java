@@ -2,6 +2,7 @@ package com.example.project2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
                 //do nothing
                 return true;
             } else if (id == R.id.search) {
-                //Use start activity with intents to start that particular activity
+                //Make an intent to start the activity
                 return true;
             } else {
                 return false;
