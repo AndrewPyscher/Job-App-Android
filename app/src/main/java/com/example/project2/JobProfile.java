@@ -184,17 +184,17 @@ public class JobProfile extends AppCompatActivity {
 
     private String[] generateEncodedProfileData() {
         //  ------------------------- Index Table -------------------------  \\
-        // |  id: 0     |  address: 1 |  aboutMe: 2      |  name: 3        | \\
-        // |  phone: 4  |  email: 5   |  workHistory:  6 |  education : 7  | \\
+        // |  id: 0     |  jobName: 1 |  description: 2  |   \\
+        // |  name: 3   |  salary: 4  |  isActive: 5     |   \\
 
-        String[] result = new String[8];
+        String[] result = new String[6];
 
         result[0] = String.valueOf(accountID); // Gotta actually get this somehow...
-        result[1] = "myAddress";
+        result[1] = txtJobName.getText().toString();
         result[2] = txtDescription.getText().toString();
-        result[3] = txtJobName.getText().toString();
-        result[4] = txtPhone.getText().toString();
-        result[5] = txtEmail.getText().toString();
+
+        result[3] = ""; // Salary
+        result[4] = "true"; // isActive(?)
 
         return result;
     }

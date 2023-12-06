@@ -16,7 +16,9 @@ import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -26,8 +28,8 @@ public class UserProfile extends AppCompatActivity {
     public static final String DELIMITER_CUSTOM_OUTER = "#@#";
     public static final String DELIMITER_CUSTOM_INNER = "@#@";
     ImageButton btnEdit, btnCancel;
-    TextView txtName, txtDescription, txtPhone, txtEmail , txtExperience, txtEducation;
-    EditText etName, etPhone, etEmail, etDescription;
+    TextView txtName, txtDescription, txtPhone, txtEmail, txtAddress, txtExperience, txtEducation;
+    EditText etName, etPhone, etAddress, etEmail, etDescription;
 //    ListView lstExperience, lstEducation;
     RecyclerView rvEmployment, rvEducation;
     JobAdapter jobAdapter;
@@ -39,6 +41,7 @@ public class UserProfile extends AppCompatActivity {
     ArrayList<School> educationHistory;
 
     int accountID;
+    boolean isAccountOwner = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class UserProfile extends AppCompatActivity {
         // Find active account and initialize if necessary
 
         String encodedStoredProfile = accountLookup();
+        Log.d(TAG, "accountLookupResult:" + encodedStoredProfile);
         String[] profileData;
         try {
             profileData = encodedStoredProfile.split(Formatting.DELIMITER_1);
@@ -71,11 +75,13 @@ public class UserProfile extends AppCompatActivity {
         txtDescription = findViewById(R.id.txtDescription);
         txtPhone = findViewById(R.id.txtPhone);
         txtEmail = findViewById(R.id.txtEmail);
+        txtAddress = findViewById(R.id.txtAddress);
         txtExperience = findViewById(R.id.txtExperience);
         txtEducation = findViewById(R.id.txtEducation);
         etName = findViewById(R.id.etName);
         etPhone = findViewById(R.id.etPhone);
         etEmail = findViewById(R.id.etEmail);
+        etAddress = findViewById(R.id.etAddress);
         etDescription = findViewById(R.id.etDescription);
 //        lstExperience = findViewById(R.id.lstExperience);
         rvEmployment = findViewById(R.id.rvEmployment);
@@ -88,10 +94,22 @@ public class UserProfile extends AppCompatActivity {
         // |  id: 0     |  address: 1 |  aboutMe: 2      |  name: 3        | \\
         // |  phone: 4  |  email: 5   |  workHistory:  6 |  education : 7  | \\
 
-        txtName.setText(profileData[3]);
-        txtPhone.setText(profileData[4]);
-        txtEmail.setText(profileData[5]);
-        txtDescription.setText(profileData[2]);
+        Log.d(TAG, profileData[3]);
+        Log.d(TAG, profileData[4]);
+        Log.d(TAG, profileData[5]);
+        Log.d(TAG, profileData[2]);
+
+        etName.setText(profileData[1]);
+        etPhone.setText(profileData[3]);
+        etEmail.setText(profileData[4]);
+        etAddress.setText(profileData[2]);
+        etDescription.setText(profileData[5]);
+
+        txtName.setText(profileData[1]);
+        txtPhone.setText(profileData[3]);
+        txtEmail.setText(profileData[4]);
+        txtAddress.setText(profileData[2]);
+        txtDescription.setText(profileData[5]);
 
 
         // --------------<<<   LIST VIEW SECTION   >>>-------------- \\
@@ -159,17 +177,22 @@ public class UserProfile extends AppCompatActivity {
                 txtName.setText(etName.getText().toString().trim());
                 txtPhone.setText(etPhone.getText().toString().trim());
                 txtEmail.setText(etEmail.getText().toString().trim());
+                txtAddress.setText(etAddress.getText().toString().trim());
                 txtDescription.setText(etDescription.getText().toString().trim());
 
                 jobAdapter.saveJobData();
                 jobHistory.remove(jobHistory.size()-1);
                 jobAdapter = new JobAdapter(this, jobHistory);
                 rvEmployment.setAdapter(jobAdapter);
+                if(jobHistory.size() == 0)
+                    txtExperience.setText("Edit Profile to Add Work Experience");
 
                 educationAdapter.saveSchoolData();
                 educationHistory.remove(educationHistory.size()-1);
                 educationAdapter = new EducationAdapter(this, educationHistory);
                 rvEducation.setAdapter(educationAdapter);
+                if(educationHistory.size() == 0)
+                    txtEducation.setText("Edit Profile to Add Education History");
 
                 // Get encoding of profile for backend
                 String[] encodedProfile = generateEncodedProfileData();
@@ -220,6 +243,7 @@ public class UserProfile extends AppCompatActivity {
         txtName.setVisibility(View.INVISIBLE);
         txtPhone.setVisibility(View.INVISIBLE);
         txtEmail.setVisibility(View.INVISIBLE);
+        txtAddress.setVisibility(View.INVISIBLE);
         txtDescription.setVisibility(View.INVISIBLE);
 
 
@@ -227,6 +251,7 @@ public class UserProfile extends AppCompatActivity {
         etName.setVisibility(View.VISIBLE);
         etPhone.setVisibility(View.VISIBLE);
         etEmail.setVisibility(View.VISIBLE);
+        etAddress.setVisibility(View.VISIBLE);
         etDescription.setVisibility(View.VISIBLE);
         btnCancel.setVisibility(View.VISIBLE);
         btnEdit.setImageResource(R.drawable.save_button_temp);
@@ -236,6 +261,7 @@ public class UserProfile extends AppCompatActivity {
         etName.setText(txtName.getText());
         etPhone.setText(txtPhone.getText());
         etEmail.setText(txtEmail.getText());
+        etAddress.setText(txtAddress.getText());
         etDescription.setText(txtDescription.getText());
     }
 
@@ -248,12 +274,14 @@ public class UserProfile extends AppCompatActivity {
         txtName.setVisibility(View.VISIBLE);
         txtPhone.setVisibility(View.VISIBLE);
         txtEmail.setVisibility(View.VISIBLE);
+        txtAddress.setVisibility(View.VISIBLE);
         txtDescription.setVisibility(View.VISIBLE);
 
         // Hide Static Fields
         etName.setVisibility(View.INVISIBLE);
         etPhone.setVisibility(View.INVISIBLE);
         etEmail.setVisibility(View.INVISIBLE);
+        etAddress.setVisibility(View.INVISIBLE);
         etDescription.setVisibility(View.INVISIBLE);
 
         btnCancel.setVisibility(View.INVISIBLE);
@@ -285,16 +313,18 @@ public class UserProfile extends AppCompatActivity {
             Log.d(TAG, "VERIFY LOGIN : "+response);
         });
 
+//        CountDownLatch latch = new CountDownLatch(1); // Initialize a latch with count 1
+
         serverDAO.myAccount(response -> {
             Log.d(TAG, "serverDAO onCreate: " + response);
             saveResponse.set(response);
+            populateProfile(response);
+//            latch.countDown(); // Signal that the callback is done
         }, "");
 
-        // Get account ID if possible
-        if(saveResponse.get() != null && !saveResponse.get().equals(""))
-            accountID = Integer.parseInt(saveResponse.get().split(Formatting.DELIMITER_1)[0]);
+//            accountID = Integer.parseInt(saveResponse.get().split(Formatting.DELIMITER_1)[0]);
 
-        result = saveResponse.get();
+//        result = saveResponse.get();
 
         // If no information exists
 //        if(accountID != -1 && result = null)
@@ -302,7 +332,60 @@ public class UserProfile extends AppCompatActivity {
 //                Log.d(TAG, "UPDATE:");
 //            },accountID,"","About Me","New User","","","","");
 
-        return result;
+        return saveResponse.get();
+    }
+
+    private void populateProfile(String encodedString) {
+        Log.d(TAG,encodedString);
+        String[] profileData;
+        try {
+            profileData = encodedString.split(Formatting.DELIMITER_1);
+        } catch (Exception e) {
+            profileData = new String[]{String.valueOf(accountID),"","","","","","",""};
+        }
+
+        Log.d(TAG, Arrays.toString(profileData));
+
+        for (String item : profileData) {
+            Log.d(TAG, "{" + item + "}");
+        }
+
+        // Check if current user is account owner
+        isAccountOwner = (accountID == Integer.parseInt(profileData[0]));
+
+        etName.setText(profileData[1]);
+        etPhone.setText(profileData[3]);
+        etEmail.setText(profileData[4]);
+        etAddress.setText(profileData[2]);
+        etDescription.setText(profileData[5]);
+
+        txtName.setText(profileData[1]);
+        txtPhone.setText(profileData[3]);
+        txtEmail.setText(profileData[4]);
+        txtAddress.setText(profileData[2]);
+        txtDescription.setText(profileData[5]);
+
+        if(profileData.length >= 7)
+            if(profileData[6] != null && !profileData[6].equals("")) {
+                jobHistory = getJobHistoryFromDAO(profileData[6]);
+                jobAdapter = new JobAdapter(this, jobHistory);
+                rvEmployment.setAdapter(jobAdapter);
+                if(jobHistory.size() == 0 && isAccountOwner)
+                    txtExperience.setText("Edit Profile to Add Work Experience");
+            }
+
+        if(profileData.length >= 8)
+            if(profileData[7] != null && !profileData[7].equals("")) {
+                educationHistory = getEducationHistoryFromDAO(profileData[7]);
+                educationAdapter = new EducationAdapter(this, educationHistory);
+                rvEducation.setAdapter(educationAdapter);
+                if(educationHistory.size() == 0 && isAccountOwner)
+                    txtEducation.setText("Edit Profile to Add Education History");
+            }
+
+        // Also address the button
+        if(!isAccountOwner)
+            btnEdit.setVisibility(View.INVISIBLE);
     }
 
     private ArrayList<Job> getJobHistoryFromDAO(String input) {
@@ -310,25 +393,30 @@ public class UserProfile extends AppCompatActivity {
         ArrayList<Job> jobs = new ArrayList<>();
 
         // Get list of job encodings
-        String[] encodedJobs = input.split(DELIMITER_CUSTOM_OUTER);
+        String[] encodedJobs = new String[1];
+
+        if(input.contains(DELIMITER_CUSTOM_OUTER))
+            encodedJobs = input.split(DELIMITER_CUSTOM_OUTER);
+        else
+            encodedJobs[0] = input;
 
         // Iterate through encodings
         // Adding new jobs to ArrayList
         try {
             for (String curJobEncoding : encodedJobs) {
                 String[] jobData = curJobEncoding.split(DELIMITER_CUSTOM_INNER);
-
+                Log.d(TAG, Arrays.toString(jobData));
                 // Create new job - Title + Company
                 Job newJob = new Job(jobData[0],jobData[1]);
 
                 // Manually add startDate if applicable
-                if(jobData[2].length() > 1)
+                if(jobData.length > 2 && jobData[2].length() > 1)
                     try {
                         newJob.setDateStart(new SimpleDateFormat("MM/yyyy").parse(jobData[2]));
                     } catch (Exception ignored) {}
 
                 // Manually add endDate if applicable
-                if(jobData[3].length() > 1)
+                if(jobData.length > 3 && jobData[3].length() > 1)
                     try {
                         newJob.setDateStart(new SimpleDateFormat("MM/yyyy").parse(jobData[3]));
                     } catch (Exception ignored) {}
@@ -349,7 +437,12 @@ public class UserProfile extends AppCompatActivity {
         ArrayList<School> schools = new ArrayList<>();
 
         // Get list of school encodings
-        String[] encodedSchools = input.split(DELIMITER_CUSTOM_OUTER);
+        String[] encodedSchools = new String[1];
+
+        if(input.contains(DELIMITER_CUSTOM_OUTER))
+            encodedSchools = input.split(DELIMITER_CUSTOM_OUTER);
+        else
+            encodedSchools[0] = input;
 
         // Iterate through encodings
         // Adding new schools to ArrayList
@@ -370,7 +463,7 @@ public class UserProfile extends AppCompatActivity {
                 schools.add(newSchool);
             }
         } catch (Exception e) {
-
+            Log.d(TAG, "Corrupt job encoding. Skipping...");
         }
 
 
@@ -386,7 +479,7 @@ public class UserProfile extends AppCompatActivity {
         String[] result = new String[8];
 
         result[0] = String.valueOf(accountID); // Gotta actually get this somehow...
-        result[1] = "myAddress";
+        result[1] = txtAddress.getText().toString();
         result[2] = txtDescription.getText().toString();
         result[3] = txtName.getText().toString();
         result[4] = txtPhone.getText().toString();

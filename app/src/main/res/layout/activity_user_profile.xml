@@ -128,7 +128,7 @@
                     android:id="@+id/txtDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="32dp"
                     android:fontFamily="sans-serif-light"
                     android:gravity="center_vertical"
                     android:paddingHorizontal="25dp"
@@ -136,13 +136,15 @@
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView7" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView1234" />
 
                 <EditText
                     android:id="@+id/etDescription"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="32dp"
                     android:ems="10"
                     android:fontFamily="sans-serif-light"
                     android:gravity="start|top"
@@ -150,9 +152,11 @@
                     android:paddingHorizontal="25dp"
                     android:textSize="16sp"
                     android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@+id/txtDescription"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView7" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView1234"
+                    app:layout_constraintVertical_bias="0.0" />
 
 
                 <TextView
@@ -184,6 +188,20 @@
                     app:layout_constraintTop_toTopOf="@+id/textView723" />
 
                 <TextView
+                    android:id="@+id/txtAddress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="32dp"
+                    android:fontFamily="sans-serif-light"
+                    android:paddingHorizontal="15dp"
+                    android:text="(123) 456-7890"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/textView1234"
+                    app:layout_constraintTop_toTopOf="@+id/textView1234" />
+
+                <TextView
                     android:id="@+id/textView7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -197,6 +215,21 @@
                     app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView723" />
+
+                <TextView
+                    android:id="@+id/textView1234"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="64dp"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:paddingHorizontal="15dp"
+                    android:text="Address:"
+                    android:textSize="16sp"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
                 <View
                     android:id="@+id/section_separator2"
@@ -291,6 +324,22 @@
                     app:layout_constraintBaseline_toBaselineOf="@+id/txtName"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
+
+                <EditText
+                    android:id="@+id/etAddress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginEnd="32dp"
+                    android:ems="10"
+                    android:fontFamily="sans-serif-light"
+                    android:hint="Address"
+                    android:inputType="text"
+                    android:textSize="14sp"
+                    android:visibility="invisible"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textView1234"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView1234" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
