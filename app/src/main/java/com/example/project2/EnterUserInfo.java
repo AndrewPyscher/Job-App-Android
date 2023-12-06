@@ -31,11 +31,7 @@ public class EnterUserInfo extends AppCompatActivity {
         sp = getSharedPreferences("user", MODE_PRIVATE);
         lblnewError = findViewById(R.id.lblnewError);
 
-
         UseServer server = new UseServer(this, sp.getString("session",""));
-
-
-
         btnSubmitNew.setOnClickListener(e->{
             if(txtNameNew.getText().toString().equals(""))
             {

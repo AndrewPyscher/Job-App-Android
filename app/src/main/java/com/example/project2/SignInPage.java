@@ -94,7 +94,6 @@ public class SignInPage extends AppCompatActivity {
                     }
 
                     ed.putInt("id", Integer.parseInt(split[0]));
-
                     ed.commit();
 
                     Intent i = new Intent(this, MainActivity.class);

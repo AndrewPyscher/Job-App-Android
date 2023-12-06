@@ -104,7 +104,5 @@ public class CreateAccount extends AppCompatActivity {
                 startActivity(createAccount);
             }
         });
-
-
     }
 }
