@@ -2,7 +2,10 @@ package com.example.project2;
 
 
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -24,10 +27,16 @@ public class UseServer {
     private static UseServer instance;
     RequestQueue queue;
     String session;
+    SharedPreferences sp;
     public UseServer(Context context) {
         queue = Volley.newRequestQueue(context);
     }
 
+
+    public UseServer(Context context, String session){
+        queue = Volley.newRequestQueue(context);
+        this.session = session;
+    }
     public static synchronized UseServer getInstance(Context context) {
         if (instance == null) {
             instance = new UseServer(context.getApplicationContext());
@@ -322,7 +331,7 @@ public class UseServer {
     // active = all    : gets all jobs (active and inactive)
     // active = ""     : all active jobs
     // active = false  : all inactive jobs
-    void allJobs(HandleResponse callback, String active){
+    public void allJobs(HandleResponse callback, String active){
         String url = "http://162.243.172.218:5000/allJobs";
         if(!active.equals(""))
             url = "http://162.243.172.218:5000/allJobs?active=" + active;
@@ -536,7 +545,7 @@ public class UseServer {
     void login(HandleResponse callback, String username, String password){
         String url = "http://162.243.172.218:5000/login";
         StringRequest createAccountRequest = new StringRequest(Request.Method.POST, url,
-                response -> callback.response(response),
+                response -> callback.response(response + "<><>"+session),
                 error -> callback.response(error.getMessage())
             ) {
                         @Override
@@ -613,8 +622,50 @@ public class UseServer {
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
                 Map<String, String> headers = response.headers;
                 String cookies = headers.get("Set-Cookie");
+
                 session = cookies.split(";")[0];
                 return super.parseNetworkResponse(response);
+            }
+        };
+        queue.add(createAccountRequest);
+    }
+
+
+    void insertUserInfo(HandleResponse callback, int id, String address, String about_me, String name, String phone, String workHistory, String education, String email){
+        String url = "http://162.243.172.218:5000/insertUserInfo";
+        StringRequest createAccountRequest = new StringRequest(Request.Method.POST, url,
+                response -> callback.response(response),
+                error -> callback.response(error.getMessage())
+        ) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                JSONObject jsonParams = new JSONObject();
+                try {
+                    jsonParams.put("id", id);
+                    jsonParams.put("address", address);
+                    jsonParams.put("about_me", about_me);
+                    jsonParams.put("name", name);
+                    jsonParams.put("phone", phone);
+                    jsonParams.put("email", email);
+                    jsonParams.put("workHistory", workHistory);
+                    jsonParams.put("education", education);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return jsonParams.toString().getBytes();
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Connection", "keep-alive");
+                headers.put("Cookie", session);
+                return headers;
             }
         };
         queue.add(createAccountRequest);
