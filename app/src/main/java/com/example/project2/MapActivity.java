@@ -3,6 +3,7 @@ package com.example.project2;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -61,6 +62,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     Spinner sPrimary, sSecondary;
     BottomNavigationView navigationMenu;
 
+    // Shared Preferences
+    SharedPreferences sp;
+
     // Constant string message
     private final String ERROR_TITLE_MESSAGE = "Error find job listing",
             ERROR_ADDRESS_MESSAGE = "ERROR generating street address",
@@ -87,8 +91,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private ArrayList<String> categoriesList = new ArrayList<>();
     private ArrayList<String> employerIdList = new ArrayList<>();
 
-    // Flag for determining if map is ready to be updated
-    private boolean mapReady = false;
+//    // Flag for determining if map is ready to be updated
+//    private boolean mapReady = false;
+
+    // Filter values
     private int primaryFilter, secondaryFilter;
 
     @Override
@@ -100,7 +106,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         tvMapTitle = findViewById(R.id.tvMapTitle);
         tvMapAddress = findViewById(R.id.tvMapAddress);
         tvMapDescription = findViewById(R.id.tvMapDescription);
-        tvMapDescription.setMovementMethod(new ScrollingMovementMethod());
 
         btnMapApply = findViewById(R.id.btnMapApply);
 
@@ -112,8 +117,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         navigationMenu = findViewById(R.id.navBar);
 
+        // Initialize shared preferences
+        sp = getSharedPreferences("user", MODE_PRIVATE);
+
         // Initialize formatting class instance
         formatting = new Formatting();
+
+        // Set up scroll bar for map description text box
+        tvMapDescription.setMovementMethod(new ScrollingMovementMethod());
 
         // Update default values to category, employer id, and secondary spinner list
         secondarySpinnerList.add(DEFAULT_NONE_VALUE);
@@ -226,8 +237,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // Set custom info window adapter
         map.setInfoWindowAdapter(new JobInfoWindow(this, allJobListings));
 
-        // Update map ready flag
-        mapReady = true;
+//        // Update map ready flag
+//        mapReady = true;
 
         // TODO Set camera position based on ? AVG OF LOCATIONS? USE ALLJOBLISTINGS LATLONG OBJECT
         // Set map camera settings
@@ -396,7 +407,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     // Import job listings for map based on no filter values
     private void importMapDataAll(String filter) {
         // Create class object for importing data from database
-        UseServer useServer = new UseServer(this);
+        UseServer useServer = new UseServer(this, sp.getString("session","") );
 
         // Pull all jobs from response
         useServer.allJobs(new HandleResponse() {
@@ -417,7 +428,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     // Import job listings for map based on category filter values
     private void importMapDataByCategory(String category) {
         // Create class object for importing data from database
-        UseServer useServer = new UseServer(this);
+        UseServer useServer = new UseServer(this, sp.getString("session","") );
 
         // Pull all jobs from response
         useServer.getJobsForCategory(new HandleResponse() {
@@ -439,7 +450,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     // Import job listings for map based on employer id filter values
     private void importMapDataByEmployerId(int employerId) {
         // Create class object for importing data from database
-        UseServer useServer = new UseServer(this);
+        UseServer useServer = new UseServer(this, sp.getString("session","") );
 
         // Pull all jobs from response
         useServer.jobByEmployer(new HandleResponse() {
@@ -461,7 +472,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     // ids, then populate all job list from data.
     private void initialInfoLoading() {
         // Create class object for importing data from database
-        UseServer useServer = new UseServer(this);
+        UseServer useServer = new UseServer(this, sp.getString("session","") );
 
         // Pull all jobs from response
         useServer.allJobs(new HandleResponse() {
