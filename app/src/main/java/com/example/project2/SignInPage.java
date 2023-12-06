@@ -33,6 +33,7 @@ public class SignInPage extends AppCompatActivity {
     EditText etUsername, etPassword1;
     CheckBox chkStaySignedIn;
     UseServer use;
+    String TAG = "Test";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,32 +49,52 @@ public class SignInPage extends AppCompatActivity {
         ed = sp.edit();
         use = UseServer.getInstance(this);
 
-//        Intent j = new Intent(this, Settings.class);
-//        startActivity(j);
 
+        try{
+            if(sp.getBoolean("stay",false)){
+                String user = sp.getString("user","");
+                Log.d(TAG, "user: " + user);
+                if(!user.equals("")){
+                    signIn(sp.getString("user", ""), sp.getString("password", ""));
+                }
+            }
+        }catch (Exception e){
+            ed.putBoolean("stay",false);
+            ed.commit();
+        }
 
-//        if(sp.getBoolean("stay",false)){
-//            String user = sp.getString("user","");
-//            if(!user.equals("")){
-//                Intent i = new Intent(this, MapActivity.class);
-//                startActivity(i);
-//            }
-//        }
         btnCreateAccount.setOnClickListener(e->{
             Intent m = new Intent(this, CreateAccount.class);
             startActivity(m);
         });
 
         btnSignIn.setOnClickListener(e -> {
+            signIn(etUsername.getText().toString(), etPassword1.getText().toString());
+        });
+    }
+    public void signIn(String username, String password){
+        try {
             use.login(response -> {
                 Log.d("test", "onCreate: " + response);
                 tvError.setText(response);
                 if (!response.equals("Username or Password is incorrect!")) {
+                    String[] split = response.split("<><>");
+                    ed.putString("session", split[1]);
+                    ed.commit();
                     if (chkStaySignedIn.isChecked()) {
                         ed.putBoolean("stay", true);
+                        if (sp.getString("user", "").equals("")) {
+                            ed.putString("user", etPassword1.getText().toString());
+                        }
+                        if (sp.getString("password", "").equals("")) {
+                            ed.putString("password", etPassword1.getText().toString());
+                        }
+                    } else {
+                        ed.putBoolean("stay", false);
                     }
-                    ed.putInt("id", Integer.parseInt(response));
-                    ed.putString("user", etUsername.getText().toString());
+
+                    ed.putInt("id", Integer.parseInt(split[0]));
+
                     ed.commit();
 
                     Intent i = new Intent(this, MainActivity.class);
@@ -83,15 +104,10 @@ public class SignInPage extends AppCompatActivity {
                     tvError.setText("Incorrect username or password");
                 }
 
-            }, etUsername.getText().toString(), etPassword1.getText().toString());
+            }, username, password);
+        }catch (Exception e){
 
-
-        });
-
-
-
-
-
+        }
     }
     @Override
     protected void onDestroy() {
