@@ -27,7 +27,6 @@ public class UseServer {
     private static UseServer instance;
     RequestQueue queue;
     String session;
-    SharedPreferences sp;
     public UseServer(Context context) {
         queue = Volley.newRequestQueue(context);
     }
