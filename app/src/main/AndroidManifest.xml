@@ -66,6 +66,9 @@
             android:name=".UserProfile"
             android:exported="true" />
         <activity
+            android:name=".JobCreation"
+            android:exported="true" />
+        <activity
             android:name=".activity_jobs"
             android:exported="false" />
         <activity
