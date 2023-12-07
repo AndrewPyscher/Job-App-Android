@@ -34,21 +34,6 @@ public class Formatting {
         return jobListings;
     }
 
-
-
-    // ----------<<< USER PROFILE ROUTES >>>---------- \\
-
-    public static String[] parseUserProfileInfo(String input)
-    {
-
-        String[] splitInput = input.split(DELIMITER_2);
-        String[] jobHistory = splitInput[0].split(DELIMITER_1);   // wrong idx
-        String[] educationHistory = splitInput[0].split(DELIMITER_1); // wrong idx
-
-
-        return splitInput;
-    }
-
     // TODO NEED TO CHECK IF WILL BREAK
     public int receiveRating(String input) {
         double ratingCounter = 0;
@@ -62,5 +47,20 @@ public class Formatting {
 
         // Divide by number of ratings, round, and return value
         return (int) Math.round(ratingCounter/splitRatings.length);
+    }
+
+
+
+    // ----------<<< USER PROFILE ROUTES >>>---------- \\
+
+    public static String[] parseUserProfileInfo(String input)
+    {
+
+        String[] splitInput = input.split(DELIMITER_2);
+        String[] jobHistory = splitInput[0].split(DELIMITER_1);   // wrong idx
+        String[] educationHistory = splitInput[0].split(DELIMITER_1); // wrong idx
+
+
+        return splitInput;
     }
 }
