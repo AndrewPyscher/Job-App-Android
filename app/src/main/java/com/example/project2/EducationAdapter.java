@@ -32,7 +32,8 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
     public EducationAdapter(Context context, ArrayList<School> educationHistory) {
         this.context = context;
         this.educationHistory = educationHistory;
-        addedSchool = educationHistory.get(educationHistory.size() - 1);
+        if(educationHistory.size() > 0)
+            addedSchool = educationHistory.get(educationHistory.size() - 1);
     }
 
     // inflates the row layout from xml when needed

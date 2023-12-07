@@ -32,7 +32,6 @@ public class EnterEmployerInfo extends AppCompatActivity {
             Log.d("test", "onCreate: " + sp.getString("session", ""));
             Log.d("test", "onCreate: " + coords);
 
-
             server.insertEmployer(response -> {
                 Log.d("test", "onCreate: "+ response);
             }, sp.getInt("id", -1),txtCompanyName.getText().toString(), coords);
