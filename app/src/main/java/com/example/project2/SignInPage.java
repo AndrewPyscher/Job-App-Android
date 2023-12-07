@@ -50,7 +50,7 @@ public class SignInPage extends AppCompatActivity {
         use = UseServer.getInstance(this);
 
 
-        try{
+        /*try{
             if(sp.getBoolean("stay",false)){
                 String user = sp.getString("user","");
                 Log.d(TAG, "user: " + user);
@@ -61,7 +61,7 @@ public class SignInPage extends AppCompatActivity {
         }catch (Exception e){
             ed.putBoolean("stay",false);
             ed.commit();
-        }
+        }*/
 
         btnCreateAccount.setOnClickListener(e->{
             Intent m = new Intent(this, CreateAccount.class);
@@ -75,6 +75,7 @@ public class SignInPage extends AppCompatActivity {
     public void signIn(String username, String password){
         try {
             use.login(response -> {
+                if (response == null) return;
                 Log.d("test", "onCreate: " + response);
                 tvError.setText(response);
                 if (!response.equals("Username or Password is incorrect!")) {
@@ -97,7 +98,7 @@ public class SignInPage extends AppCompatActivity {
                     ed.putInt("id", Integer.parseInt(split[0]));
                     ed.commit();
 
-                    Intent i = new Intent(this, JobListing.class);
+                    Intent i = new Intent(this, activity_jobs.class);
                     startActivity(i);
                 } else {
                     tvError.setVisibility(View.VISIBLE);

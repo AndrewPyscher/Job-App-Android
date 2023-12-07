@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,6 +33,7 @@ public class UserProfile extends AppCompatActivity {
     EditText etName, etPhone, etAddress, etEmail, etDescription;
 //    ListView lstExperience, lstEducation;
     RecyclerView rvEmployment, rvEducation;
+    BottomNavigationView botNavBar;
     JobAdapter jobAdapter;
     EducationAdapter educationAdapter;
     UseServer serverDAO;
@@ -95,6 +99,7 @@ public class UserProfile extends AppCompatActivity {
         rvEmployment = findViewById(R.id.rvEmployment);
 //        lstEducation = findViewById(R.id.lstEducation);
         rvEducation = findViewById(R.id.rvEducation);
+        botNavBar = findViewById(R.id.botNavBarProfile);
 
         // --------------<<<   POPULATE VIEWS FROM BACKEND   >>>-------------- \\
 
@@ -237,6 +242,24 @@ public class UserProfile extends AppCompatActivity {
             rvEmployment.setAdapter(jobAdapter);
             educationAdapter.notifyDataSetChanged();
             rvEducation.setAdapter(educationAdapter);
+        });
+
+        botNavBar.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.home) {
+                Intent i = new Intent(this, activity_jobs.class);
+                startActivity(i);
+                return true;
+            } else if (id == R.id.search) {
+                Intent i = new Intent(this, MapActivity.class);
+                startActivity(i);
+                return true;
+            } else if (id == R.id.profile) {
+                //You are here
+                return true;
+            } else {
+                return false;
+            }
         });
     }
 

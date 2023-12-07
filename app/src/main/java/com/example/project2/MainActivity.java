@@ -24,12 +24,16 @@ public class MainActivity extends AppCompatActivity {
                 //do nothing
                 return true;
             } else if (id == R.id.search) {
-                //Make an intent to start the activity
+                Intent i = new Intent(this, MapActivity.class);
+                startActivity(i);
+                return true;
+            } else if (id == R.id.profile){
+                Intent i = new Intent(this, UserProfile.class);
+                startActivity(i);
                 return true;
             } else {
                 return false;
             }
-            //Etc etc etc, you can modify this however you want to change its behavior
         });
     }
 
