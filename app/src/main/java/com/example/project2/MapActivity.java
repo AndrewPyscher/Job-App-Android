@@ -45,10 +45,7 @@ import java.util.Objects;
 // radius = sp.getInt("radius", 10);
 
 // TODO FIX
-// default camera location, use -1 value for rating
-
-// UPDATE INFOWINDOW TO BE HAVE DIFFERENCE FOR ACTIVE AND INACTIVE
-// ADD FLAG TO JOB LISTING
+// default camera location
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
     // Formatting class instance
@@ -470,24 +467,30 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         useServer.allJobs(new HandleResponse() {
             @Override
             public void response(String response) {
-                // Check response value
-                if (response.equals("")) {
-                    // Empty response returned, no jobs available, set no job tv to visible
-                    tvMapNoJob.setVisibility(View.VISIBLE);
+                try {
+                    // Check response value
+                    if (response.equals("")) {
+                        // Empty response returned, no jobs available, set no job tv to visible
+                        tvMapNoJob.setVisibility(View.VISIBLE);
 
-                } else if (response.equals(ERROR_DATABASE)){
+                    } else if (response.equals(ERROR_DATABASE)){
+                        // Request invalid
+                        // Toast to user error message
+                        Toast.makeText(getApplicationContext(),ERROR_DATABASE_MESSAGE,Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        // Response valid
+                        // Set no job text view to invisible
+                        tvMapNoJob.setVisibility(View.INVISIBLE);
+
+                        // Pass to formatting class to convert string to array list, then pass list to update map method
+                        updateMapData(formatting.recieveJob(response));
+
+                    }
+                } catch (NullPointerException nullPointerException) {
                     // Request invalid
                     // Toast to user error message
                     Toast.makeText(getApplicationContext(),ERROR_DATABASE_MESSAGE,Toast.LENGTH_SHORT).show();
-
-                } else {
-                    // Response valid
-                    // Set no job text view to invisible
-                    tvMapNoJob.setVisibility(View.INVISIBLE);
-
-                    // Pass to formatting class to convert string to array list, then pass list to update map method
-                    updateMapData(formatting.recieveJob(response));
-
                 }
             }
         }, filter);
@@ -502,23 +505,29 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         useServer.getJobsForCategory(new HandleResponse() {
             @Override
             public void response(String response) {
-                // Check response value
-                if (response.equals("")) {
-                    // Empty response returned, no jobs available, set no job tv to visible
-                    tvMapNoJob.setVisibility(View.VISIBLE);
+                try {
+                    // Check response value
+                    if (response.equals("")) {
+                        // Empty response returned, no jobs available, set no job tv to visible
+                        tvMapNoJob.setVisibility(View.VISIBLE);
 
-                } else if (response.equals(ERROR_DATABASE)){
+                    } else if (response.equals(ERROR_DATABASE)){
+                        // Request invalid
+                        // Toast to user error message
+                        Toast.makeText(getApplicationContext(),ERROR_DATABASE_MESSAGE,Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        // Response valid
+                        // Set no job text view to invisible
+                        tvMapNoJob.setVisibility(View.INVISIBLE);
+
+                        // Pass to formatting class to convert string to array list, then pass list to update map method
+                        updateMapData(formatting.recieveJob(response));
+                    }
+                } catch (NullPointerException nullPointerException) {
                     // Request invalid
                     // Toast to user error message
                     Toast.makeText(getApplicationContext(),ERROR_DATABASE_MESSAGE,Toast.LENGTH_SHORT).show();
-
-                } else {
-                    // Response valid
-                    // Set no job text view to invisible
-                    tvMapNoJob.setVisibility(View.INVISIBLE);
-
-                    // Pass to formatting class to convert string to array list, then pass list to update map method
-                    updateMapData(formatting.recieveJob(response));
                 }
             }
         }, category);
@@ -534,23 +543,29 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void response(String response) {
                 // Check response value
-                if (response.equals("")) {
-                    // Empty response returned, no jobs available, set no job tv to visible
-                    tvMapNoJob.setVisibility(View.VISIBLE);
+                try {
+                    if (response.equals("")) {
+                        // Empty response returned, no jobs available, set no job tv to visible
+                        tvMapNoJob.setVisibility(View.VISIBLE);
 
-                } else if (response.equals(ERROR_DATABASE)){
+                    } else if (response.equals(ERROR_DATABASE)){
+                        // Request invalid
+                        // Toast to user error message
+                        Toast.makeText(getApplicationContext(),ERROR_DATABASE_MESSAGE,Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        // Response valid
+                        // Set no job text view to invisible
+                        tvMapNoJob.setVisibility(View.INVISIBLE);
+
+                        // Pass to formatting class to convert string to array list, then pass list to update map method
+                        updateMapData(formatting.recieveJob(response));
+
+                    }
+                } catch (NullPointerException nullPointerException) {
                     // Request invalid
                     // Toast to user error message
                     Toast.makeText(getApplicationContext(),ERROR_DATABASE_MESSAGE,Toast.LENGTH_SHORT).show();
-
-                } else {
-                    // Response valid
-                    // Set no job text view to invisible
-                    tvMapNoJob.setVisibility(View.INVISIBLE);
-
-                    // Pass to formatting class to convert string to array list, then pass list to update map method
-                    updateMapData(formatting.recieveJob(response));
-
                 }
             }
         }, employerId);
@@ -567,61 +582,66 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void response(String response) {
                 // Check response value
-                if (response.equals("")) {
-                    // Empty response returned, no jobs available, set no job tv to visible
-                    tvMapNoJob.setVisibility(View.VISIBLE);
+                try {
+                    if (response.equals("")) {
+                        // Empty response returned, no jobs available, set no job tv to visible
+                        tvMapNoJob.setVisibility(View.VISIBLE);
 
-                } else if (response.equals(ERROR_DATABASE)){
-                    // Request invalid
+                    } else if (response.equals(ERROR_DATABASE)){
+                        // Request invalid
+                        // Toast to user error message
+                        Toast.makeText(getApplicationContext(),ERROR_DATABASE_MESSAGE,Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        // Response valid
+                        // Set no job text view to invisible
+                        tvMapNoJob.setVisibility(View.INVISIBLE);
+
+                        // Create lat and long counters
+                        double latCounter = 0, longCounter = 0;
+
+                        // Split response and cycle through list of jobs pulled from response string
+                        String[] listArray = response.split(formatting.delimiter2);
+                        for (int i = 0; i < listArray.length; i++) {
+                            // Job string into id, job title, description, salary, category, LatLng
+                            String[] jobDetails = listArray[i].split(formatting.delimiter);
+
+                            // Split location values by commas
+                            String[] cordArray = jobDetails[6].split(",");
+                            latCounter = Double.parseDouble(cordArray[0]) + latCounter;
+                            longCounter = Double.parseDouble(cordArray[1]) + longCounter;
+
+                            // Check if employer id is already added to category list
+                            if (!employerIdList.contains(jobDetails[1])) {
+                                // If not added then add to employer list
+                                employerIdList.add(jobDetails[1]);
+                            }
+
+                            // Check if category is already added to category list
+                            if (!categoriesList.contains(jobDetails[5])) {
+                                // If not added then add to list
+                                categoriesList.add(jobDetails[5]);
+                            }
+                        }
+
+                        // Update all job listings from formatting
+                        allJobListings = formatting.recieveJob(response);
+
+                        // Create default camera location
+                        defaultCameraLatLng = new LatLng(latCounter/allJobListings.size(),
+                                longCounter/allJobListings.size());
+
+                        // Shift camera position
+                        resetMapCamera();
+
+                        // Load ratings
+                        loadRatings();
+
+                    }
+                } catch (NullPointerException nullPointerException) {
+                    // Response invalid
                     // Toast to user error message
                     Toast.makeText(getApplicationContext(),ERROR_DATABASE_MESSAGE,Toast.LENGTH_SHORT).show();
-
-                } else {
-                    // Response valid
-                    // Set no job text view to invisible
-                    tvMapNoJob.setVisibility(View.INVISIBLE);
-
-                    // Create lat and long counters
-                    double latCounter = 0, longCounter = 0;
-
-                    // Split response and cycle through list of jobs pulled from response string
-                    String[] listArray = response.split(formatting.delimiter2);
-                    for (int i = 0; i < listArray.length; i++) {
-                        // Job string into id, job title, description, salary, category, LatLng
-                        String[] jobDetails = listArray[i].split(formatting.delimiter);
-
-                        // Split location values by commas
-                        String[] cordArray = jobDetails[6].split(",");
-                        latCounter = Double.parseDouble(cordArray[0]) + latCounter;
-                        longCounter = Double.parseDouble(cordArray[1]) + longCounter;
-
-                        // Check if employer id is already added to category list
-                        if (!employerIdList.contains(jobDetails[1])) {
-                            // If not added then add to employer list
-                            employerIdList.add(jobDetails[1]);
-                        }
-
-                        // Check if category is already added to category list
-                        if (!categoriesList.contains(jobDetails[5])) {
-                            // If not added then add to list
-                            categoriesList.add(jobDetails[5]);
-                        }
-                    }
-
-                    // Update all job listings from formatting
-                    allJobListings = formatting.recieveJob(response);
-
-                    // Create default camera location
-                    defaultCameraLatLng = new LatLng(latCounter/allJobListings.size(),
-                            longCounter/allJobListings.size());
-
-                    // Shift camera position
-                    resetMapCamera();
-
-                    // TODO COMMENETING OUT FOR TESTING
-//                    // Load ratings
-//                    loadRatings();
-
                 }
             }
         }, "all");
@@ -652,22 +672,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             for (int j = 0; j < allJobListings.size(); j++) {
                 // Check if employer id matches prev job listing and it isn't the same job listing
                 if (allJobListings.get(j).employer_id == jobListing.employer_id &&
-                        !jobListing.equals(allJobListings.get(j))) {
+                        !jobListing.equals(allJobListings.get(j)) &&
+                        allJobListings.get(j).rating != -1) {
                     // Set rating values to same as job listing
                     rating = allJobListings.get(j).getRating();
 
                     // Break for loop
                     break;
                 }
-            }
 
-            // Check if rating was found from perv job listings
-            if (rating != -1) {
-                // Rating found
-                jobListing.setRating(rating);
-            } else {
-                // Rating not found, pull rating from database
-                getRating(jobListing);
+                // Check if rating was found from perv job listings
+                if (rating != -1) {
+                    // Rating found
+                    jobListing.setRating(rating);
+                } else {
+                    // Rating not found, pull rating from database
+                    getRating(jobListing);
+                }
             }
         }
     }
@@ -682,15 +703,26 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void response(String response) {
                 // Check if response is null
-                if (response != null) {
-                    // Pass to formatting class to convert employer id and then set job listing rating
-                    // TODO TESTING
-                    jobListing.setRating(formatting.receiveRating(response));
+                try {
+                    if (response.equals(ERROR_DATABASE)) {
+                        // Request invalid
+                        // Toast to user error message
+                        Toast.makeText(getApplicationContext(), ERROR_DATABASE_MESSAGE, Toast.LENGTH_SHORT).show();
 
-                } else {
-                    // Nothing returned in response
-                    jobListing.setRating(-1);
+                    } else if (!Objects.equals(response, "")) {
+                        // Pass to formatting class to convert employer id and then set job listing rating
+                        // TODO TESTING
+                        jobListing.setRating(formatting.receiveRating(response));
 
+                    } else {
+                        // Nothing returned in response
+                        jobListing.setRating(-1);
+
+                    }
+                } catch (NullPointerException nullPointerException) {
+                    // Response invalid
+                    // Toast to user error message
+                    Toast.makeText(getApplicationContext(),ERROR_DATABASE_MESSAGE,Toast.LENGTH_SHORT).show();
                 }
             }
         }), jobListing.employer_id);
