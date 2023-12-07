@@ -24,15 +24,29 @@ public class Formatting {
                             split[2], // title
                             split[3], // description
                             split[4], // salary
-                            split[5], // type
+                            split[5], // category
                             new LatLng(Double.parseDouble(location[0]), Double.parseDouble(location[1])) // location
                             )
             );
 
-
         }
 
         return jobListings;
+    }
+
+    // TODO NEED TO CHECK IF WILL BREAK
+    public int receiveRating(String input) {
+        double ratingCounter = 0;
+
+        // Split input by delimiter value then loop through ratings summing them together
+        String[] splitRatings = input.split(DELIMITER_1);
+        for (int i = 0; i < splitRatings.length; i++) {
+            // Add up all ratings
+            ratingCounter = ratingCounter + Integer.parseInt(splitRatings[i]);
+        }
+
+        // Divide by number of ratings, round, and return value
+        return (int) Math.round(ratingCounter/splitRatings.length);
     }
 
 

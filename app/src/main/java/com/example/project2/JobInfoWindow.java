@@ -17,10 +17,13 @@ import java.util.ArrayList;
 public class JobInfoWindow implements GoogleMap.InfoWindowAdapter {
     Context mapContext;
     ArrayList<JobListing> mapJobListings;
+    Formatting formatting;
 
     public JobInfoWindow(Context mapContext, ArrayList<JobListing> jobListings) {
         this.mapContext = mapContext;
         this.mapJobListings = jobListings;
+
+        formatting = new Formatting();
     }
 
     @Nullable
@@ -46,17 +49,13 @@ public class JobInfoWindow implements GoogleMap.InfoWindowAdapter {
         // Find JobListing from marker tag
         JobListing markerJobListing = (JobListing) marker.getTag();
 
-        // TODO SET UP WHEN ROUTE IS SET UP
-        // Find rating for employer
-        int rating = 4;
-
         // Update text information
         tvTitle.setText(markerJobListing.getTitle());
         tvSalary.setText("$" + markerJobListing.getSalary());
         tvType.setText(markerJobListing.getCategory());
 
-        // Update stars from rating value
-        switch (rating) {
+        // Find rating for employer and update star display from rating value
+        switch (markerJobListing.getRating()) {
             case 5: {
                 ivStar5.setImageResource(R.drawable.rating_star_on);
             }
@@ -76,7 +75,6 @@ public class JobInfoWindow implements GoogleMap.InfoWindowAdapter {
                 break;
             }
         }
-
         return view;
     }
 
