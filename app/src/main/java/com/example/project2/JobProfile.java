@@ -52,7 +52,8 @@ public class JobProfile extends AppCompatActivity {
         jobID = getIntent().getExtras().getInt("jobID", 0);
 
         viewedUserName = getIntent().getStringExtra("username");
-        isAccountOwner = false;
+
+        isAccountOwner = (accountID == employerID);
 
         serverDAO = UseServer.getInstance(this);
         saveResponse = new AtomicReference<>();
@@ -184,22 +185,28 @@ public class JobProfile extends AppCompatActivity {
 
     private void accountLookup() {
 //        String username = "";
+//        serverDAO.verifyLogin(loginResponse -> {
+//            Log.d(TAG, "VERIFY LOGIN : "+loginResponse);
+//            serverDAO.myAccount(accountResponse -> {
+//                Log.d(TAG, "serverDAO onCreate: " + accountResponse);
+//                // Check if current user is account owner
+//                viewedID = Integer.parseInt(accountResponse.split(Formatting.DELIMITER_1)[0]);
+//                isAccountOwner = (accountID == viewedID);
+////            serverDAO.job
+//
+//
+//            }, viewedUserName);
+//        });
+
         serverDAO.verifyLogin(loginResponse -> {
             Log.d(TAG, "VERIFY LOGIN : "+loginResponse);
-            serverDAO.myAccount(accountResponse -> {
-                Log.d(TAG, "serverDAO onCreate: " + accountResponse);
-                // Check if current user is account owner
-                viewedID = Integer.parseInt(accountResponse.split(Formatting.DELIMITER_1)[0]);
-                isAccountOwner = (accountID == viewedID);
-//            serverDAO.job
-                serverDAO.oneJob(jobResponse -> {
-                    Log.d(TAG, jobResponse);
-                    Log.d("STOP","");
-                    populateProfile(jobResponse);
-                }, sharedPrefs.getInt("jobID", -1));
-
-            }, viewedUserName);
+            serverDAO.oneJob(jobResponse -> {
+                Log.d(TAG, "Job Response:"+jobResponse);
+                Log.d("STOP","");
+                populateProfile(jobResponse);
+            }, jobID);
         });
+
 
         // TODO: Find a way to check applicant/employer viewing page
 
