@@ -122,7 +122,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.494"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtDescription" />
+                    app:layout_constraintTop_toBottomOf="@+id/etDescription" />
 
                 <TextView
                     android:id="@+id/txtDescription"
@@ -148,6 +148,7 @@
                     android:ems="10"
                     android:fontFamily="sans-serif-light"
                     android:gravity="start|top"
+                    android:hint="About Me Section"
                     android:inputType="textMultiLine"
                     android:paddingHorizontal="25dp"
                     android:textSize="16sp"
@@ -263,6 +264,7 @@
                     android:layout_marginEnd="32dp"
                     android:ems="10"
                     android:fontFamily="sans-serif-light"
+                    android:hint="(123) 456-7890"
                     android:inputType="phone"
                     android:textSize="14sp"
                     android:visibility="invisible"
@@ -315,6 +317,7 @@
                     android:ems="10"
                     android:fontFamily="sans-serif-smallcaps"
                     android:gravity="center"
+                    android:hint="My Name"
                     android:inputType="text"
                     android:letterSpacing=".25"
                     android:textAlignment="gravity"

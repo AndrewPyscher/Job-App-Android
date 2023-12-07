@@ -15,7 +15,6 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -25,6 +24,7 @@ public class UserProfile extends AppCompatActivity {
     public static final String TAG = "USER_PROFILE";
     public static final String DELIMITER_CUSTOM_OUTER = "#@#";
     public static final String DELIMITER_CUSTOM_INNER = "@#@";
+    public static final String EMPTY_FIELD = ".";
     ImageButton btnEdit, btnCancel;
     TextView txtName, txtDescription, txtPhone, txtEmail, txtAddress, txtExperience, txtEducation;
     EditText etName, etPhone, etAddress, etEmail, etDescription;
@@ -39,7 +39,7 @@ public class UserProfile extends AppCompatActivity {
     ArrayList<Job> jobHistory;
     ArrayList<School> educationHistory;
 
-    int accountID, viewedID;
+    int accountID, ownerID;
     boolean isAccountOwner;
 
     @Override
@@ -48,13 +48,15 @@ public class UserProfile extends AppCompatActivity {
         setContentView(R.layout.activity_user_profile);
 
         accountID = getSharedPreferences("user", MODE_PRIVATE).getInt("id", -1);;
-        viewedID = -1;
+        ownerID = -1;
         isAccountOwner = false;
-        try {
-            viewedUserName = Objects.requireNonNull(getIntent().getExtras()).getString("username");
-        } catch (Exception e) {
-            viewedUserName = "";
-        }
+
+        viewedUserName = getIntent().getStringExtra("username");
+        if(viewedUserName==null)
+            viewedUserName="";
+
+
+        Log.d(TAG, "Viewed USERNAME:"+viewedUserName);
 
         serverDAO = UseServer.getInstance(this);
         saveResponse = new AtomicReference<>();
@@ -317,21 +319,27 @@ public class UserProfile extends AppCompatActivity {
 //        String result = "";
         serverDAO.verifyLogin(loginResponse -> {
             Log.d(TAG, "VERIFY LOGIN : "+loginResponse);
-            serverDAO.myAccount(accountResponse -> {
-                Log.d(TAG, "serverDAO onCreate: " + accountResponse);
-                // Check if current user is account owner
-                viewedID = Integer.parseInt(accountResponse.split(Formatting.DELIMITER_1)[0]);
-                isAccountOwner = (accountID == viewedID);
-                populateProfile(accountResponse);
-//            latch.countDown(); // Signal that the callback is done
-            }, viewedUserName);
-        });
 
-//        CountDownLatch latch = new CountDownLatch(1); // Initialize a latch with count 1
+        });
+        serverDAO.myAccount(accountResponse -> {
+//            if(accountResponse==null) {
+//                serverDAO.updateProfile(response -> {},1,".",".",".",".",".", ".", ".");
+//                return;
+//            }
+
+            Log.d(TAG, "serverDAO onCreate: " + accountResponse);
+            // Check if current user is account owner
+            ownerID = Integer.parseInt(accountResponse.split(Formatting.DELIMITER_1)[0]);
+            isAccountOwner = (accountID == ownerID);
+            populateProfile(accountResponse);
+
+
+        }, viewedUserName);
+
+
 
 //            accountID = Integer.parseInt(saveResponse.get().split(Formatting.DELIMITER_1)[0]);
 
-//        result = saveResponse.get();
 
         // If no information exists
 //        if(accountID != -1 && result = null)
@@ -348,7 +356,7 @@ public class UserProfile extends AppCompatActivity {
         try {
             profileData = encodedString.split(Formatting.DELIMITER_1);
         } catch (Exception e) {
-            profileData = new String[]{String.valueOf(viewedID),"","","","","","",""};
+            profileData = new String[]{String.valueOf(ownerID),EMPTY_FIELD,EMPTY_FIELD,EMPTY_FIELD,EMPTY_FIELD,EMPTY_FIELD,EMPTY_FIELD,EMPTY_FIELD};
         }
 
         Log.d(TAG, Arrays.toString(profileData));
@@ -357,39 +365,41 @@ public class UserProfile extends AppCompatActivity {
             Log.d(TAG, "{" + item + "}");
         }
 
-        etName.setText(profileData[1]);
-        etPhone.setText(profileData[3]);
-        etEmail.setText(profileData[4]);
-        etAddress.setText(profileData[2]);
-        etDescription.setText(profileData[5]);
+        etName.setText(profileData[1].equals(EMPTY_FIELD) ? "" : profileData[1]);
+        etPhone.setText(profileData[3].equals(EMPTY_FIELD) ? "" : profileData[3]);
+        etEmail.setText(profileData[4].equals(EMPTY_FIELD) ? "" : profileData[4]);
+        etAddress.setText(profileData[2].equals(EMPTY_FIELD) ? "" : profileData[2]);
+        etDescription.setText(profileData[5].equals(EMPTY_FIELD) ? "" : profileData[5]);
 
-        txtName.setText(profileData[1]);
-        txtPhone.setText(profileData[3]);
-        txtEmail.setText(profileData[4]);
-        txtAddress.setText(profileData[2]);
-        txtDescription.setText(profileData[5]);
+        txtName.setText(profileData[1].equals(EMPTY_FIELD) ? "" : profileData[1]);
+        txtPhone.setText(profileData[3].equals(EMPTY_FIELD) ? "" : profileData[3]);
+        txtEmail.setText(profileData[4].equals(EMPTY_FIELD) ? "" : profileData[4]);
+        txtAddress.setText(profileData[2].equals(EMPTY_FIELD) ? "" : profileData[2]);
+        txtDescription.setText(profileData[5].equals(EMPTY_FIELD) ? "" : profileData[5]);
 
         if(profileData.length >= 7)
-            if(profileData[6] != null && !profileData[6].equals("")) {
+            if(profileData[6] != null && profileData[6].length()>1) {
                 jobHistory = getJobHistoryFromDAO(profileData[6]);
                 jobAdapter = new JobAdapter(this, jobHistory);
                 rvEmployment.setAdapter(jobAdapter);
-                if(jobHistory.size() == 0 && isAccountOwner)
-                    txtExperience.setText("Edit Profile to Add Work Experience");
-                else if(jobHistory.size() == 0 && !isAccountOwner)
-                    txtExperience.setVisibility(View.INVISIBLE);
+
             }
+        if(jobHistory.size() == 0 && isAccountOwner)
+            txtExperience.setText("Edit Profile to Add Work Experience");
+        else if(jobHistory.size() == 0 && !isAccountOwner)
+            txtExperience.setVisibility(View.INVISIBLE);
 
         if(profileData.length >= 8)
-            if(profileData[7] != null && !profileData[7].equals("")) {
+            if(profileData[7] != null && profileData[7].length()>1) {
                 educationHistory = getEducationHistoryFromDAO(profileData[7]);
                 educationAdapter = new EducationAdapter(this, educationHistory);
                 rvEducation.setAdapter(educationAdapter);
-                if(educationHistory.size() == 0 && isAccountOwner)
-                    txtEducation.setText("Edit Profile to Add Education History");
-                else if(educationHistory.size() == 0 && !isAccountOwner)
-                    txtEducation.setVisibility(View.INVISIBLE);
             }
+
+        if(educationHistory.size() == 0 && isAccountOwner)
+            txtEducation.setText("Edit Profile to Add Education History");
+        else if(educationHistory.size() == 0 && !isAccountOwner)
+            txtEducation.setVisibility(View.INVISIBLE);
 
         // Also address the button
         if(!isAccountOwner)

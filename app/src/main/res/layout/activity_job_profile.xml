@@ -25,7 +25,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+     <Button
+         android:id="@+id/btnQuickApply"
+         android:layout_width="212dp"
+         android:layout_height="51dp"
+         android:text="Quick Apply"
+         android:visibility="invisible"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintHorizontal_bias="0.497"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="@+id/switchIsActive" />
+
+     <ImageView
         android:id="@+id/imgJobPic"
         android:layout_width="0dp"
         android:layout_height="0dp"

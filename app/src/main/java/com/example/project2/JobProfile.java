@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Switch;
@@ -24,6 +25,7 @@ public class JobProfile extends AppCompatActivity {
     public static final int IDX_ACTIVATED = 4;
     public static final int DATA_LENGTH = 5;
     ImageButton btnEdit, btnCancel;
+    Button btnQuickApply;
     TextView txtTitle, txtDescription, txtSalary;
     EditText etTitle, etSalary, etDescription;
     Switch switchIsActive;
@@ -74,6 +76,7 @@ public class JobProfile extends AppCompatActivity {
 
         btnEdit = findViewById(R.id.btnEditJob);
         btnCancel = findViewById(R.id.btnCancelEdit);
+        btnQuickApply = findViewById(R.id.btnQuickApply);
         txtTitle = findViewById(R.id.txtJobTitle);
         txtDescription = findViewById(R.id.txtJobDescription);
         txtSalary = findViewById(R.id.txtJobSalary);
@@ -81,6 +84,13 @@ public class JobProfile extends AppCompatActivity {
         etSalary = findViewById(R.id.etJobSalary);
         etDescription = findViewById(R.id.etJobDescription);
         switchIsActive = findViewById(R.id.switchIsActive);
+
+        // show switch ONLY if employer is viewing their own job
+        switchIsActive.setVisibility(isAccountOwner ? View.VISIBLE : View.INVISIBLE);
+        // show button ONLY if applicant is viewing job
+        btnQuickApply.setVisibility(isAccountOwner ? View.INVISIBLE : View.VISIBLE);
+
+
 
         // --------------<<<   POPULATE VIEWS FROM BACKEND   >>>-------------- \\
 
@@ -127,6 +137,13 @@ public class JobProfile extends AppCompatActivity {
         });
 
         btnCancel.setOnClickListener(v -> setProfileStatic());
+
+        // TODO: Where is this message coming from
+        btnQuickApply.setOnClickListener(v -> {
+            serverDAO.insertApplication(response -> {
+                Log.d(TAG, "Inserted Application. Response: "+response);
+            }, jobID, accountID, "Test Application Message");
+        });
     }
 
     // --------------<<<   UTILITY METHODS   >>>-------------- \\
