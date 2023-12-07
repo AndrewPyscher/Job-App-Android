@@ -2,6 +2,8 @@ package com.example.project2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,9 +21,10 @@ public class CreateAccount extends AppCompatActivity {
     Button btnConfirmAccount;
     EditText etUsername1, etPassword2, etConfirmPassword,etCompanyName;
     RadioButton rdbEmployer,rdbApplicant;
-    TextView lblCompany,lblError;
+    TextView lblError;
     RequestQueue queue;
-
+    SharedPreferences sp;
+    SharedPreferences.Editor ed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,22 +37,18 @@ public class CreateAccount extends AppCompatActivity {
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
         rdbEmployer = findViewById(R.id.rdbEmployer);
         rdbApplicant = findViewById(R.id.rdbApplicant);
-        etCompanyName = findViewById(R.id.etCompanyName);
-        lblCompany = findViewById(R.id.lblCompany);
         lblError = findViewById(R.id.lblError);
+        sp = getSharedPreferences("user", MODE_PRIVATE);
+        ed = sp.edit();
 
         rdbApplicant.setOnClickListener(e->{
             if(rdbApplicant.isChecked()){
                 rdbEmployer.setChecked(false);
-                lblCompany.setVisibility(View.INVISIBLE);
-                etCompanyName.setVisibility(View.INVISIBLE);
             }
         });
         rdbEmployer.setOnClickListener(e->{
             if(rdbEmployer.isChecked()){
                 rdbApplicant.setChecked(false);
-                lblCompany.setVisibility(View.VISIBLE);
-                etCompanyName.setVisibility(View.VISIBLE);
             }
         });
 
@@ -69,11 +68,7 @@ public class CreateAccount extends AppCompatActivity {
                 lblError.setVisibility(View.VISIBLE);
                 return;
             }
-            if(rdbEmployer.isChecked() && (""+etCompanyName.getText()).equals("")){
-                lblError.setText("Fill out all fields!");
-                lblError.setVisibility(View.VISIBLE);
-                return;
-            }
+
 
             String role = "";
             if(rdbApplicant.isChecked()){
@@ -85,11 +80,29 @@ public class CreateAccount extends AppCompatActivity {
             UseServer useServer = new UseServer(this);
             AtomicReference<String> saveResponse = new AtomicReference<>("");
             useServer.createAccount(response -> {
-                Log.d("test", "onCreate: " +response);
+                lblError.setText(response);
                 saveResponse.set(response);
+
+                useServer.login(new HandleResponse() {
+                    @Override
+                    public void response(String response) {
+                        String[] split = response.split("<><>");
+                        ed.putString("session", split[1]);
+                        Log.d("test", "response: " + response);
+                        ed.putInt("id", Integer.parseInt(response.split("<><>")[0]));
+                        ed.commit();
+                    }
+                }, etUsername1.getText().toString(), etConfirmPassword.getText().toString());
             }, role, etUsername1.getText().toString(), etConfirmPassword.getText().toString() );
+
+            if(role.equals("applicant")) {
+                Intent createAccount = new Intent(this, EnterUserInfo.class);
+                startActivity(createAccount);
+            }
+            if(role.equals("employer")){
+                Intent createAccount = new Intent(this, EnterEmployerInfo.class);
+                startActivity(createAccount);
+            }
         });
-
-
     }
 }
