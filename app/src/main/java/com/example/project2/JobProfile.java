@@ -30,7 +30,8 @@ public class JobProfile extends AppCompatActivity {
     SharedPreferences sharedPrefs;
     UseServer serverDAO;
     AtomicReference<String> saveResponse;
-    int accountID, viewedID;
+    int accountID;
+    int employerID, jobID;
     boolean isAccountOwner;;
     String viewedUserName;
 
@@ -45,8 +46,12 @@ public class JobProfile extends AppCompatActivity {
         accountID = sharedPrefs.getInt("id", -1);
         Log.d(TAG, "Account ID: "+accountID);
         // Will get in populateProfile()
-        viewedID = -1;
-        viewedUserName = "";
+//        viewedID = -1;
+
+        employerID = getIntent().getExtras().getInt("employerID", 0);
+        jobID = getIntent().getExtras().getInt("jobID", 0);
+
+        viewedUserName = getIntent().getStringExtra("username");
         isAccountOwner = false;
 
         serverDAO = UseServer.getInstance(this);
