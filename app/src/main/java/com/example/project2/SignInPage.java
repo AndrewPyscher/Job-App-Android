@@ -50,7 +50,7 @@ public class SignInPage extends AppCompatActivity {
         use = UseServer.getInstance(this);
 
 
-        /*try{
+        try{
             if(sp.getBoolean("stay",false)){
                 String user = sp.getString("user","");
                 Log.d(TAG, "user: " + user);
@@ -61,7 +61,7 @@ public class SignInPage extends AppCompatActivity {
         }catch (Exception e){
             ed.putBoolean("stay",false);
             ed.commit();
-        }*/
+        }
 
         btnCreateAccount.setOnClickListener(e->{
             Intent m = new Intent(this, CreateAccount.class);
