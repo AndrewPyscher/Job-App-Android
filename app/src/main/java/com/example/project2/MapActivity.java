@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -24,6 +25,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -40,7 +42,13 @@ import java.util.Objects;
 
 // UPDATE JOB LISTINGS TO USE GET AND SET METHODS
 
+// radius = sp.getInt("radius", 10);
+
+// TODO FIX
+// default camera location, use -1 value for rating
+
 // UPDATE INFOWINDOW TO BE HAVE DIFFERENCE FOR ACTIVE AND INACTIVE
+// ADD FLAG TO JOB LISTING
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
     // Formatting class instance
@@ -56,19 +64,27 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     JobListing currentJobListing;
 
     // Required views
-    TextView tvMapTitle, tvMapAddress, tvMapDescription;
+    TextView tvMapTitle, tvMapAddress, tvMapDescription, tvMapNoJob;
     Button btnMapApply;
     ProgressBar pbMap, pbInfo;
     Spinner sPrimary, sSecondary;
     BottomNavigationView navigationMenu;
 
+    // Array adapters for spinners
+    ArrayAdapter<String> primaryAdapter, secondaryAdapter;
+
     // Shared Preferences
     SharedPreferences sp;
 
-    // Constant string message
-    private final String ERROR_TITLE_MESSAGE = "Error find job listing",
-            ERROR_ADDRESS_MESSAGE = "ERROR generating street address",
-            ERROR_DESCRIPTION_MESSAGE = "Please refresh map data and retry";
+    // Constant string messages
+    private final String APPLY_VALID_MESSAGE = "Successful, apply was valid",
+            APPLY_INVALID_MESSAGE = "Failure, apply was invalid";
+
+    // Constant string error messages
+    private final String ERROR_TITLE_MESSAGE = "Error finding job listing",
+            ERROR_ADDRESS_MESSAGE = "Error generating street address",
+            ERROR_DESCRIPTION_MESSAGE = "Error Please refresh map data and retry",
+            ERROR_DATABASE_MESSAGE = "Error reaching database, please restart app";
 
     // Constant filtering strings
     private final String JOBS_ALL = "All Jobs", JOBS_ACTIVE = "Active Jobs",
@@ -91,8 +107,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private ArrayList<String> categoriesList = new ArrayList<>();
     private ArrayList<String> employerIdList = new ArrayList<>();
 
-//    // Flag for determining if map is ready to be updated
-//    private boolean mapReady = false;
+    // Default camera info
+    private LatLng defaultCameraLatLng;
+    private final float defaultCameraZoomLevel = 10, defaultCameraTilt = 0, defaultCameraBearing = 0;
 
     // Filter values
     private int primaryFilter, secondaryFilter;
@@ -106,6 +123,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         tvMapTitle = findViewById(R.id.tvMapTitle);
         tvMapAddress = findViewById(R.id.tvMapAddress);
         tvMapDescription = findViewById(R.id.tvMapDescription);
+        tvMapNoJob = findViewById(R.id.tvMapNoJobs);
 
         btnMapApply = findViewById(R.id.btnMapApply);
 
@@ -127,6 +145,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         tvMapDescription.setMovementMethod(new ScrollingMovementMethod());
 
         // Update default values to category, employer id, and secondary spinner list
+        categoriesList.add(DEFAULT_NONE_VALUE);
+        employerIdList.add(DEFAULT_NONE_VALUE);
         secondarySpinnerList.add(DEFAULT_NONE_VALUE);
 
         // Set up bottom navigation menu listener
@@ -146,8 +166,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
 
         // Set up spinner adapter, onSelected listener, and default values
-        ArrayAdapter<String> primaryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,primarySpinnerList),
-                secondaryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,secondarySpinnerList);
+        primaryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, primarySpinnerList);
+        secondaryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, secondarySpinnerList);
         sPrimary.setAdapter(primaryAdapter);
         sPrimary.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -167,16 +187,38 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     // Update info
                     updatedFilter();
                 } else {
+                    // Update with correct list for filter type
+                    switch (filterType) {
+                        case JOBS_CATEGORY: {
+                            // Update secondary filter to category list
+                            secondaryAdapter.clear();
+                            secondaryAdapter.addAll(categoriesList);
+                            secondaryAdapter.notifyDataSetChanged();
+
+                            // Set secondary spinner to default value
+                            sSecondary.setSelection(0);
+                            break;
+                        }
+                        case JOBS_EMPLOYER: {
+                            // Update secondary filter to employer id list
+                            secondaryAdapter.clear();
+                            secondaryAdapter.addAll(employerIdList);
+                            secondaryAdapter.notifyDataSetChanged();
+
+                            // Set secondary spinner to default value
+                            sSecondary.setSelection(0);
+                            break;
+                        }
+                    }
+
                     // Make secondary filter spinner accessible
                     sSecondary.setClickable(true);
                 }
-
-//                // Set secondary spinner to be default value
-//                sSecondary.setSelection(0);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
         sSecondary.setAdapter(secondaryAdapter);
         sSecondary.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -192,7 +234,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
         // Make secondary filter spinner inaccessible
@@ -210,8 +253,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 // Check there is a current job listing
                 if (currentJobListing != null) {
-                    // TODO When figuring out where to push apply event
-                    // TODO CHECK FOR PROFILE to set up phone or email to allow apply SHARED PREFERENCES
+                    // Apply for current job listing
+                    applyForJob();
                 }
             }
         });
@@ -228,20 +271,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // Set store google map object to returned google map object
         map = googleMap;
 
-        // Load in initial job and rating information and populate all job listings list
-        initialInfoLoading();
+        // Load in initial job and rating information, populate all job listings list, and set default camera position
+        initialLoading();
 
         // Set primary spinner to initial selection of default (all jobs)
         sPrimary.setSelection(0);
 
         // Set custom info window adapter
         map.setInfoWindowAdapter(new JobInfoWindow(this, allJobListings));
-
-//        // Update map ready flag
-//        mapReady = true;
-
-        // TODO Set camera position based on ? AVG OF LOCATIONS? USE ALLJOBLISTINGS LATLONG OBJECT
-        // Set map camera settings
 
         // Make secondary filter spinner accessible
         sSecondary.setClickable(true);
@@ -271,7 +308,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 getJobInfo(marker);
             }
         });
-
     }
 
     // Takes in marker object, request a street address from google map's revers geocaching api,
@@ -288,7 +324,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             // Create api url
             String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
                     "latlng=" + markerLocation.latitude + "," + markerLocation.longitude +
-                    "&result_type=street_address&key=" +
+                    "&key=" +
+                    // TODO NEED TO SET UP FOR OTHERS TO USE
                     "AIzaSyD524YfI0YzrCR1kbUwG4kLOe93O55kTng";
 
             // Create api request
@@ -302,7 +339,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             try {
                                 // Pull address string from response
                                 streetAddress = response.getJSONArray("results").
-                                        getJSONObject(0).getString("formatted_address");
+                                        getJSONObject(1).getString("formatted_address");
 
                             } catch (JSONException e) {
                                 // Set address value to error value
@@ -328,16 +365,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             // Pass error object and error response to update job information
             updateJobInfo(new JobListing(ERROR_TITLE_MESSAGE,ERROR_DESCRIPTION_MESSAGE),
                     ERROR_ADDRESS_MESSAGE);
-
-            // TODO ADD MORE
-            // TODO FIGURE OUT WHAT IS NEEDED
-            throw new RuntimeException(nullPointerException);
         }
     }
 
     // Change visibility of progress bar and updates job information at bottom of activity
     private void updateJobInfo(JobListing jobListing, String streetAddress) {
-        // TODO MAY NOT NEED TO RUN ON UI THREAD
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -404,6 +436,31 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
+    // TODO CHECK IF NEED TO CHECK ANYTHING BUT ID?
+    // Create a request to database for applying to that job listing using the user id and job
+    // listing id. Will display a toast with outcome message to user.
+    private void applyForJob() {
+        // Create class object for importing data from database
+        UseServer useServer = new UseServer(this, sp.getString("session","") );
+
+        // Pull response from database on apply request
+        useServer.insertApplication(new HandleResponse() {
+            @Override
+            public void response(String response) {
+                // Check response value
+                if (response.equals("Valid")) {
+                    // Apply valid, toast to user invalid message
+                    Toast.makeText(getApplicationContext(),APPLY_VALID_MESSAGE,Toast.LENGTH_SHORT).show();
+
+                } else {
+                    // Apply invalid, toast to user invalid message
+                    Toast.makeText(getApplicationContext(),APPLY_INVALID_MESSAGE,Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        }, currentJobListing.id, sp.getInt("id", -1), "");
+    }
+
     // Import job listings for map based on no filter values
     private void importMapDataAll(String filter) {
         // Create class object for importing data from database
@@ -413,13 +470,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         useServer.allJobs(new HandleResponse() {
             @Override
             public void response(String response) {
-                // Check if response is null
-                if (response != null) {
+                // Check response value
+                if (response.equals("")) {
+                    // Empty response returned, no jobs available, set no job tv to visible
+                    tvMapNoJob.setVisibility(View.VISIBLE);
+
+                } else if (response.equals(ERROR_DATABASE)){
+                    // Request invalid
+                    // Toast to user error message
+                    Toast.makeText(getApplicationContext(),ERROR_DATABASE_MESSAGE,Toast.LENGTH_SHORT).show();
+
+                } else {
+                    // Response valid
+                    // Set no job text view to invisible
+                    tvMapNoJob.setVisibility(View.INVISIBLE);
+
                     // Pass to formatting class to convert string to array list, then pass list to update map method
                     updateMapData(formatting.recieveJob(response));
-                } else {
-                    // Nothing returned in response
-                    // TODO FIGURE OUT WHAT IS NEEDED
+
                 }
             }
         }, filter);
@@ -434,14 +502,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         useServer.getJobsForCategory(new HandleResponse() {
             @Override
             public void response(String response) {
-                // Check if response is null
-                if (response != null) {
-                    // Pass to formatting class to convert string to array list, then pass list to update map method
-                    updateMapData(formatting.recieveJob(response));
+                // Check response value
+                if (response.equals("")) {
+                    // Empty response returned, no jobs available, set no job tv to visible
+                    tvMapNoJob.setVisibility(View.VISIBLE);
+
+                } else if (response.equals(ERROR_DATABASE)){
+                    // Request invalid
+                    // Toast to user error message
+                    Toast.makeText(getApplicationContext(),ERROR_DATABASE_MESSAGE,Toast.LENGTH_SHORT).show();
 
                 } else {
-                    // Nothing returned in response
-                    // TODO FIGURE OUT WHAT IS NEEDED
+                    // Response valid
+                    // Set no job text view to invisible
+                    tvMapNoJob.setVisibility(View.INVISIBLE);
+
+                    // Pass to formatting class to convert string to array list, then pass list to update map method
+                    updateMapData(formatting.recieveJob(response));
                 }
             }
         }, category);
@@ -456,13 +533,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         useServer.jobByEmployer(new HandleResponse() {
             @Override
             public void response(String response) {
-                // Check if response is null
-                if (response != null) {
+                // Check response value
+                if (response.equals("")) {
+                    // Empty response returned, no jobs available, set no job tv to visible
+                    tvMapNoJob.setVisibility(View.VISIBLE);
+
+                } else if (response.equals(ERROR_DATABASE)){
+                    // Request invalid
+                    // Toast to user error message
+                    Toast.makeText(getApplicationContext(),ERROR_DATABASE_MESSAGE,Toast.LENGTH_SHORT).show();
+
+                } else {
+                    // Response valid
+                    // Set no job text view to invisible
+                    tvMapNoJob.setVisibility(View.INVISIBLE);
+
                     // Pass to formatting class to convert string to array list, then pass list to update map method
                     updateMapData(formatting.recieveJob(response));
-                } else {
-                    // Nothing returned in response
-                    // TODO FIGURE OUT WHAT IS NEEDED
+
                 }
             }
         }, employerId);
@@ -470,7 +558,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     // Import all job information from database, pull filtering lists for category and employer
     // ids, then populate all job list from data.
-    private void initialInfoLoading() {
+    private void initialLoading() {
         // Create class object for importing data from database
         UseServer useServer = new UseServer(this, sp.getString("session","") );
 
@@ -478,45 +566,77 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         useServer.allJobs(new HandleResponse() {
             @Override
             public void response(String response) {
-                // Check if response is null
-                if (response != null) {
+                // Check response value
+                if (response.equals("")) {
+                    // Empty response returned, no jobs available, set no job tv to visible
+                    tvMapNoJob.setVisibility(View.VISIBLE);
+
+                } else if (response.equals(ERROR_DATABASE)){
+                    // Request invalid
+                    // Toast to user error message
+                    Toast.makeText(getApplicationContext(),ERROR_DATABASE_MESSAGE,Toast.LENGTH_SHORT).show();
+
+                } else {
+                    // Response valid
+                    // Set no job text view to invisible
+                    tvMapNoJob.setVisibility(View.INVISIBLE);
+
+                    // Create lat and long counters
+                    double latCounter = 0, longCounter = 0;
+
                     // Split response and cycle through list of jobs pulled from response string
                     String[] listArray = response.split(formatting.delimiter2);
                     for (int i = 0; i < listArray.length; i++) {
                         // Job string into id, job title, description, salary, category, LatLng
-                        String[] jobArray = listArray[i].split(formatting.delimiter);
+                        String[] jobDetails = listArray[i].split(formatting.delimiter);
 
-                        // TODO MIGHT NEED TO ACCESS WHERE TO PUT CAMERA
-//                        // Split location values by commas
-//                        String[] cordArray = jobArray[5].split(",");
+                        // Split location values by commas
+                        String[] cordArray = jobDetails[6].split(",");
+                        latCounter = Double.parseDouble(cordArray[0]) + latCounter;
+                        longCounter = Double.parseDouble(cordArray[1]) + longCounter;
 
                         // Check if employer id is already added to category list
-                        if (!employerIdList.contains(jobArray[1])) {
+                        if (!employerIdList.contains(jobDetails[1])) {
                             // If not added then add to employer list
-                            employerIdList.add(jobArray[1]);
+                            employerIdList.add(jobDetails[1]);
                         }
 
                         // Check if category is already added to category list
-                        if (!categoriesList.contains(jobArray[5])) {
+                        if (!categoriesList.contains(jobDetails[5])) {
                             // If not added then add to list
-                            categoriesList.add(jobArray[5]);
+                            categoriesList.add(jobDetails[5]);
                         }
                     }
 
                     // Update all job listings from formatting
                     allJobListings = formatting.recieveJob(response);
 
+                    // Create default camera location
+                    defaultCameraLatLng = new LatLng(latCounter/allJobListings.size(),
+                            longCounter/allJobListings.size());
+
+                    // Shift camera position
+                    resetMapCamera();
+
                     // TODO COMMENETING OUT FOR TESTING
 //                    // Load ratings
 //                    loadRatings();
 
-                } else {
-                    // Nothing returned in response
-                    // TODO FIGURE OUT WHAT IS NEEDED
                 }
-
             }
         }, "all");
+    }
+
+    // Create a new camera position using the default camera values then applies it to the map object
+    private void resetMapCamera() {
+        // Shift camera to default camera position
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(
+                new CameraPosition.Builder().target(defaultCameraLatLng)
+                        .zoom(defaultCameraZoomLevel)
+                        .bearing(defaultCameraBearing)
+                        .tilt(defaultCameraTilt)
+                        .build()
+        ));
     }
 
     // TODO WILL STILL NEED TO TEST

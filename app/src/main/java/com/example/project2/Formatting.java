@@ -24,7 +24,7 @@ public class Formatting {
                             split[2], // title
                             split[3], // description
                             split[4], // salary
-                            split[5], // type
+                            split[5], // category
                             new LatLng(Double.parseDouble(location[0]), Double.parseDouble(location[1])) // location
                             )
             );

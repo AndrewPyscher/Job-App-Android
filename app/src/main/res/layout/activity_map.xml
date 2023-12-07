@@ -7,6 +7,18 @@
     android:textAlignment="textStart"
     tools:context=".MapActivity">
 
+    <TextView
+        android:id="@+id/tvMapNoJobs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No job listings"
+        android:textSize="34sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/map"
+        app:layout_constraintEnd_toEndOf="@+id/map"
+        app:layout_constraintStart_toStartOf="@+id/map"
+        app:layout_constraintTop_toTopOf="@+id/map" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineMap"
         android:layout_width="wrap_content"
@@ -44,6 +56,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/map"
+        app:layout_constraintEnd_toEndOf="@+id/map"
+        app:layout_constraintStart_toStartOf="@+id/map"
+        app:layout_constraintTop_toTopOf="@+id/map" />
 
     <Spinner
         android:id="@+id/sMapFilterPrimary"

@@ -11,7 +11,7 @@ public class JobListing {
     LatLng location;
 
     // Parametrized constructor
-    public JobListing(int id, int employer_id,String title, String description, String category, String salary,
+    public JobListing(int id, int employer_id,String title, String description, String salary, String category,
                       LatLng location) {
         this.id = id;
         this.employer_id = employer_id;
