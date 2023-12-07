@@ -12,13 +12,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.text.Normalizer;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.concurrent.CountDownLatch;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -36,36 +34,44 @@ public class UserProfile extends AppCompatActivity {
     EducationAdapter educationAdapter;
     UseServer serverDAO;
     AtomicReference<String> saveResponse;
+    String viewedUserName;
 
     ArrayList<Job> jobHistory;
     ArrayList<School> educationHistory;
 
-    int accountID;
-    boolean isAccountOwner = false;
+    int accountID, viewedID;
+    boolean isAccountOwner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        accountID = -1;
+        accountID = getSharedPreferences("user", MODE_PRIVATE).getInt("id", -1);;
+        viewedID = -1;
+        isAccountOwner = false;
+        try {
+            viewedUserName = Objects.requireNonNull(getIntent().getExtras()).getString("username");
+        } catch (Exception e) {
+            viewedUserName = "";
+        }
 
         serverDAO = UseServer.getInstance(this);
         saveResponse = new AtomicReference<>();
 
-        accountID = getSharedPreferences("user", MODE_PRIVATE).getInt("id", -1);
         Log.d(TAG, "Account ID: "+accountID);
 
         // Find active account and initialize if necessary
 
-        String encodedStoredProfile = accountLookup();
-        Log.d(TAG, "accountLookupResult:" + encodedStoredProfile);
-        String[] profileData;
-        try {
-            profileData = encodedStoredProfile.split(Formatting.DELIMITER_1);
-        } catch (Exception e) {
-            profileData = new String[]{String.valueOf(accountID),"","","","","","",""};
-        }
+//        String encodedStoredProfile = accountLookup();
+        accountLookup();
+//        Log.d(TAG, "accountLookupResult:" + encodedStoredProfile);
+//        String[] profileData;
+//        try {
+//            profileData = encodedStoredProfile.split(Formatting.DELIMITER_1);
+//        } catch (Exception e) {
+//            profileData = new String[]{String.valueOf(accountID),"","","","","","",""};
+//        }
 
         // --------------<<<   GET VIEWS   >>>-------------- \\
 
@@ -94,36 +100,36 @@ public class UserProfile extends AppCompatActivity {
         // |  id: 0     |  address: 1 |  aboutMe: 2      |  name: 3        | \\
         // |  phone: 4  |  email: 5   |  workHistory:  6 |  education : 7  | \\
 
-        Log.d(TAG, profileData[3]);
-        Log.d(TAG, profileData[4]);
-        Log.d(TAG, profileData[5]);
-        Log.d(TAG, profileData[2]);
-
-        etName.setText(profileData[1]);
-        etPhone.setText(profileData[3]);
-        etEmail.setText(profileData[4]);
-        etAddress.setText(profileData[2]);
-        etDescription.setText(profileData[5]);
-
-        txtName.setText(profileData[1]);
-        txtPhone.setText(profileData[3]);
-        txtEmail.setText(profileData[4]);
-        txtAddress.setText(profileData[2]);
-        txtDescription.setText(profileData[5]);
+//        Log.d(TAG, profileData[3]);
+//        Log.d(TAG, profileData[4]);
+//        Log.d(TAG, profileData[5]);
+//        Log.d(TAG, profileData[2]);
+//
+//        etName.setText(profileData[1]);
+//        etPhone.setText(profileData[3]);
+//        etEmail.setText(profileData[4]);
+//        etAddress.setText(profileData[2]);
+//        etDescription.setText(profileData[5]);
+//
+//        txtName.setText(profileData[1]);
+//        txtPhone.setText(profileData[3]);
+//        txtEmail.setText(profileData[4]);
+//        txtAddress.setText(profileData[2]);
+//        txtDescription.setText(profileData[5]);
 
 
         // --------------<<<   LIST VIEW SECTION   >>>-------------- \\
 
         // TODO: Get the user's real job history from backend
         jobHistory = new ArrayList<>();
-        jobHistory.add(new Job("Shift Manager", "McDonalds"));
-        jobHistory.add(new Job("Frying Cook", "Krusty Krab", new Date(122,7,24), new Date(123,4,4)));
+//        jobHistory.add(new Job("Shift Manager", "McDonalds"));
+//        jobHistory.add(new Job("Frying Cook", "Krusty Krab", new Date(122,7,24), new Date(123,4,4)));
         // Use as backup somehow???
 
-        jobHistory = getJobHistoryFromDAO(profileData[6]);
+//        jobHistory = getJobHistoryFromDAO(profileData[6]);
 
-        Log.d(TAG, "Size of jobHistory: " + jobHistory.size());
-        Log.d(TAG, "Contents of jobHistory: " + jobHistory);
+//        Log.d(TAG, "Size of jobHistory: " + jobHistory.size());
+//        Log.d(TAG, "Contents of jobHistory: " + jobHistory);
 
         // ------ \\
 
@@ -137,14 +143,14 @@ public class UserProfile extends AppCompatActivity {
         // ------ \\
 
         educationHistory = new ArrayList<>();
-        educationHistory.add(new School("Saginaw Valley State University", "Computer Science", new Date(124,4,4)));
-        educationHistory.add(new School("Georgia Tech", "Computer Science", new Date(125,4,4)));
+//        educationHistory.add(new School("Saginaw Valley State University", "Computer Science", new Date(124,4,4)));
+//        educationHistory.add(new School("Georgia Tech", "Computer Science", new Date(125,4,4)));
 
         // Get Education History for User
-        educationHistory = getEducationHistoryFromDAO(profileData[7]);
+//        educationHistory = getEducationHistoryFromDAO(profileData[7]);
 
-        Log.d(TAG, "Size of educationHistory: " + educationHistory.size());
-        Log.d(TAG, "Contents of educationHistory: " + educationHistory);
+//        Log.d(TAG, "Size of educationHistory: " + educationHistory.size());
+//        Log.d(TAG, "Contents of educationHistory: " + educationHistory);
 
 //        if(educationHistory.size() == 0)
 //            txtEducation.setVisibility(View.INVISIBLE);
@@ -307,20 +313,21 @@ public class UserProfile extends AppCompatActivity {
             callbackFnct(n+1);
     }
 
-    private String accountLookup() {
-        String result = "";
-        serverDAO.verifyLogin(response -> {
-            Log.d(TAG, "VERIFY LOGIN : "+response);
+    private void accountLookup() {
+//        String result = "";
+        serverDAO.verifyLogin(loginResponse -> {
+            Log.d(TAG, "VERIFY LOGIN : "+loginResponse);
+            serverDAO.myAccount(accountResponse -> {
+                Log.d(TAG, "serverDAO onCreate: " + accountResponse);
+                // Check if current user is account owner
+                viewedID = Integer.parseInt(accountResponse.split(Formatting.DELIMITER_1)[0]);
+                isAccountOwner = (accountID == viewedID);
+                populateProfile(accountResponse);
+//            latch.countDown(); // Signal that the callback is done
+            }, viewedUserName);
         });
 
 //        CountDownLatch latch = new CountDownLatch(1); // Initialize a latch with count 1
-
-        serverDAO.myAccount(response -> {
-            Log.d(TAG, "serverDAO onCreate: " + response);
-            saveResponse.set(response);
-            populateProfile(response);
-//            latch.countDown(); // Signal that the callback is done
-        }, "");
 
 //            accountID = Integer.parseInt(saveResponse.get().split(Formatting.DELIMITER_1)[0]);
 
@@ -332,7 +339,7 @@ public class UserProfile extends AppCompatActivity {
 //                Log.d(TAG, "UPDATE:");
 //            },accountID,"","About Me","New User","","","","");
 
-        return saveResponse.get();
+//        return saveResponse.get();
     }
 
     private void populateProfile(String encodedString) {
@@ -341,7 +348,7 @@ public class UserProfile extends AppCompatActivity {
         try {
             profileData = encodedString.split(Formatting.DELIMITER_1);
         } catch (Exception e) {
-            profileData = new String[]{String.valueOf(accountID),"","","","","","",""};
+            profileData = new String[]{String.valueOf(viewedID),"","","","","","",""};
         }
 
         Log.d(TAG, Arrays.toString(profileData));
@@ -349,9 +356,6 @@ public class UserProfile extends AppCompatActivity {
         for (String item : profileData) {
             Log.d(TAG, "{" + item + "}");
         }
-
-        // Check if current user is account owner
-        isAccountOwner = (accountID == Integer.parseInt(profileData[0]));
 
         etName.setText(profileData[1]);
         etPhone.setText(profileData[3]);
@@ -372,6 +376,8 @@ public class UserProfile extends AppCompatActivity {
                 rvEmployment.setAdapter(jobAdapter);
                 if(jobHistory.size() == 0 && isAccountOwner)
                     txtExperience.setText("Edit Profile to Add Work Experience");
+                else if(jobHistory.size() == 0 && !isAccountOwner)
+                    txtExperience.setVisibility(View.INVISIBLE);
             }
 
         if(profileData.length >= 8)
@@ -381,6 +387,8 @@ public class UserProfile extends AppCompatActivity {
                 rvEducation.setAdapter(educationAdapter);
                 if(educationHistory.size() == 0 && isAccountOwner)
                     txtEducation.setText("Edit Profile to Add Education History");
+                else if(educationHistory.size() == 0 && !isAccountOwner)
+                    txtEducation.setVisibility(View.INVISIBLE);
             }
 
         // Also address the button

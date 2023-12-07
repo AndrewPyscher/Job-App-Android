@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
- <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationViewJob"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+ <androidx.constraintlayout.widget.ConstraintLayout
 
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -55,7 +73,7 @@
         app:srcCompat="@drawable/cancel_button_temp" />
 
     <TextView
-        android:id="@+id/txtJobName"
+        android:id="@+id/txtJobTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
@@ -80,79 +98,67 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtJobDescription" />
 
-    <TextView
-        android:id="@+id/txtJobDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:fontFamily="sans-serif-light"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="25dp"
-        android:text="This job sucks.\n\nYou aren't even a real cook.\nI'm just gonna pay you $4 an hour to flip burgers.\n\nI reserve the right to fire you at any moment."
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView78" />
+     <TextView
+         android:id="@+id/txtJobDescription"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="32dp"
+         android:fontFamily="sans-serif-light"
+         android:gravity="center_vertical"
+         android:paddingHorizontal="25dp"
+         android:text="This job sucks.\n\nYou aren't even a real cook.\nI'm just gonna pay you $4 an hour to flip burgers.\n\nI reserve the right to fire you at any moment."
+         android:textSize="16sp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/textView724" />
 
-    <EditText
-        android:id="@+id/etJobDescription"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:fontFamily="sans-serif-light"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        android:paddingHorizontal="25dp"
-        android:textSize="16sp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView78" />
+     <EditText
+         android:id="@+id/etJobDescription"
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:layout_marginStart="32dp"
+         android:layout_marginTop="32dp"
+         android:layout_marginEnd="32dp"
+         android:ems="10"
+         android:fontFamily="sans-serif-light"
+         android:gravity="start|top"
+         android:inputType="textMultiLine"
+         android:paddingHorizontal="25dp"
+         android:textSize="16sp"
+         android:visibility="invisible"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/textView724" />
 
-    <TextView
-        android:id="@+id/textView724"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="sans-serif-medium"
-        android:paddingHorizontal="15dp"
-        android:text="Phone:"
-        android:textSize="16sp"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtJobName" />
+   <TextView
+       android:id="@+id/textView724"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginStart="64dp"
+       android:layout_marginTop="24dp"
+       android:fontFamily="sans-serif-medium"
+       android:paddingHorizontal="15dp"
+       android:text="Salary:"
+       android:textSize="16sp"
+       app:layout_constraintHorizontal_chainStyle="packed"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toBottomOf="@+id/txtJobTitle" />
 
-    <TextView
-        android:id="@+id/txtJobPhone"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:fontFamily="sans-serif-light"
-        android:paddingHorizontal="15dp"
-        android:text="(123) 456-7890"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/textView724"
-        app:layout_constraintTop_toTopOf="@+id/textView724" />
+     <TextView
+         android:id="@+id/txtJobSalary"
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:layout_marginEnd="32dp"
+         android:fontFamily="sans-serif-light"
+         android:paddingHorizontal="15dp"
+         android:text="$4/Hour"
+         android:textSize="16sp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintHorizontal_bias="0.5"
+         app:layout_constraintStart_toEndOf="@+id/textView724"
+         app:layout_constraintTop_toTopOf="@+id/textView724" />
 
-    <TextView
-        android:id="@+id/textView78"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="sans-serif-medium"
-        android:paddingHorizontal="15dp"
-        android:text="Email:"
-        android:textSize="16sp"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView724" />
-
-    <View
+   <View
         android:id="@+id/section_separator_c2"
         android:layout_width="320dp"
         android:layout_height="1dp"
@@ -162,22 +168,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/txtJobEmail"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:fontFamily="sans-serif-light"
-        android:paddingHorizontal="15dp"
-        android:text="durrr_burger@fortnite.com"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/textView78"
-        app:layout_constraintTop_toTopOf="@+id/textView78" />
-
-    <EditText
-        android:id="@+id/etJobPhone"
+   <EditText
+        android:id="@+id/etJobSalary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
@@ -190,30 +182,42 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView724" />
 
-    <EditText
-        android:id="@+id/etJobEmail"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="5dp"
-        android:layout_marginEnd="32dp"
-        android:ems="10"
-        android:fontFamily="sans-serif-light"
-        android:hint="example@domain.com"
-        android:inputType="text"
-        android:textSize="14sp"
-        android:visibility="invisible"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textView78"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/txtJobEmail" />
-
-   <com.google.android.material.bottomnavigation.BottomNavigationView
-       android:id="@+id/job_bottom_nav"
+   <EditText
+       android:id="@+id/etJobTitle"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       app:layout_constraintBottom_toBottomOf="parent"
+       android:ems="10"
+       android:hint="Job Title"
+       android:inputType="text"
+       android:visibility="invisible"
+       app:layout_constraintBaseline_toBaselineOf="@+id/txtJobTitle"
        app:layout_constraintEnd_toEndOf="parent"
-       app:layout_constraintStart_toStartOf="parent"
-       app:menu="@menu/bottom_nav_menu" />
+       app:layout_constraintStart_toStartOf="parent" />
+
+     <Switch
+         android:id="@+id/switchIsActive"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="Activate Job"
+         android:tooltipText="Activate to show job posting globally"
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/section_separator_c1" />
+
+ </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationViewJob"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
