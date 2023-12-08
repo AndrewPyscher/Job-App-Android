@@ -26,6 +26,7 @@ public class CreateAccount extends AppCompatActivity {
     SharedPreferences sp;
     SharedPreferences.Editor ed;
 
+    // class to create an account for both applicants and employers
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +42,7 @@ public class CreateAccount extends AppCompatActivity {
         sp = getSharedPreferences("user", MODE_PRIVATE);
         ed = sp.edit();
 
+        // listeners for radio buttons
         rdbApplicant.setOnClickListener(e->{
             if(rdbApplicant.isChecked()){
                 rdbEmployer.setChecked(false);
@@ -52,6 +54,7 @@ public class CreateAccount extends AppCompatActivity {
             }
         });
 
+        // when the user clicks the button verify all the info is filled out, if it is create their account
         btnConfirmAccount.setOnClickListener(e->{
             if(("" +etConfirmPassword.getText()).equals("") || (""+etUsername1.getText()).equals("")){
                 lblError.setText("Fill out all fields!");
@@ -83,6 +86,7 @@ public class CreateAccount extends AppCompatActivity {
                 lblError.setText(response);
                 saveResponse.set(response);
 
+                // after the account is made, sign the user in
                 useServer.login(new HandleResponse() {
                     @Override
                     public void response(String response) {
@@ -98,6 +102,7 @@ public class CreateAccount extends AppCompatActivity {
                 }, etUsername1.getText().toString(), etConfirmPassword.getText().toString());
             }, role, etUsername1.getText().toString(), etConfirmPassword.getText().toString() );
 
+            //determine which page to got next based on role
             if(role.equals("applicant")) {
                 // Set user role
                 User.role = "applicant";

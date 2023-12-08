@@ -57,6 +57,7 @@ public class Settings extends AppCompatActivity {
         seekRadius.setProgress(radius);
         switchNotifications.setChecked(notifications);
 
+        // switch to change users notification preferences
         switchNotifications.setOnClickListener(e->{
             notifications = switchNotifications.isChecked();
             ed.putBoolean("notifications", notifications);

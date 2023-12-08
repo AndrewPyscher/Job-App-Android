@@ -102,7 +102,12 @@ public class SignInPage extends AppCompatActivity {
 
                     // Get user role and set it
                     // TODO
-                    // getUserRole()
+                    use.getRole(new HandleResponse() {
+                        @Override
+                        public void response(String response) {
+                            User.role = response;
+                        }
+                    }, User.id);
 
                     // Update shared preference values for current location
                     updateCurrentLocation();
@@ -155,9 +160,6 @@ public class SignInPage extends AppCompatActivity {
     }
 
     // Pulls user role info from database and sets user's role to it
-    private void getUserRole() {
-        // Can be set to applicant, employer, or error
-//        User.role = "";
-    }
+
 
 }

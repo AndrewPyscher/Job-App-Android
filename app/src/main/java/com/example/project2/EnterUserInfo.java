@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+// class for applicants to continue filling out information
+// applicants are only required to input name and a phone number/ email
 public class EnterUserInfo extends AppCompatActivity {
 
     EditText txtNameNew, txtPhoneNew, txtEmailNew, txtAboutMe,txtAddressNew;

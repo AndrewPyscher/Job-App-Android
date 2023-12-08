@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+//class to convert a street address into a LngLat object
 public class ConvertAddressToLngLat {
 
     public static String convert(Context context, String address) {
