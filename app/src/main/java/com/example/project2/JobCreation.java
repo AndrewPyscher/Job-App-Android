@@ -40,7 +40,7 @@ public class JobCreation extends AppCompatActivity {
         btnCreateNewJob.setOnClickListener(v -> {
             //Parse contents on each item to verify completeness
             if (checkJobContents()) {
-                UseServer useServer = UseServer.getInstance(this);
+                UseServer useServer = new UseServer(this, User.session);
                 AtomicReference<String> saveResponse = new AtomicReference<>("");
                 useServer.createPosting(response -> {
                     Log.d("test","Creating a new job posting: " + response);
