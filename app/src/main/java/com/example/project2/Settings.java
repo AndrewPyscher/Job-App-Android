@@ -5,7 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -20,8 +21,12 @@ public class Settings extends AppCompatActivity {
     SharedPreferences sp;
     SharedPreferences.Editor ed;
     Switch switchNotifications;
+    Button btnChangePass;
+    TextView etNewPass, etConfirm;
     int radius;
     boolean notifications;
+
+    TextView txtErrorNew;
 
     /*
     to get the settings you need used SharedPreferences!
@@ -38,6 +43,11 @@ public class Settings extends AppCompatActivity {
         seekRadius = findViewById(R.id.seekRadius);
         botNavBar = findViewById(R.id.botNavBar);
         txtRadius = findViewById(R.id.txtRadius);
+        txtErrorNew =findViewById(R.id.txtErrorNew);
+        btnChangePass = findViewById(R.id.btnChangePass);
+        etNewPass = findViewById(R.id.etNewPass);
+        etConfirm = findViewById(R.id.etConfirm);
+
         switchNotifications = findViewById(R.id.switchNotifications);
         sp = getSharedPreferences("settings", MODE_PRIVATE);
         ed = sp.edit();
@@ -55,17 +65,44 @@ public class Settings extends AppCompatActivity {
         botNavBar.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.home) {
+                Intent i = new Intent(this, activity_jobs.class);
+                startActivity(i);
                 return true;
             } else if (id == R.id.search) {
                 //Use start activity with intents to start that particular activity
+                Intent i = new Intent(this, MapActivity.class);
+                startActivity(i);
+                return true;
+            }
+            else if (id == R.id.profile) {
+                Intent i = new Intent(this, UserProfile.class);
+                startActivity(i);
                 return true;
             } else if(id == R.id.settings){
+                //You are here
                 return true;
             }
             else{
                 return false;
             }
             //Etc etc etc, you can modify this however you want to change its behavior
+        });
+
+        btnChangePass.setOnClickListener(e->{
+            if(etNewPass.getText().toString().equals(etConfirm.getText().toString())){
+                UseServer server = new UseServer(this, User.session);
+                server.changePassword(new HandleResponse() {
+                    @Override
+                    public void response(String response) {
+                        txtErrorNew.setVisibility(View.VISIBLE);
+                        txtErrorNew.setText("Password changed!");
+                    }
+                }, User.username, etConfirm.getText().toString());
+            }
+            else{
+                txtErrorNew.setVisibility(View.VISIBLE);
+                txtErrorNew.setText("Passwords Don't Match!");
+            }
         });
 
         seekRadius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -95,6 +132,6 @@ public class Settings extends AppCompatActivity {
 
         //Set default selected item when in this activity in onStart
         //This will guarantee that we have the correct item selected when the activity starts
-        botNavBar.setSelectedItemId(R.id.home);
+        botNavBar.setSelectedItemId(R.id.settings);
     }
 }

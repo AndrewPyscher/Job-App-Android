@@ -2,49 +2,43 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity_jobs">
+    tools:context=".ApplicationStatus">
 
-    <EditText
-        android:id="@+id/etSearch"
-        android:layout_width="369dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="12dp"
-        android:ems="10"
-        android:hint="Search Job"
-        android:inputType="text"
+    <TextView
+        android:id="@+id/tvApplicationStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/sql_injection_blue"
+        android:backgroundTint="@color/sql_injection_blue"
+        android:gravity="center"
+        android:paddingVertical="15dp"
+        android:text="Application Statuses"
+        android:textColor="@color/avishek_orange"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="368dp"
-        android:layout_height="41dp"
-        android:layout_marginTop="16dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/botNavBarNotifs"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etSearch" />
+        app:layout_constraintTop_toBottomOf="@+id/tvApplicationStatus" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/botNavBarJobSearch"
+        android:id="@+id/botNavBarNotifs"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav_menu" />
-
-    <ListView
-        android:id="@+id/lstJobs"
-        android:layout_width="409dp"
-        android:layout_height="543dp"
-        android:layout_marginTop="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/botNavBarJobSearch"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

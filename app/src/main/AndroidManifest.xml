@@ -13,12 +13,30 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Project2"
         android:usesCleartextTraffic="true"
-        android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31">
+        <activity
+            android:name=".ApplicationStatus"
+            android:exported="false" />
+
+        <service
+            android:name=".applicationStatusService"
+            android:enabled="true"
+            android:exported="false"></service>
+
+        <activity
+            android:name=".EmployerProfile"
+            android:exported="false" />
+        <activity
+            android:name=".EnterEmployerInfo"
+            android:exported="false" />
+        <activity
+            android:name=".EnterUserInfo"
+            android:exported="false" />
         <activity
             android:name=".Settings"
             android:exported="false"
@@ -58,15 +76,13 @@
             android:exported="true" />
         <activity
             android:name=".UserProfile"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
+        <activity
+            android:name=".JobCreation"
+            android:exported="true" />
         <activity
             android:name=".activity_jobs"
             android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-        </activity>
     </application>
 
 </manifest>

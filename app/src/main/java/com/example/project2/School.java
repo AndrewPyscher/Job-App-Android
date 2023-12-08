@@ -64,15 +64,11 @@ public class School {
     public String toString() {
         String result = "";
 
-        result += "{";
-
         result+=this.institution;
-        result+="!@#";
+        result+="@#@";
         result+=this.department;
-        result+="!@#";
+        result+="@#@";
         result+=this.getGradDateString();
-
-        result += "}";
 
         return result;
     }
