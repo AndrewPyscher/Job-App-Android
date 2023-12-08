@@ -313,7 +313,7 @@ public class UseServer {
     void myAccount(HandleResponse callback, String username){
         String url = "https://dominitechnicus.com/myAccount";
         if(!username.equals(""))
-            url = "http://162.243.172.218:5000/myAccount?username=" + username;
+            url = "https://dominitechnicus.com/myAccount?username=" + username;
         StringRequest myAccount = new StringRequest(Request.Method.GET, url,
 
                 response -> callback.response(response),
@@ -336,7 +336,7 @@ public class UseServer {
     public void allJobs(HandleResponse callback, String active){
         String url = "https://dominitechnicus.com/allJobs";
         if(!active.equals(""))
-            url = "http://162.243.172.218:5000/allJobs?active=" + active;
+            url = "https://dominitechnicus.com/allJobs?active=" + active;
         StringRequest myAccount = new StringRequest(Request.Method.GET, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())

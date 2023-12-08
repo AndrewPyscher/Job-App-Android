@@ -1,9 +1,16 @@
 package com.example.project2;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,11 +24,18 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SignInPage extends AppCompatActivity {
@@ -33,6 +47,7 @@ public class SignInPage extends AppCompatActivity {
     EditText etUsername, etPassword1;
     UseServer use;
     String TAG = "Test";
+    public static final int LOCATION_REQUEST_CODE = 321;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,8 +62,17 @@ public class SignInPage extends AppCompatActivity {
         ed = sp.edit();
         use = UseServer.getInstance(this);
 
+        // Check permission settings for location access
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+        } else {
+            Log.d(TAG, "Location access permitted...");
+        }
 
         btnCreateAccount.setOnClickListener(e->{
+            // Update shared preference values for current location
+            updateCurrentLocation();
+
             Intent m = new Intent(this, CreateAccount.class);
             startActivity(m);
         });
@@ -77,6 +101,9 @@ public class SignInPage extends AppCompatActivity {
                     ed.putInt("id", Integer.parseInt(split[0]));
                     ed.commit();
 
+                    // Update shared preference values for current location
+                    updateCurrentLocation();
+
                     Intent i = new Intent(this, activity_jobs.class);
                     startActivity(i);
                 } else {
@@ -100,5 +127,26 @@ public class SignInPage extends AppCompatActivity {
         super.onDestroy();
     }
 
+    // Checks location permissions before
+    private void updateCurrentLocation() {
+        // Create fused location provider object and check permissions for using locations
+        FusedLocationProviderClient flpClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG, "Location access was denied...");
+            return;
+        }
+
+        // Set on success and on failure listeners for location request
+        flpClient.getLastLocation().addOnSuccessListener(location -> {
+            // On success update shared preferences value for location as coordinates string
+            ed.putString("location", location.getLatitude() + "," + location.getLongitude());
+            ed.commit();
+        });
+        flpClient.getLastLocation().addOnFailureListener(e -> {
+            // On failure update shared preferences value for location as error string
+            ed.putString("location", "error");
+            ed.commit();
+        });
+    }
 
 }
