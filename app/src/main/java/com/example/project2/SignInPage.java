@@ -31,7 +31,6 @@ public class SignInPage extends AppCompatActivity {
     SharedPreferences sp;
     SharedPreferences.Editor ed;
     EditText etUsername, etPassword1;
-    CheckBox chkStaySignedIn;
     UseServer use;
     String TAG = "Test";
     @Override
@@ -44,24 +43,10 @@ public class SignInPage extends AppCompatActivity {
         etUsername = findViewById(R.id.etUsername);
         etPassword1 = findViewById(R.id.etPassword1);
         btnCreateAccount = findViewById(R.id.btnCreateAccount);
-        chkStaySignedIn = findViewById(R.id.chkStaySignedIn);
         sp = getSharedPreferences("user", MODE_PRIVATE);
         ed = sp.edit();
         use = UseServer.getInstance(this);
 
-
-        try{
-            if(sp.getBoolean("stay",false)){
-                String user = sp.getString("user","");
-                Log.d(TAG, "user: " + user);
-                if(!user.equals("")){
-                    signIn(sp.getString("user", ""), sp.getString("password", ""));
-                }
-            }
-        }catch (Exception e){
-            ed.putBoolean("stay",false);
-            ed.commit();
-        }
 
         btnCreateAccount.setOnClickListener(e->{
             Intent m = new Intent(this, CreateAccount.class);
@@ -86,17 +71,6 @@ public class SignInPage extends AppCompatActivity {
                     String[] split = response.split("<><>");
                     ed.putString("session", split[1]);
                     ed.commit();
-                    if (chkStaySignedIn.isChecked()) {
-                        ed.putBoolean("stay", true);
-                        if (sp.getString("user", "").equals("")) {
-                            ed.putString("user", etPassword1.getText().toString());
-                        }
-                        if (sp.getString("password", "").equals("")) {
-                            ed.putString("password", etPassword1.getText().toString());
-                        }
-                    } else {
-                        ed.putBoolean("stay", false);
-                    }
                     User.username = etUsername.getText().toString();
                     User.id = Integer.parseInt(split[0]);
                     User.session = split[1];
