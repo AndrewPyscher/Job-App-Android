@@ -4,4 +4,5 @@ import android.util.Log;
 
 public interface HandleResponse {
     void response(String response);
+
 }
