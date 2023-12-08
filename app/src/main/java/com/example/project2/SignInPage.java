@@ -74,12 +74,15 @@ public class SignInPage extends AppCompatActivity {
                     User.username = etUsername.getText().toString();
                     User.id = Integer.parseInt(split[0]);
                     User.session = split[1];
+                    //User.role = "";
                     ed.putInt("id", Integer.parseInt(split[0]));
                     ed.commit();
 
                     //Start tracking the users applications before changing activities
                     //This executes the background service one time
-                    startTrackingService();
+                    if (User.role.equals("applicant")) {
+                        startTrackingService();
+                    }
 
                     Intent i = new Intent(this, activity_jobs.class);
                     startActivity(i);

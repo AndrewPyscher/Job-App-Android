@@ -53,10 +53,9 @@ public class activity_jobs extends AppCompatActivity {
                 startActivity(i);
                 return true;
             } else if (id == R.id.profile) {
-                Intent i = new Intent(this, UserProfile.class);
+                Intent i = new Intent(this, EmployerProfile.class);
                 startActivity(i);
                 return true;
-                // TODO need to add the rest of the navbar buttons to their respective activities
             } else if(id == R.id.settings){
                 Intent i = new Intent(this, Settings.class);
                 startActivity(i);
