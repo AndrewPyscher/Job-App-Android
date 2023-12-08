@@ -79,6 +79,7 @@ public class SignInPage extends AppCompatActivity {
             signIn(etUsername.getText().toString(), etPassword1.getText().toString());
         });
     }
+    // method to sign in
     public void signIn(String username, String password){
         if(etUsername.getText().toString().equals("") || etPassword1.getText().toString().equals("")){
             tvError.setText("Fill out all Fields!");
