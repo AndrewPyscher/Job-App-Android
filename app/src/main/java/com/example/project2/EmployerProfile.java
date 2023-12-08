@@ -1,9 +1,12 @@
 package com.example.project2;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -59,7 +62,7 @@ public class EmployerProfile extends AppCompatActivity {
 
         btnNewJob.setOnClickListener(v -> {
             Intent i = new Intent(this, JobCreation.class);
-            startActivity(i);
+            startActivityForResult(i,1);
         });
 
     }

@@ -74,8 +74,15 @@ public class SignInPage extends AppCompatActivity {
                     User.username = etUsername.getText().toString();
                     User.id = Integer.parseInt(split[0]);
                     User.session = split[1];
+                    //User.role = "";
                     ed.putInt("id", Integer.parseInt(split[0]));
                     ed.commit();
+
+                    //Start tracking the users applications before changing activities
+                    //This executes the background service one time
+                    if (User.role.equals("applicant")) {
+                        startTrackingService();
+                    }
 
                     Intent i = new Intent(this, activity_jobs.class);
                     startActivity(i);
@@ -89,14 +96,16 @@ public class SignInPage extends AppCompatActivity {
 
         }
     }
+
+    public void startTrackingService() {
+        Intent i = new Intent(this, applicationStatusService.class);
+        Log.d("test","starting tracking service");
+        startService(i);
+    }
+
     @Override
     protected void onDestroy() {
-        use.logout(new HandleResponse() {
-            @Override
-            public void response(String response) {
-                Log.d("test", "response: " + response);
-            }
-        });
+        use.logout(response -> Log.d("test", "response: " + response));
         super.onDestroy();
     }
 
