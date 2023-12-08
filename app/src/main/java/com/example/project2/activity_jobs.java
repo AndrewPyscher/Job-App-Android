@@ -8,22 +8,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
-import com.google.android.gms.maps.model.LatLng;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
-
 public class activity_jobs extends AppCompatActivity {
-
+    ArrayList<String> options;
     BottomNavigationView botNavBar;
     SharedPreferences sp;
     ListView lstJobs;
     ArrayList<JobListing> jobs;
     UseServer useServer;
     JobListingAdapter adapter;
+    Spinner spinner;
 
 
     @Override
@@ -37,8 +38,9 @@ public class activity_jobs extends AppCompatActivity {
         adapter = new JobListingAdapter(this,jobs);
         lstJobs = findViewById(R.id.lstJobs);
         lstJobs.setAdapter(adapter);
-
+        spinner = findViewById(R.id.spinner);
         botNavBar = findViewById(R.id.botNavBarJobSearch);
+        options = new ArrayList<>();
 
 
         botNavBar.setOnItemSelectedListener(item -> {
@@ -55,9 +57,12 @@ public class activity_jobs extends AppCompatActivity {
                 startActivity(i);
                 return true;
                 // TODO need to add the rest of the navbar buttons to their respective activities
-            } else {
-                return false;
+            } else if(id == R.id.settings){
+                Intent i = new Intent(this, Settings.class);
+                startActivity(i);
+                return true;
             }
+            return false;
         });
 
     }
@@ -70,9 +75,17 @@ public class activity_jobs extends AppCompatActivity {
             Log.d("test", "getData: " + response);
             ArrayList<JobListing> temp = Formatting.recieveJob(response);
             for (int i=0; i<temp.size(); i++){
+                if(!options.contains(temp.get(i).category)){
+                    options.add(temp.get(i).category);
+                }
                 jobs.add(temp.get(i));
                 Log.d("test", "getData: " + i);
+
             }
+            String[] optionArray = options.toArray(new String[0]);
+            ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, optionArray);
+            adapter2.setDropDownViewResource(android.R.layout.simple_spinner_item);
+            spinner.setAdapter(adapter2);
             adapter.notifyDataSetChanged();
         },"");
 
