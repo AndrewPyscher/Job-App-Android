@@ -60,6 +60,10 @@ public class activity_jobs extends AppCompatActivity {
                 Intent i = new Intent(this, Settings.class);
                 startActivity(i);
                 return true;
+            } else if (id == R.id.Notifs) {
+                Intent i = new Intent(this, ApplicationStatus.class);
+                startActivity(i);
+                return true;
             }
             return false;
         });

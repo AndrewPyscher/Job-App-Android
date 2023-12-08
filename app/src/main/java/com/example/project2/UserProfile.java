@@ -211,14 +211,16 @@ public class UserProfile extends AppCompatActivity {
             } else if (id == R.id.profile) {
                 //You are here
                 return true;
-            } else if (id == R.id.settings) {
-                Log.d(TAG, "SETTINGS INTENT");
+            } else if(id == R.id.settings){
                 Intent i = new Intent(this, Settings.class);
                 startActivity(i);
                 return true;
-            } else {
-                return false;
+            } else if (id == R.id.Notifs) {
+                Intent i = new Intent(this, ApplicationStatus.class);
+                startActivity(i);
+                return true;
             }
+            return false;
         });
     }
 
