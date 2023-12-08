@@ -29,7 +29,7 @@ public class ApplicationStatus extends AppCompatActivity {
                 startActivity(i);
                 return true;
             } else if (id == R.id.profile) {
-                Intent i = new Intent(this, ((User.role.equals("applicant")) ? UserProfile.class : EmployerProfile.class));
+                Intent i = new Intent(this, UserProfile.class);
                 startActivity(i);
                 return true;
             } else if (id == R.id.settings) {
