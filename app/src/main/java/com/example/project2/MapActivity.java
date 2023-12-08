@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -99,8 +98,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     // List for storing job listings, categories, and employer id
     private ArrayList<JobListing> allJobListings = new ArrayList<>(), jobList = new ArrayList<>();
-    private ArrayList<String> categoriesList = new ArrayList<>(),employerIdList = new ArrayList<>();
-//        employerNameList = new ArrayList<>();
+    private ArrayList<String> categoriesList = new ArrayList<>(),employerIdList = new ArrayList<>(),
+        employerNameList = new ArrayList<>();
 
     // Map zone values
     private double mapZoneLat1, mapZoneLat2, mapZoneLng1, mapZoneLng2;
@@ -145,7 +144,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // Update default values to category, employer id, and secondary spinner list
         categoriesList.add(DEFAULT_NONE_VALUE);
         employerIdList.add(DEFAULT_NONE_VALUE);
-//        employerNameList.add(DEFAULT_NONE_VALUE);
+        employerNameList.add(DEFAULT_NONE_VALUE);
         secondarySpinnerList.add(DEFAULT_NONE_VALUE);
 
         // Set up bottom navigation menu listener
@@ -675,6 +674,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                 // If not added then add to employer lists
                                 employerIdList.add(jobDetails[1]);
 
+                                // Get and set employer name from database
+                                updateEmployerNameList();
+
                             }
 
                             // Check if category is already added to category list
@@ -795,6 +797,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 }
             }
         }), jobListing.employer_id);
+    }
+
+    // Get employer name from route, then sets name for employer name to employer name list
+    private void updateEmployerNameList() {
+        // TODO
     }
 
     // Takes in a GoogleMap object, and ArrayList of JobListing objects, adds markers to map object
