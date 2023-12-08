@@ -8,9 +8,8 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:fillViewport="true"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationViewJob"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -20,215 +19,206 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
- <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-     <Button
-         android:id="@+id/btnQuickApply"
-         android:layout_width="212dp"
-         android:layout_height="51dp"
-         android:text="Quick Apply"
-         android:visibility="invisible"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintHorizontal_bias="0.497"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toTopOf="@+id/switchIsActive" />
+                <Button
+                    android:id="@+id/btnQuickApply"
+                    android:layout_width="212dp"
+                    android:layout_height="51dp"
+                    android:text="Quick Apply"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.497"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/switchIsActive" />
 
-     <ImageView
-        android:id="@+id/imgJobPic"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/guideline_c1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/uhhh_fortnite_burger" />
+                <ImageView
+                    android:id="@+id/imgJobPic"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline_c1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/uhhh_fortnite_burger" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_c1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="242dp" />
-
-
-    <ImageButton
-        android:id="@+id/btnEditJob"
-        android:layout_width="82dp"
-        android:layout_height="62dp"
-        android:background="@null"
-        android:scaleType="centerInside"
-        app:layout_constraintBottom_toTopOf="@+id/guideline_c1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.9"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline_c1"
-        app:srcCompat="@drawable/edit_button_temp" />
-
-    <ImageButton
-        android:id="@+id/btnCancelEdit"
-        android:layout_width="82dp"
-        android:layout_height="62dp"
-        android:background="@null"
-        android:scaleType="centerInside"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/guideline_c1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline_c1"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/cancel_button_temp" />
-
-    <TextView
-        android:id="@+id/txtJobTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:fontFamily="sans-serif-smallcaps"
-        android:letterSpacing=".25"
-        android:text="Burger Flipper"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgJobPic" />
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline_c1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="242dp" />
 
 
-    <View
-        android:id="@+id/section_separator_c1"
-        android:layout_width="320dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="32dp"
-        android:background="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtJobDescription" />
+                <ImageButton
+                    android:id="@+id/btnEditJob"
+                    android:layout_width="82dp"
+                    android:layout_height="62dp"
+                    android:background="@null"
+                    android:scaleType="centerInside"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline_c1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.9"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/guideline_c1"
+                    app:srcCompat="@drawable/edit_button_temp" />
 
-     <TextView
-         android:id="@+id/txtJobDescription"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_marginTop="32dp"
-         android:fontFamily="sans-serif-light"
-         android:gravity="center_vertical"
-         android:paddingHorizontal="25dp"
-         android:text="This job sucks.\n\nYou aren't even a real cook.\nI'm just gonna pay you $4 an hour to flip burgers.\n\nI reserve the right to fire you at any moment."
-         android:textSize="16sp"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toBottomOf="@+id/textView724" />
+                <ImageButton
+                    android:id="@+id/btnCancelEdit"
+                    android:layout_width="82dp"
+                    android:layout_height="62dp"
+                    android:background="@null"
+                    android:scaleType="centerInside"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline_c1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/guideline_c1"
+                    app:layout_constraintVertical_bias="0.0"
+                    app:srcCompat="@drawable/cancel_button_temp" />
 
-     <EditText
-         android:id="@+id/etJobDescription"
-         android:layout_width="0dp"
-         android:layout_height="wrap_content"
-         android:layout_marginStart="32dp"
-         android:layout_marginTop="32dp"
-         android:layout_marginEnd="32dp"
-         android:ems="10"
-         android:fontFamily="sans-serif-light"
-         android:gravity="start|top"
-         android:inputType="textMultiLine"
-         android:paddingHorizontal="25dp"
-         android:textSize="16sp"
-         android:visibility="invisible"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toBottomOf="@+id/textView724" />
+                <TextView
+                    android:id="@+id/txtJobTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="48dp"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:letterSpacing=".25"
+                    android:text="Burger Flipper"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imgJobPic" />
 
-   <TextView
-       android:id="@+id/textView724"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_marginStart="64dp"
-       android:layout_marginTop="24dp"
-       android:fontFamily="sans-serif-medium"
-       android:paddingHorizontal="15dp"
-       android:text="Salary:"
-       android:textSize="16sp"
-       app:layout_constraintHorizontal_chainStyle="packed"
-       app:layout_constraintStart_toStartOf="parent"
-       app:layout_constraintTop_toBottomOf="@+id/txtJobTitle" />
 
-     <TextView
-         android:id="@+id/txtJobSalary"
-         android:layout_width="0dp"
-         android:layout_height="wrap_content"
-         android:layout_marginEnd="32dp"
-         android:fontFamily="sans-serif-light"
-         android:paddingHorizontal="15dp"
-         android:text="$4/Hour"
-         android:textSize="16sp"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintHorizontal_bias="0.5"
-         app:layout_constraintStart_toEndOf="@+id/textView724"
-         app:layout_constraintTop_toTopOf="@+id/textView724" />
+                <View
+                    android:id="@+id/section_separator_c1"
+                    android:layout_width="320dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="32dp"
+                    android:background="#000000"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.494"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtJobDescription" />
 
-   <View
-        android:id="@+id/section_separator_c2"
-        android:layout_width="320dp"
-        android:layout_height="1dp"
-        android:background="#000000"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+                <TextView
+                    android:id="@+id/txtJobDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="25dp"
+                    android:text="This job sucks.\n\nYou aren't even a real cook.\nI'm just gonna pay you $4 an hour to flip burgers.\n\nI reserve the right to fire you at any moment."
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView724" />
 
-   <EditText
-        android:id="@+id/etJobSalary"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:ems="10"
-        android:fontFamily="sans-serif-light"
-        android:inputType="phone"
-        android:textSize="14sp"
-        android:visibility="invisible"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textView724"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView724" />
+                <EditText
+                    android:id="@+id/etJobDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:ems="10"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="start|top"
+                    android:inputType="textMultiLine"
+                    android:paddingHorizontal="25dp"
+                    android:textSize="16sp"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView724" />
 
-   <EditText
-       android:id="@+id/etJobTitle"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:ems="10"
-       android:hint="Job Title"
-       android:inputType="text"
-       android:visibility="invisible"
-       app:layout_constraintBaseline_toBaselineOf="@+id/txtJobTitle"
-       app:layout_constraintEnd_toEndOf="parent"
-       app:layout_constraintStart_toStartOf="parent" />
+                <TextView
+                    android:id="@+id/textView724"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="64dp"
+                    android:layout_marginTop="24dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:paddingHorizontal="15dp"
+                    android:text="Salary:"
+                    android:textSize="16sp"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtJobTitle" />
 
-     <Switch
-         android:id="@+id/switchIsActive"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:text="Activate Job"
-         android:tooltipText="Activate to show job posting globally"
-         app:layout_constraintBottom_toBottomOf="parent"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toBottomOf="@+id/section_separator_c1" />
+                <TextView
+                    android:id="@+id/txtJobSalary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="32dp"
+                    android:fontFamily="sans-serif-light"
+                    android:paddingHorizontal="15dp"
+                    android:text="$4/Hour"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/textView724"
+                    app:layout_constraintTop_toTopOf="@+id/textView724" />
 
- </androidx.constraintlayout.widget.ConstraintLayout>
+                <View
+                    android:id="@+id/section_separator_c2"
+                    android:layout_width="320dp"
+                    android:layout_height="1dp"
+                    android:background="#000000"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <EditText
+                    android:id="@+id/etJobSalary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="32dp"
+                    android:ems="10"
+                    android:fontFamily="sans-serif-light"
+                    android:inputType="phone"
+                    android:textSize="14sp"
+                    android:visibility="invisible"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textView724"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView724" />
+
+                <EditText
+                    android:id="@+id/etJobTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Job Title"
+                    android:inputType="text"
+                    android:visibility="invisible"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/txtJobTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <Switch
+                    android:id="@+id/switchIsActive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Activate Job"
+                    android:tooltipText="Activate to show job posting globally"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/section_separator_c1" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationViewJob"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

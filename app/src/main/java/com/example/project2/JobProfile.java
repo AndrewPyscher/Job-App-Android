@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
@@ -42,10 +43,11 @@ public class JobProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_profile);
 
-        sharedPrefs = getSharedPreferences("user", MODE_PRIVATE);
+//        sharedPrefs = getSharedPreferences("user", MODE_PRIVATE);
 
         // Get saved account ID from login
-        accountID = sharedPrefs.getInt("id", -1);
+//        accountID = sharedPrefs.getInt("id", -1);
+        accountID = User.id;
         Log.d(TAG, "Account ID: "+accountID);
         // Will get in populateProfile()
 //        viewedID = -1;
@@ -87,6 +89,7 @@ public class JobProfile extends AppCompatActivity {
 
         // show switch ONLY if employer is viewing their own job
         switchIsActive.setVisibility(isAccountOwner ? View.VISIBLE : View.INVISIBLE);
+        btnEdit.setVisibility(isAccountOwner ? View.VISIBLE : View.INVISIBLE);
         // show button ONLY if applicant is viewing job
         btnQuickApply.setVisibility(isAccountOwner ? View.INVISIBLE : View.VISIBLE);
 
@@ -142,7 +145,14 @@ public class JobProfile extends AppCompatActivity {
         btnQuickApply.setOnClickListener(v -> {
             serverDAO.insertApplication(response -> {
                 Log.d(TAG, "Inserted Application. Response: "+response);
+                Toast.makeText(this, "Application Submitted!", Toast.LENGTH_LONG).show();
+                btnQuickApply.setVisibility(View.INVISIBLE);
             }, jobID, accountID, "Test Application Message");
+        });
+
+        switchIsActive.setOnClickListener(v -> {
+            serverDAO.activeJob(response -> Log.d(TAG, "activeJob: "+response),
+                    jobID, switchIsActive.isActivated());
         });
     }
 
@@ -157,7 +167,6 @@ public class JobProfile extends AppCompatActivity {
         txtTitle.setVisibility(View.INVISIBLE);
         txtSalary.setVisibility(View.INVISIBLE);
         txtDescription.setVisibility(View.INVISIBLE);
-
 
         // Display Editable Fields
         etTitle.setVisibility(View.VISIBLE);
