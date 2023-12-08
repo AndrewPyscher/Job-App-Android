@@ -62,7 +62,7 @@ public class UserProfile extends AppCompatActivity {
 
         Log.d(TAG, "Viewed USERNAME:"+viewedUserName);
 
-        serverDAO = UseServer.getInstance(this);
+        serverDAO = new UseServer(this, User.session);
         saveResponse = new AtomicReference<>();
 
         Log.d(TAG, "Account ID: "+accountID);
