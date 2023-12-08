@@ -694,8 +694,6 @@ public class UseServer {
         };
         queue.add(createAccountRequest);
     }
-
-
     // route to insert user info, used when creating an account
     void insertUserInfo(HandleResponse callback, int id, String address, String about_me, String name, String phone, String workHistory, String education, String email){
         String url = "https://dominitechnicus.com/insertUserInfo";
