@@ -73,6 +73,10 @@ public class SignInPage extends AppCompatActivity {
         });
     }
     public void signIn(String username, String password){
+        if(etUsername.getText().toString().equals("") || etPassword1.getText().toString().equals("")){
+            tvError.setText("Fill out all Fields!");
+            tvError.setVisibility(View.VISIBLE);
+        }
         try {
             use.login(response -> {
                 if (response == null) return;
@@ -80,7 +84,6 @@ public class SignInPage extends AppCompatActivity {
                 tvError.setText(response);
                 if (!response.equals("Username or Password is incorrect!")) {
                     String[] split = response.split("<><>");
-                    Log.d("Garbage",split[1]);
                     ed.putString("session", split[1]);
                     ed.commit();
                     if (chkStaySignedIn.isChecked()) {
@@ -94,7 +97,9 @@ public class SignInPage extends AppCompatActivity {
                     } else {
                         ed.putBoolean("stay", false);
                     }
-
+                    User.username = etUsername.getText().toString();
+                    User.id = Integer.parseInt(split[0]);
+                    User.session = split[1];
                     ed.putInt("id", Integer.parseInt(split[0]));
                     ed.commit();
 
