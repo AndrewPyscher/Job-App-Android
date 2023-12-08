@@ -259,6 +259,7 @@ public class UserProfile extends AppCompatActivity {
                 //You are here
                 return true;
             } else if (id == R.id.settings) {
+                Log.d(TAG, "SETTINGS INTENT");
                 Intent i = new Intent(this, Settings.class);
                 startActivity(i);
                 return true;

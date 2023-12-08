@@ -2,6 +2,7 @@ package com.example.project2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.SeekBar;
@@ -34,7 +35,7 @@ public class Settings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         seekRadius = findViewById(R.id.seekRadius);
-        botNavBar = findViewById(R.id.navBar);
+        botNavBar = findViewById(R.id.botNavBar);
         txtRadius = findViewById(R.id.txtRadius);
         switchNotifications = findViewById(R.id.switchNotifications);
         sp = getSharedPreferences("settings", MODE_PRIVATE);
@@ -53,9 +54,18 @@ public class Settings extends AppCompatActivity {
         botNavBar.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.home) {
+                Intent i = new Intent(this, activity_jobs.class);
+                startActivity(i);
                 return true;
             } else if (id == R.id.search) {
                 //Use start activity with intents to start that particular activity
+                Intent i = new Intent(this, MapActivity.class);
+                startActivity(i);
+                return true;
+            }
+            else if (id == R.id.profile) {
+                Intent i = new Intent(this, UserProfile.class);
+                startActivity(i);
                 return true;
             } else if(id == R.id.settings){
                 return true;

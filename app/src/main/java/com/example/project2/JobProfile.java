@@ -147,7 +147,7 @@ public class JobProfile extends AppCompatActivity {
                 Log.d(TAG, "Inserted Application. Response: "+response);
                 Toast.makeText(this, "Application Submitted!", Toast.LENGTH_LONG).show();
                 btnQuickApply.setVisibility(View.INVISIBLE);
-            }, jobID, accountID, "Test Application Message");
+            }, jobID, accountID, "");
         });
 
         switchIsActive.setOnClickListener(v -> {
