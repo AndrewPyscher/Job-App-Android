@@ -43,7 +43,8 @@ public class JobListingAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        view = LayoutInflater.from(context).inflate(R.layout.activity_layout_jobs_item, parent, false);
+        if(view == null)
+            view = LayoutInflater.from(context).inflate(R.layout.activity_layout_jobs_item, parent, false);
         TextView tvJobName = view.findViewById(R.id.tvJobName);
         TextView tvSalary = view.findViewById(R.id.tvSalary);
         TextView tvType = view.findViewById(R.id.tvType);
