@@ -43,7 +43,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
         JobApplication myApplication = applications.get(position);
 
         holder.btnViewProfile.setOnClickListener(v -> {
-            Intent i = new Intent(context, UserProfile.class);
+            Intent i = new Intent(context, ((User.role.equals("applicant")) ? UserProfile.class : EmployerProfile.class));
             i.putExtra("username", myApplication.getApplicantUsername());
         });
 
