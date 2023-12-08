@@ -149,7 +149,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         secondarySpinnerList.add(DEFAULT_NONE_VALUE);
 
         // Set up bottom navigation menu listener
-        // TODO NEED TO SET UP LOGIC AND ICONS FOR OTHER ACTIVITIES
         botNavBar.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.home) {
@@ -165,6 +164,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 return true;
             } else if (id == R.id.settings) {
                 Intent i = new Intent(this, Settings.class);
+                startActivity(i);
+                return true;
+            } else if (id == R.id.Notifs) {
+                Intent i = new Intent(this, ApplicationStatus.class);
                 startActivity(i);
                 return true;
             }

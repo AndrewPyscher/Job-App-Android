@@ -80,9 +80,9 @@ public class SignInPage extends AppCompatActivity {
 
                     //Start tracking the users applications before changing activities
                     //This executes the background service one time
-                    if (User.role.equals("applicant")) {
+                    /*if (User.role.equals("applicant")) {
                         startTrackingService();
-                    }
+                    }*/
 
                     Intent i = new Intent(this, activity_jobs.class);
                     startActivity(i);

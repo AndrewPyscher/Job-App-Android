@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -23,6 +25,7 @@ public class EmployerProfile extends AppCompatActivity {
     UseServer serverDAO;
 
     Button btnNewJob;
+    BottomNavigationView botNavBar;
     RecyclerView rvApplications;
     ApplicationAdapter applicationAdapter;
     ArrayList<JobApplication> applications;
@@ -49,6 +52,7 @@ public class EmployerProfile extends AppCompatActivity {
 
         btnNewJob = findViewById(R.id.btnNewJob);
         rvApplications = findViewById(R.id.rvApplications);
+        botNavBar = findViewById(R.id.botNavBarEmployerProfile);
 
         // Basically exists in case nothing is populated
         applications = new ArrayList<>();
@@ -65,6 +69,38 @@ public class EmployerProfile extends AppCompatActivity {
             startActivityForResult(i,1);
         });
 
+        botNavBar.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.home) {
+                Intent i = new Intent(this, activity_jobs.class);
+                startActivity(i);
+                return true;
+            } else if (id == R.id.search) {
+                Intent i = new Intent(this, MapActivity.class);
+                startActivity(i);
+                return true;
+            } else if (id == R.id.profile) {
+                //You are here
+                return true;
+            } else if(id == R.id.settings){
+                Intent i = new Intent(this, Settings.class);
+                startActivity(i);
+                return true;
+            } else if (id == R.id.Notifs) {
+                Intent i = new Intent(this, ApplicationStatus.class);
+                startActivity(i);
+                return true;
+            }
+            return false;
+        });
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        botNavBar.setSelectedItemId(R.id.profile);
     }
 
     // --------------<<<   UTILITY METHODS   >>>-------------- \\

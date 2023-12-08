@@ -588,7 +588,7 @@ public class UseServer {
     }
 
     void createPosting(HandleResponse callback, int employer_id, String job_title, String description, String salary, String type){
-        String url = "https://dominitechnicus.com/createPosting";
+        String url = "https://dominitechnicus.com/createJob";
         StringRequest createAccountRequest = new StringRequest(Request.Method.POST, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -624,7 +624,7 @@ public class UseServer {
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
                 Map<String, String> headers = response.headers;
                 String cookies = headers.get("Set-Cookie");
-
+                Log.d("test", response.toString());
                 session = cookies.split(";")[0];
                 return super.parseNetworkResponse(response);
             }

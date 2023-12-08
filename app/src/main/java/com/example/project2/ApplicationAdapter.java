@@ -47,27 +47,6 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
             i.putExtra("username", myApplication.getApplicantUsername());
         });
 
-        holder.botNavBar.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.home) {
-                Intent i = new Intent(context, activity_jobs.class);
-                context.startActivity(i);
-                return true;
-            } else if (id == R.id.search) {
-                Intent i = new Intent(context, MapActivity.class);
-                context.startActivity(i);
-                return true;
-            } else if (id == R.id.profile) {
-                //You are here
-                return true;
-            } else if (id == R.id.settings) {
-                Intent i = new Intent(context, Settings.class);
-                context.startActivity(i);
-                return true;
-            } else {
-                return false;
-            }
-        });
     }
 
     @Override
@@ -79,7 +58,6 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
     // stores and recycles views as they are scrolled off screen
     class ViewHolder extends RecyclerView.ViewHolder {
         Button btnViewProfile;
-        BottomNavigationView botNavBar;
 
         ViewHolder(View itemView)  {
             super(itemView);

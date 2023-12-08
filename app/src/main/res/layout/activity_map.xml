@@ -26,25 +26,16 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.6" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.9" />
-
     <ProgressBar
         android:id="@+id/pbMapInfo"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineMenu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/map"
-        app:layout_constraintVertical_bias="0.499" />
+        app:layout_constraintTop_toBottomOf="@+id/map" />
 
     <ProgressBar
         android:id="@+id/pbMapFragment"
@@ -160,13 +151,11 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navBar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guidelineMenu"
-        app:layout_constraintVertical_bias="1.0"
         app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
