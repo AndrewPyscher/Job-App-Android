@@ -53,6 +53,10 @@ public class JobCreation extends AppCompatActivity {
                 Toast.makeText(this, "Please fill out all fields.", Toast.LENGTH_SHORT).show();
             }
         });
+
+        btnCancelJobPost.setOnClickListener(v -> {
+            finish();
+        });
     }
 
     boolean checkJobContents() {
