@@ -84,7 +84,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     // Constant filtering strings
     private final String JOBS_ALL = "All Jobs", JOBS_ACTIVE = "Active Jobs",
             JOBS_INACTIVE = "Inactive Jobs", JOBS_CATEGORY = "Category",
-            JOBS_EMPLOYER = "Employer ID", DEFAULT_NONE_VALUE = "-";
+            JOBS_EMPLOYER = "Employer", DEFAULT_NONE_VALUE = "-";
 
     // Constant database error value
     private final String ERROR_DATABASE = "Access Denied", ERROR_GPS = "error", ERROR_SIGNIN = "error";
@@ -210,7 +210,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         case JOBS_EMPLOYER: {
                             // Update secondary filter to employer id list
                             secondaryAdapter.clear();
-                            secondaryAdapter.addAll(employerIdList);
+                            secondaryAdapter.addAll(employerNameList);
                             secondaryAdapter.notifyDataSetChanged();
 
                             // Set secondary spinner to default value
@@ -242,8 +242,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         // Make secondary filter spinner inaccessible
@@ -547,7 +546,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         tvMapNoJob.setVisibility(View.INVISIBLE);
 
                         // Pass to formatting class to convert string to array list, then pass list to update map method
-                        updateMapData(formatting.recieveJob(response));
+                        updateMapData(Formatting.recieveJob(response));
 
                     }
                 } catch (NullPointerException nullPointerException) {
@@ -585,7 +584,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         tvMapNoJob.setVisibility(View.INVISIBLE);
 
                         // Pass to formatting class to convert string to array list, then pass list to update map method
-                        updateMapData(formatting.recieveJob(response));
+                        updateMapData(Formatting.recieveJob(response));
                     }
                 } catch (NullPointerException nullPointerException) {
                     // Request invalid
@@ -622,7 +621,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         tvMapNoJob.setVisibility(View.INVISIBLE);
 
                         // Pass to formatting class to convert string to array list, then pass list to update map method
-                        updateMapData(formatting.recieveJob(response));
+                        updateMapData(Formatting.recieveJob(response));
 
                     }
                 } catch (NullPointerException nullPointerException) {
@@ -675,7 +674,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                 employerIdList.add(jobDetails[1]);
 
                                 // Get and set employer name from database
-                                updateEmployerNameList();
+                                updateEmployerNameList(Integer.parseInt(jobDetails[1]));
 
                             }
 
@@ -687,7 +686,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         }
 
                         // Update all job listings from formatting
-                        allJobListings = formatting.recieveJob(response);
+                        allJobListings = Formatting.recieveJob(response);
 
                         // Create default camera location
                         String gpsLocationString = sp.getString("location",ERROR_GPS);
@@ -800,8 +799,36 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     // Get employer name from route, then sets name for employer name to employer name list
-    private void updateEmployerNameList() {
-        // TODO
+    private void updateEmployerNameList(int employer_id) {
+        // Create class object for importing data from database
+        UseServer useServer = new UseServer(this);
+
+        // Pull and compute ratings for employee id
+        useServer.getCompanyName((new HandleResponse() {
+            @Override
+            public void response(String response) {
+                // Check if response is null
+                try {
+                    if (response.equals(ERROR_DATABASE)) {
+                        // Request invalid
+                        // Toast to user error message
+                        Toast.makeText(getApplicationContext(), ERROR_DATABASE_MESSAGE, Toast.LENGTH_SHORT).show();
+                        employerNameList.add("ERROR");
+
+                    } else if (!Objects.equals(response, "")) {
+                        employerNameList.add(response);
+
+                    } else {
+                        // Error loading name
+                        employerNameList.add("ERROR");
+                    }
+                } catch (NullPointerException nullPointerException) {
+                    // Response invalid
+                    // Toast to user error message
+                    Toast.makeText(getApplicationContext(),ERROR_DATABASE_MESSAGE,Toast.LENGTH_SHORT).show();
+                }
+            }
+        }), employer_id);
     }
 
     // Takes in a GoogleMap object, and ArrayList of JobListing objects, adds markers to map object

@@ -102,7 +102,6 @@ public class SignInPage extends AppCompatActivity {
                     ed.commit();
 
                     // Get user role and set it
-                    // TODO
                     use.getRole(new HandleResponse() {
                         @Override
                         public void response(String response) {
@@ -159,8 +158,5 @@ public class SignInPage extends AppCompatActivity {
             ed.commit();
         });
     }
-
-    // Pulls user role info from database and sets user's role to it
-
 
 }
