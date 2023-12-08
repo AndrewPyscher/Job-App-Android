@@ -322,18 +322,17 @@ public class UserProfile extends AppCompatActivity {
 
         });
         serverDAO.myAccount(accountResponse -> {
-//            if(accountResponse==null) {
-//                serverDAO.updateProfile(response -> {},1,".",".",".",".",".", ".", ".");
-//                return;
-//            }
+            // Reset account if no formatting exists (including empty string)
+            if(!accountResponse.contains(Formatting.DELIMITER_1)) {
+                serverDAO.updateProfile(response -> {},accountID,".",".",".",".",".", ".", ".");
+                return;
+            }
 
             Log.d(TAG, "serverDAO onCreate: " + accountResponse);
             // Check if current user is account owner
             ownerID = Integer.parseInt(accountResponse.split(Formatting.DELIMITER_1)[0]);
             isAccountOwner = (accountID == ownerID);
             populateProfile(accountResponse);
-
-
         }, viewedUserName);
 
 
