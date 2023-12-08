@@ -98,10 +98,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private ArrayList<String> secondarySpinnerList = new ArrayList<>();
 
     // List for storing job listings, categories, and employer id
-    private ArrayList<JobListing> allJobListings = new ArrayList<>();
-    private ArrayList<JobListing> jobList = new ArrayList<>();
-    private ArrayList<String> categoriesList = new ArrayList<>();
-    private ArrayList<String> employerIdList = new ArrayList<>();
+    private ArrayList<JobListing> allJobListings = new ArrayList<>(), jobList = new ArrayList<>();
+    private ArrayList<String> categoriesList = new ArrayList<>(),employerIdList = new ArrayList<>();
+//        employerNameList = new ArrayList<>();
 
     // Map zone values
     private double mapZoneLat1, mapZoneLat2, mapZoneLng1, mapZoneLng2;
@@ -146,6 +145,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // Update default values to category, employer id, and secondary spinner list
         categoriesList.add(DEFAULT_NONE_VALUE);
         employerIdList.add(DEFAULT_NONE_VALUE);
+//        employerNameList.add(DEFAULT_NONE_VALUE);
         secondarySpinnerList.add(DEFAULT_NONE_VALUE);
 
         // Set up bottom navigation menu listener
@@ -257,13 +257,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         currentJobListing = null;
 
         // Check for role from shared preferences if employer then don't set buttons listeners for applying
-        // TODO FIX
-        String userRole = sp.getString("role",ERROR_SIGNIN);
-        if (userRole.equals(ERROR_SIGNIN)) {
+        if (User.role == null || User.role.equals(ERROR_SIGNIN)) {
             // Error in sign in process
             Toast.makeText(this, ERROR_SIGNIN_MESSAGE, Toast.LENGTH_SHORT).show();
 
-        } else if (userRole.equals("applicant")) {
+        } else if (User.role.equals("applicant")) {
             // Role is applicant not employer
             // Set up button listener for apply button
             btnMapApply.setOnClickListener(new View.OnClickListener() {
@@ -474,10 +472,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             case JOBS_CATEGORY: {
                 String filterValue = secondarySpinnerList.get(secondaryFilter);
 
-                // Check if filter value is set to default value, skip if so
+                // Check if filter value is set to default value, clear map markers if so
                 if (!filterValue.equals(DEFAULT_NONE_VALUE)) {
                     // Filter for jobs with the same category
                     importMapDataByCategory(filterValue);
+                } else {
+                    map.clear();
                 }
 
                 break;
@@ -485,10 +485,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             case JOBS_EMPLOYER: {
                 String filterValue = secondarySpinnerList.get(secondaryFilter);
 
-                // Check if filter value is set to default value, skip if so
+                // Check if filter value is set to default value, clear map markers if so
                 if (!filterValue.equals(DEFAULT_NONE_VALUE)) {
                     // Filter for jobs with the same employer id
                     importMapDataByEmployerId(Integer.parseInt(filterValue));
+                } else {
+                    map.clear();
                 }
 
                 break;
@@ -496,7 +498,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-    // TODO CHECK IF NEED TO CHECK ANYTHING BUT ID?
     // Create a request to database for applying to that job listing using the user id and job
     // listing id. Will display a toast with outcome message to user.
     private void applyForJob() {
@@ -671,8 +672,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                             // Check if employer id is already added to category list
                             if (!employerIdList.contains(jobDetails[1])) {
-                                // If not added then add to employer list
+                                // If not added then add to employer lists
                                 employerIdList.add(jobDetails[1]);
+
                             }
 
                             // Check if category is already added to category list
@@ -779,7 +781,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                     } else if (!Objects.equals(response, "")) {
                         // Pass to formatting class to convert employer id and then set job listing rating
-                        // TODO TESTING
                         jobListing.setRating(formatting.receiveRating(response));
 
                     } else {
