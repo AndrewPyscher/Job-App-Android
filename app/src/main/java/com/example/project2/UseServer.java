@@ -29,7 +29,7 @@ public class UseServer {
     RequestQueue queue;
     String session;
     SharedPreferences sp;
-    ArrayList<JobListing> jobs;
+
     public UseServer(Context context) {
         queue = Volley.newRequestQueue(context);
     }
@@ -38,14 +38,6 @@ public class UseServer {
     public UseServer(Context context, String session){
         queue = Volley.newRequestQueue(context);
         this.session = session;
-
-        this.jobs = new ArrayList<>();
-        this.allJobs(new HandleResponse() {
-            @Override
-            public void response(String response) {
-              jobs = Formatting.recieveJob(response);
-            }
-        },"");
     }
     public static synchronized UseServer getInstance(Context context) {
         if (instance == null) {

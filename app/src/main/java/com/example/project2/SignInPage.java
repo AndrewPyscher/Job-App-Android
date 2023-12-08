@@ -97,7 +97,9 @@ public class SignInPage extends AppCompatActivity {
                     } else {
                         ed.putBoolean("stay", false);
                     }
-
+                    User.username = etUsername.getText().toString();
+                    User.id = Integer.parseInt(split[0]);
+                    User.session = split[1];
                     ed.putInt("id", Integer.parseInt(split[0]));
                     ed.commit();
 

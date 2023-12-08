@@ -10,7 +10,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ListView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -20,10 +22,9 @@ public class activity_jobs extends AppCompatActivity {
 
     BottomNavigationView botNavBar;
     SharedPreferences sp;
-    RecyclerView rvJobs;
+    ListView lstJobs;
     ArrayList<JobListing> jobs;
-
-    boolean loadFlag;
+    UseServer useServer;
     JobListingAdapter adapter;
 
 
@@ -32,30 +33,12 @@ public class activity_jobs extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jobs);
         sp = getSharedPreferences("user", MODE_PRIVATE);
-        loadFlag = false;
+        useServer = new UseServer(this, sp.getString("session", ""));
         jobs = new ArrayList<>();
-        rvJobs = findViewById(R.id.rvJobs);
         getData();
         adapter = new JobListingAdapter(this,jobs);
-        rvJobs.setAdapter(adapter);
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        rvJobs.setLayoutManager(manager);
-
-        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-            }
-        });
-        helper.attachToRecyclerView(rvJobs);
-
-
-        sp = getSharedPreferences("user", MODE_PRIVATE);
+        lstJobs = findViewById(R.id.lstJobs);
+        lstJobs.setAdapter(adapter);
 
         botNavBar = findViewById(R.id.botNavBarJobSearch);
 
@@ -83,17 +66,16 @@ public class activity_jobs extends AppCompatActivity {
 
 
     public void getData(){
-        loadFlag = true;
-        UseServer useServer = new UseServer(this, sp.getString("session", ""));
         useServer.allJobs(response -> {
             if(response.equals(""))
                 return;
-
-            jobs = Formatting.recieveJob(response);
+            Log.d("test", "getData: " + response);
+            ArrayList<JobListing> temp = Formatting.recieveJob(response);
+            for (int i=0; i<temp.size(); i++){
+                jobs.add(temp.get(i));
+                Log.d("test", "getData: " + i);
+            }
             adapter.notifyDataSetChanged();
-
-
-
         },"");
 
     }

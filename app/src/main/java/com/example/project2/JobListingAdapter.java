@@ -1,19 +1,25 @@
 package com.example.project2;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class JobListingAdapter extends RecyclerView.Adapter<JobListingAdapter.JobListingViewHolder> {
+public class JobListingAdapter extends BaseAdapter {
 
     ArrayList<JobListing> jobs;
     Context context;
@@ -22,46 +28,57 @@ public class JobListingAdapter extends RecyclerView.Adapter<JobListingAdapter.Jo
         this.context = context;
         this.jobs = jobs;
     }
-    @NonNull
+
     @Override
-    public JobListingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.activity_layout_jobs_item,parent,false);
-        return new JobListingViewHolder(v);
+    public int getCount() {
+        return jobs.size();
     }
 
     @Override
-    public void onBindViewHolder(@NonNull JobListingViewHolder holder, int position) {
-        JobListing job = jobs.get(position);
-        holder.tvJobName.setText(job.title);
-        holder.tvSalary.setText(job.salary);
-        holder.tvType.setText(job.category);
-        Log.d("test", "onBindViewHolder: "  +jobs.size());
+    public Object getItem(int position) {
+        return jobs.get(position);
     }
 
     @Override
-    public int getItemCount() {
+    public long getItemId(int position) {
         return 0;
     }
 
-    class JobListingViewHolder extends RecyclerView.ViewHolder{
-        TextView tvJobName;
-        TextView tvSalary;
-        TextView tvType;
-        Button btnViewMore;
-        Button btnApply;
+    @Override
+    public View getView(int position, View view, ViewGroup parent) {
+        view = LayoutInflater.from(context).inflate(R.layout.activity_layout_jobs_item, parent, false);
+        TextView tvJobName = view.findViewById(R.id.tvJobName);
+        TextView tvSalary = view.findViewById(R.id.tvSalary);
+        TextView tvType = view.findViewById(R.id.tvType);
+        Button btnViewMore = view.findViewById(R.id.btnViewMore);
+        Button btnApply = view.findViewById(R.id.btnApply);
+        JobListing j = jobs.get(position);
 
-        public JobListingViewHolder(@NonNull View view) {
-            super(view);
-            tvJobName = view.findViewById(R.id.tvJobName);
-            tvSalary = view.findViewById(R.id.tvSalary);
-            tvType = view.findViewById(R.id.tvType);
-            btnViewMore = view.findViewById(R.id.btnViewMore);
-            btnApply = view.findViewById(R.id.btnApply);
+        tvJobName.setText(j.title);
+        tvSalary.setText(j.salary);
+        tvType.setText(j.category);
 
+        SharedPreferences sp = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+        btnApply.setOnClickListener(e->{
+            btnApply.setVisibility(View.INVISIBLE);
+            Log.d("test", "getView: here" );
+            UseServer server = new UseServer(context, sp.getString("session",""));
+            server.insertApplication(new HandleResponse() {
+                @Override
+                public void response(String response) {
+                    Toast.makeText(context, "Application Submitted!", Toast.LENGTH_LONG).show();
+                }
+            }, j.id,User.id,"");
+        });
 
+        btnViewMore.setOnClickListener(e->{
+            Intent i = new Intent(context, JobProfile.class);
+            i.putExtra("jobID", j.id);
+            i.putExtra("employerID", j.employer_id);
+            context.startActivity(i);
+        });
 
-
-        }
+        return view;
     }
 }
 
