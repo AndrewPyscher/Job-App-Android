@@ -3,9 +3,11 @@ package com.example.project2;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -65,7 +67,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     Button btnMapApply;
     ProgressBar pbMap, pbInfo;
     Spinner sPrimary, sSecondary;
-    BottomNavigationView navigationMenu;
+    BottomNavigationView botNavBar;
 
     // Array adapters for spinners
     ArrayAdapter<String> primaryAdapter, secondaryAdapter;
@@ -130,7 +132,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         sPrimary = findViewById(R.id.sMapFilterPrimary);
         sSecondary = findViewById(R.id.sMapFilterSecondary);
 
-        navigationMenu = findViewById(R.id.navBar);
+        botNavBar = findViewById(R.id.navBar);
 
         // Initialize shared preferences
         sp = getSharedPreferences("user", MODE_PRIVATE);
@@ -148,18 +150,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         // Set up bottom navigation menu listener
         // TODO NEED TO SET UP LOGIC AND ICONS FOR OTHER ACTIVITIES
-        navigationMenu.setOnItemSelectedListener(item -> {
+        botNavBar.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.home) {
-                //do nothing
+                Intent i = new Intent(this, activity_jobs.class);
+                startActivity(i);
                 return true;
             } else if (id == R.id.search) {
-                //Use start activity with intents to start that particular activity
+                //You are here
                 return true;
-            } else {
-                return false;
+            } else if (id == R.id.profile) {
+                Intent i = new Intent(this, UserProfile.class);
+                startActivity(i);
+                return true;
+            } else if (id == R.id.settings) {
+                Intent i = new Intent(this, Settings.class);
+                startActivity(i);
+                return true;
             }
-            //Etc etc etc, you can modify this however you want to change its behavior
+            return false;
         });
 
         // Set up spinner adapter, onSelected listener, and default values
@@ -261,6 +270,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        botNavBar.setSelectedItemId(R.id.search);
     }
 
     @Override

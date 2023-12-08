@@ -222,6 +222,13 @@ public class UserProfile extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        botNavBar.setSelectedItemId(R.id.profile);
+    }
+
     // --------------<<<   UTILITY METHODS   >>>-------------- \\
 
     /**

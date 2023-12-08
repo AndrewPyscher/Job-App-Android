@@ -45,7 +45,7 @@ public class JobCreation extends AppCompatActivity {
                 useServer.createPosting(response -> {
                     Log.d("test","Creating a new job posting: " + response);
                     saveResponse.set(response);
-                }, 1, etNewJobTitle.getText()+"", etNewJobDesc.getText()+"",
+                }, User.id, etNewJobTitle.getText()+"", etNewJobDesc.getText()+"",
                         etNewJobSalary.getText()+"", etNewJobType.getText()+"");
             }
         });
