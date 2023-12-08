@@ -100,6 +100,10 @@ public class SignInPage extends AppCompatActivity {
                     ed.putInt("id", Integer.parseInt(split[0]));
                     ed.commit();
 
+                    // Get user role and set it
+                    // TODO
+                    // getUserRole()
+
                     // Update shared preference values for current location
                     updateCurrentLocation();
 
@@ -148,6 +152,12 @@ public class SignInPage extends AppCompatActivity {
             ed.putString("location", "error");
             ed.commit();
         });
+    }
+
+    // Pulls user role info from database and sets user's role to it
+    private void getUserRole() {
+        // Can be set to applicant, employer, or error
+//        User.role = "";
     }
 
 }

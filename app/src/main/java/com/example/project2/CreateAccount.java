@@ -99,10 +99,16 @@ public class CreateAccount extends AppCompatActivity {
             }, role, etUsername1.getText().toString(), etConfirmPassword.getText().toString() );
 
             if(role.equals("applicant")) {
+                // Set user role
+                User.role = "applicant";
+
                 Intent createAccount = new Intent(this, EnterUserInfo.class);
                 startActivity(createAccount);
             }
             if(role.equals("employer")){
+                // Set user role
+                User.role = "employer";
+
                 Intent createAccount = new Intent(this, EnterEmployerInfo.class);
                 startActivity(createAccount);
             }
