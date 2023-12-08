@@ -63,4 +63,8 @@ public class Formatting {
 
         return splitInput;
     }
+
+    public static double mileToMeters(int miles){
+        return miles * 1609.34;
+    }
 }
