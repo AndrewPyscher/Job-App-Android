@@ -51,7 +51,8 @@ public class UserProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        accountID = getSharedPreferences("user", MODE_PRIVATE).getInt("id", -1);;
+//        accountID = getSharedPreferences("user", MODE_PRIVATE).getInt("id", -1);;
+        accountID = User.id;
         ownerID = -1;
         isAccountOwner = false;
 
@@ -256,6 +257,11 @@ public class UserProfile extends AppCompatActivity {
                 return true;
             } else if (id == R.id.profile) {
                 //You are here
+                return true;
+            } else if (id == R.id.settings) {
+                Log.d(TAG, "SETTINGS INTENT");
+                Intent i = new Intent(this, Settings.class);
+                startActivity(i);
                 return true;
             } else {
                 return false;
