@@ -131,6 +131,6 @@ public class Settings extends AppCompatActivity {
 
         //Set default selected item when in this activity in onStart
         //This will guarantee that we have the correct item selected when the activity starts
-        botNavBar.setSelectedItemId(R.id.home);
+//        botNavBar.setSelectedItemId(R.id.home);
     }
 }
