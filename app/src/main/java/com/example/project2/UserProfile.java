@@ -102,47 +102,11 @@ public class UserProfile extends AppCompatActivity {
         rvEducation = findViewById(R.id.rvEducation);
         botNavBar = findViewById(R.id.botNavBarProfile);
 
-        // --------------<<<   POPULATE VIEWS FROM BACKEND   >>>-------------- \\
-
-        //  ------------------------- Index Table -------------------------  \\
-        // |  id: 0     |  address: 1 |  aboutMe: 2      |  name: 3        | \\
-        // |  phone: 4  |  email: 5   |  workHistory:  6 |  education : 7  | \\
-
-//        Log.d(TAG, profileData[3]);
-//        Log.d(TAG, profileData[4]);
-//        Log.d(TAG, profileData[5]);
-//        Log.d(TAG, profileData[2]);
-//
-//        etName.setText(profileData[1]);
-//        etPhone.setText(profileData[3]);
-//        etEmail.setText(profileData[4]);
-//        etAddress.setText(profileData[2]);
-//        etDescription.setText(profileData[5]);
-//
-//        txtName.setText(profileData[1]);
-//        txtPhone.setText(profileData[3]);
-//        txtEmail.setText(profileData[4]);
-//        txtAddress.setText(profileData[2]);
-//        txtDescription.setText(profileData[5]);
-
 
         // --------------<<<   LIST VIEW SECTION   >>>-------------- \\
 
-        // TODO: Get the user's real job history from backend
         jobHistory = new ArrayList<>();
-//        jobHistory.add(new Job("Shift Manager", "McDonalds"));
-//        jobHistory.add(new Job("Frying Cook", "Krusty Krab", new Date(122,7,24), new Date(123,4,4)));
-        // Use as backup somehow???
 
-//        jobHistory = getJobHistoryFromDAO(profileData[6]);
-
-//        Log.d(TAG, "Size of jobHistory: " + jobHistory.size());
-//        Log.d(TAG, "Contents of jobHistory: " + jobHistory);
-
-        // ------ \\
-
-//        txtExperience.setVisibility(View.INVISIBLE);
-//        rvEmployment.setAdapter(jobAdapter);
         jobAdapter = new JobAdapter(this, jobHistory);
         rvEmployment.setLayoutManager(new LinearLayoutManager(this));
         rvEmployment.setAdapter(jobAdapter);
@@ -151,18 +115,7 @@ public class UserProfile extends AppCompatActivity {
         // ------ \\
 
         educationHistory = new ArrayList<>();
-//        educationHistory.add(new School("Saginaw Valley State University", "Computer Science", new Date(124,4,4)));
-//        educationHistory.add(new School("Georgia Tech", "Computer Science", new Date(125,4,4)));
 
-        // Get Education History for User
-//        educationHistory = getEducationHistoryFromDAO(profileData[7]);
-
-//        Log.d(TAG, "Size of educationHistory: " + educationHistory.size());
-//        Log.d(TAG, "Contents of educationHistory: " + educationHistory);
-
-//        if(educationHistory.size() == 0)
-//            txtEducation.setVisibility(View.INVISIBLE);
-//        else {
         educationAdapter = new EducationAdapter(this, educationHistory);
         rvEducation.setLayoutManager(new LinearLayoutManager(this));
         rvEducation.setAdapter(educationAdapter);
@@ -258,15 +211,24 @@ public class UserProfile extends AppCompatActivity {
             } else if (id == R.id.profile) {
                 //You are here
                 return true;
-            } else if (id == R.id.settings) {
-                Log.d(TAG, "SETTINGS INTENT");
+            } else if(id == R.id.settings){
                 Intent i = new Intent(this, Settings.class);
                 startActivity(i);
                 return true;
-            } else {
-                return false;
+            } else if (id == R.id.Notifs) {
+                Intent i = new Intent(this, ApplicationStatus.class);
+                startActivity(i);
+                return true;
             }
+            return false;
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        botNavBar.setSelectedItemId(R.id.profile);
     }
 
     // --------------<<<   UTILITY METHODS   >>>-------------- \\
@@ -328,22 +290,6 @@ public class UserProfile extends AppCompatActivity {
         hideKeyboard();
     }
 
-    private void callbackFnct() {
-        callbackFnct(0);
-    }
-
-    private void callbackFnct(int n) {
-        AtomicBoolean isFinished = new AtomicBoolean(false);
-        serverDAO.myAccount(response -> {
-            if (response == null) return;
-            Log.d(TAG, "serverDAO onCreate: " + response);
-            saveResponse.set(response);
-            isFinished.set(true);
-        }, "");
-        if(n < 15 && !isFinished.get())
-            callbackFnct(n+1);
-    }
-
     private void accountLookup() {
 //        String result = "";
         serverDAO.verifyLogin(loginResponse -> {
@@ -351,32 +297,19 @@ public class UserProfile extends AppCompatActivity {
 
         });
         serverDAO.myAccount(accountResponse -> {
-//            if(accountResponse==null) {
-//                serverDAO.updateProfile(response -> {},1,".",".",".",".",".", ".", ".");
-//                return;
-//            }
+            Log.d(TAG, accountResponse);
+            // Reset account if no formatting exists (including empty string)
+            if(!accountResponse.contains(Formatting.DELIMITER_1)) {
+                serverDAO.updateProfile(response -> {},accountID,".",".",".",".",".", ".", ".");
+                return;
+            }
 
             Log.d(TAG, "serverDAO onCreate: " + accountResponse);
             // Check if current user is account owner
             ownerID = Integer.parseInt(accountResponse.split(Formatting.DELIMITER_1)[0]);
             isAccountOwner = (accountID == ownerID);
             populateProfile(accountResponse);
-
-
         }, viewedUserName);
-
-
-
-//            accountID = Integer.parseInt(saveResponse.get().split(Formatting.DELIMITER_1)[0]);
-
-
-        // If no information exists
-//        if(accountID != -1 && result = null)
-//            serverDAO.updateProfile(response -> {
-//                Log.d(TAG, "UPDATE:");
-//            },accountID,"","About Me","New User","","","","");
-
-//        return saveResponse.get();
     }
 
     private void populateProfile(String encodedString) {
@@ -531,6 +464,13 @@ public class UserProfile extends AppCompatActivity {
         result[3] = txtName.getText().toString();
         result[4] = txtPhone.getText().toString();
         result[5] = txtEmail.getText().toString();
+
+        // Insert placeholders if necessary
+        if(result[1].equals("")) result[1] = EMPTY_FIELD;
+        if(result[2].equals("")) result[2] = EMPTY_FIELD;
+        if(result[3].equals("")) result[3] = EMPTY_FIELD;
+        if(result[4].equals("")) result[4] = EMPTY_FIELD;
+        if(result[5].equals("")) result[5] = EMPTY_FIELD;
 
         // Add jobHistory
         String encodedHistory = "";

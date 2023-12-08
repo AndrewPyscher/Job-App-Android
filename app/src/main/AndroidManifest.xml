@@ -20,6 +20,18 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ApplicationStatus"
+            android:exported="false" />
+
+        <service
+            android:name=".applicationStatusService"
+            android:enabled="true"
+            android:exported="false"></service>
+
+        <activity
+            android:name=".EmployerProfile"
+            android:exported="false" />
+        <activity
             android:name=".EnterEmployerInfo"
             android:exported="false" />
         <activity
@@ -71,9 +83,6 @@
         <activity
             android:name=".activity_jobs"
             android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true" />
     </application>
 
 </manifest>

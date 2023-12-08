@@ -3,9 +3,11 @@ package com.example.project2;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -56,7 +58,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     Button btnMapApply;
     ProgressBar pbMap, pbInfo;
     Spinner sPrimary, sSecondary;
-    BottomNavigationView navigationMenu;
+    BottomNavigationView botNavBar;
 
     // Array adapters for spinners
     ArrayAdapter<String> primaryAdapter, secondaryAdapter;
@@ -130,7 +132,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         sPrimary = findViewById(R.id.sMapFilterPrimary);
         sSecondary = findViewById(R.id.sMapFilterSecondary);
 
-        navigationMenu = findViewById(R.id.navBar);
+        botNavBar = findViewById(R.id.navBar);
 
         // Initialize shared preferences
         sp = getSharedPreferences("user", MODE_PRIVATE);
@@ -147,18 +149,29 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         secondarySpinnerList.add(DEFAULT_NONE_VALUE);
 
         // Set up bottom navigation menu listener
-        navigationMenu.setOnItemSelectedListener(item -> {
+        botNavBar.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.home) {
-                //do nothing
+                Intent i = new Intent(this, activity_jobs.class);
+                startActivity(i);
                 return true;
             } else if (id == R.id.search) {
-                //Use start activity with intents to start that particular activity
+                //You are here
                 return true;
-            } else {
-                return false;
+            } else if (id == R.id.profile) {
+                Intent i = new Intent(this, UserProfile.class);
+                startActivity(i);
+                return true;
+            } else if (id == R.id.settings) {
+                Intent i = new Intent(this, Settings.class);
+                startActivity(i);
+                return true;
+            } else if (id == R.id.Notifs) {
+                Intent i = new Intent(this, ApplicationStatus.class);
+                startActivity(i);
+                return true;
             }
-            //Etc etc etc, you can modify this however you want to change its behavior
+            return false;
         });
 
         // Set up spinner adapter, onSelected listener, and default values
@@ -244,6 +257,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         currentJobListing = null;
 
         // Check for role from shared preferences if employer then don't set buttons listeners for applying
+        // TODO FIX
         String userRole = sp.getString("role",ERROR_SIGNIN);
         if (userRole.equals(ERROR_SIGNIN)) {
             // Error in sign in process
@@ -272,6 +286,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        botNavBar.setSelectedItemId(R.id.search);
     }
 
     @Override
@@ -648,11 +669,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             // Job string into id, job title, description, salary, category, LatLng
                             String[] jobDetails = listArray[i].split(DELIMITER_1);
 
-//                            // Split location values by commas
-//                            String[] cordArray = jobDetails[6].split(",");
-//                            latCounter = Double.parseDouble(cordArray[0]) + latCounter;
-//                            longCounter = Double.parseDouble(cordArray[1]) + longCounter;
-
                             // Check if employer id is already added to category list
                             if (!employerIdList.contains(jobDetails[1])) {
                                 // If not added then add to employer list
@@ -713,7 +729,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         ));
     }
 
-    // TODO WILL STILL NEED TO TEST
     // Loop through all job listings list for each job listing, checking for matching employer id's,
     // if found then pulling rating info from that job listing else pull information from database.
     private void loadRatings() {
@@ -747,7 +762,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-    // TODO NEED TO FIGURE OUT WHERE TO PUT
     private void getRating(JobListing jobListing) {
         // Create class object for importing data from database
         UseServer useServer = new UseServer(this);

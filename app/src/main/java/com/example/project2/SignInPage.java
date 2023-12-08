@@ -1,6 +1,5 @@
 package com.example.project2;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -33,9 +32,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class SignInPage extends AppCompatActivity {
@@ -98,6 +95,7 @@ public class SignInPage extends AppCompatActivity {
                     User.username = etUsername.getText().toString();
                     User.id = Integer.parseInt(split[0]);
                     User.session = split[1];
+                    //User.role = "";
                     ed.putInt("id", Integer.parseInt(split[0]));
                     ed.commit();
 
@@ -116,14 +114,16 @@ public class SignInPage extends AppCompatActivity {
 
         }
     }
+
+    public void startTrackingService() {
+        Intent i = new Intent(this, applicationStatusService.class);
+        Log.d("test","starting tracking service");
+        startService(i);
+    }
+
     @Override
     protected void onDestroy() {
-        use.logout(new HandleResponse() {
-            @Override
-            public void response(String response) {
-                Log.d("test", "response: " + response);
-            }
-        });
+        use.logout(response -> Log.d("test", "response: " + response));
         super.onDestroy();
     }
 

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -42,7 +43,6 @@ public class activity_jobs extends AppCompatActivity {
         botNavBar = findViewById(R.id.botNavBarJobSearch);
         options = new ArrayList<>();
 
-
         botNavBar.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.home) {
@@ -56,9 +56,12 @@ public class activity_jobs extends AppCompatActivity {
                 Intent i = new Intent(this, UserProfile.class);
                 startActivity(i);
                 return true;
-                // TODO need to add the rest of the navbar buttons to their respective activities
             } else if(id == R.id.settings){
                 Intent i = new Intent(this, Settings.class);
+                startActivity(i);
+                return true;
+            } else if (id == R.id.Notifs) {
+                Intent i = new Intent(this, ApplicationStatus.class);
                 startActivity(i);
                 return true;
             }
@@ -67,6 +70,12 @@ public class activity_jobs extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        botNavBar.setSelectedItemId(R.id.home);
+    }
 
     public void getData(){
         useServer.allJobs(response -> {
@@ -90,4 +99,5 @@ public class activity_jobs extends AppCompatActivity {
         },"");
 
     }
+
 }

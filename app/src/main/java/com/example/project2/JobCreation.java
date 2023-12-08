@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -35,7 +36,7 @@ public class JobCreation extends AppCompatActivity {
         etNewJobEmail = findViewById(R.id.etNewJobEmail);
         etNewJobSalary = findViewById(R.id.etNewJobSalary);
         etNewJobDesc = findViewById(R.id.etNewJobDesc);
-        etNewJobTitle = findViewById(R.id.etJobType);
+        etNewJobType = findViewById(R.id.etNewJobType);
 
         btnCreateNewJob.setOnClickListener(v -> {
             //Parse contents on each item to verify completeness
@@ -45,9 +46,16 @@ public class JobCreation extends AppCompatActivity {
                 useServer.createPosting(response -> {
                     Log.d("test","Creating a new job posting: " + response);
                     saveResponse.set(response);
-                }, 1, etNewJobTitle.getText()+"", etNewJobDesc.getText()+"",
+                }, User.id, etNewJobTitle.getText()+"", etNewJobDesc.getText()+"",
                         etNewJobSalary.getText()+"", etNewJobType.getText()+"");
+                finish();
+            } else {
+                Toast.makeText(this, "Please fill out all fields.", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        btnCancelJobPost.setOnClickListener(v -> {
+            finish();
         });
     }
 

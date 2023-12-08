@@ -127,7 +127,7 @@
         app:layout_constraintStart_toEndOf="@+id/textView3" />
 
     <EditText
-        android:id="@+id/etJobType"
+        android:id="@+id/etNewJobType"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginVertical="5dp"
@@ -181,7 +181,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etJobType" />
+        app:layout_constraintTop_toBottomOf="@+id/etNewJobType" />
 
     <Button
         android:id="@+id/btnCancelJobPost"
