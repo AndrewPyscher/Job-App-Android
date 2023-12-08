@@ -1,9 +1,16 @@
 package com.example.project2;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +24,11 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,8 +43,9 @@ public class SignInPage extends AppCompatActivity {
     SharedPreferences sp;
     SharedPreferences.Editor ed;
     EditText etUsername, etPassword1;
-    CheckBox chkStaySignedIn;
     UseServer use;
+    String TAG = "Test";
+    public static final int LOCATION_REQUEST_CODE = 321;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,38 +56,56 @@ public class SignInPage extends AppCompatActivity {
         etUsername = findViewById(R.id.etUsername);
         etPassword1 = findViewById(R.id.etPassword1);
         btnCreateAccount = findViewById(R.id.btnCreateAccount);
-
         sp = getSharedPreferences("user", MODE_PRIVATE);
         ed = sp.edit();
         use = UseServer.getInstance(this);
 
-//        Intent j = new Intent(this, Settings.class);
-//        startActivity(j);
+        // Check permission settings for location access
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_REQUEST_CODE);
+        } else {
+            Log.d(TAG, "Location access permitted...");
+        }
 
-
-//        if(sp.getBoolean("stay",false)){
-//            String user = sp.getString("user","");
-//            if(!user.equals("")){
-//                Intent i = new Intent(this, MapActivity.class);
-//                startActivity(i);
-//            }
-//        }
         btnCreateAccount.setOnClickListener(e->{
+            // Update shared preference values for current location
+            updateCurrentLocation();
+
             Intent m = new Intent(this, CreateAccount.class);
             startActivity(m);
         });
 
         btnSignIn.setOnClickListener(e -> {
+            signIn(etUsername.getText().toString(), etPassword1.getText().toString());
+        });
+    }
+    public void signIn(String username, String password){
+        if(etUsername.getText().toString().equals("") || etPassword1.getText().toString().equals("")){
+            tvError.setText("Fill out all Fields!");
+            tvError.setVisibility(View.VISIBLE);
+        }
+        try {
             use.login(response -> {
+                if (response == null) return;
                 Log.d("test", "onCreate: " + response);
                 tvError.setText(response);
                 if (!response.equals("Username or Password is incorrect!")) {
-                    if (chkStaySignedIn.isChecked()) {
-                        ed.putBoolean("stay", true);
-                    }
-                    ed.putInt("id", Integer.parseInt(response));
-                    ed.putString("user", etUsername.getText().toString());
+                    String[] split = response.split("<><>");
+                    ed.putString("session", split[1]);
                     ed.commit();
+                    User.username = etUsername.getText().toString();
+                    User.id = Integer.parseInt(split[0]);
+                    User.session = split[1];
+                    //User.role = "";
+                    ed.putInt("id", Integer.parseInt(split[0]));
+                    ed.commit();
+
+                    // Get user role and set it
+                    // TODO
+                    // getUserRole()
+
+                    // Update shared preference values for current location
+                    updateCurrentLocation();
 
                     Intent i = new Intent(this, activity_jobs.class);
                     startActivity(i);
@@ -83,26 +114,50 @@ public class SignInPage extends AppCompatActivity {
                     tvError.setText("Incorrect username or password");
                 }
 
-            }, etUsername.getText().toString(), etPassword1.getText().toString());
+            }, username, password);
+        }catch (Exception e){
 
-
-        });
-
-
-
-
-
+        }
     }
+
+    public void startTrackingService() {
+        Intent i = new Intent(this, applicationStatusService.class);
+        Log.d("test","starting tracking service");
+        startService(i);
+    }
+
     @Override
     protected void onDestroy() {
-        use.logout(new HandleResponse() {
-            @Override
-            public void response(String response) {
-                Log.d("test", "response: " + response);
-            }
-        });
+        use.logout(response -> Log.d("test", "response: " + response));
         super.onDestroy();
     }
 
+    // Checks location permissions before
+    private void updateCurrentLocation() {
+        // Create fused location provider object and check permissions for using locations
+        FusedLocationProviderClient flpClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG, "Location access was denied...");
+            return;
+        }
+
+        // Set on success and on failure listeners for location request
+        flpClient.getLastLocation().addOnSuccessListener(location -> {
+            // On success update shared preferences value for location as coordinates string
+            ed.putString("location", location.getLatitude() + "," + location.getLongitude());
+            ed.commit();
+        });
+        flpClient.getLastLocation().addOnFailureListener(e -> {
+            // On failure update shared preferences value for location as error string
+            ed.putString("location", "error");
+            ed.commit();
+        });
+    }
+
+    // Pulls user role info from database and sets user's role to it
+    private void getUserRole() {
+        // Can be set to applicant, employer, or error
+//        User.role = "";
+    }
 
 }
