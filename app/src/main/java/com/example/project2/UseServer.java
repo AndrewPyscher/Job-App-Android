@@ -19,6 +19,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ public class UseServer {
     RequestQueue queue;
     String session;
     SharedPreferences sp;
+
     public UseServer(Context context) {
         queue = Volley.newRequestQueue(context);
     }
@@ -45,7 +47,7 @@ public class UseServer {
     }
 
     void updateJobPosting(HandleResponse callback, int id, String jobTitle, String description, String salary, boolean active) {
-        String url = "http://162.243.172.218:5000/updatePosting";
+        String url = "https://dominitechnicus.com/updatePosting";
         StringRequest updateJob = new StringRequest(Request.Method.POST, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -81,7 +83,7 @@ public class UseServer {
     }
 
     void updateProfile(HandleResponse callback, int id, String address, String aboutMe, String name, String phone,String email, String workHistory, String education) {
-        String url = "http://162.243.172.218:5000/updateProfile";
+        String url = "https://dominitechnicus.com/updateProfile";
         StringRequest updateProfile = new StringRequest(Request.Method.POST, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -121,7 +123,7 @@ public class UseServer {
 
 
     void updateEmployer(HandleResponse callback, int employer_id, String company_name, String location) {
-        String url = "http://162.243.172.218:5000/updateEmployer";
+        String url = "https://dominitechnicus.com/updateEmployer";
         StringRequest updateEmployer = new StringRequest(Request.Method.POST, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -155,7 +157,7 @@ public class UseServer {
     }
 
     void insertEmployer(HandleResponse callback, int employer_id, String company_name, String location) {
-        String url = "http://162.243.172.218:5000/insertEmployerInfo";
+        String url = "https://dominitechnicus.com/insertEmployerInfo";
         StringRequest insertEmployer = new StringRequest(Request.Method.POST, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -189,7 +191,7 @@ public class UseServer {
     }
 
     void insertApplication(HandleResponse callback, int jobPostingID, int applicant_id, String message) {
-        String url = "http://162.243.172.218:5000/insertApp";
+        String url = "https://dominitechnicus.com/insertApp";
         StringRequest insertApplication = new StringRequest(Request.Method.POST, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -224,7 +226,7 @@ public class UseServer {
 
     // status should be (approved/pending/denied)
     void updateApplication(HandleResponse callback, int jobPostingID, int applicant_id, String message, String status) {
-        String url = "http://162.243.172.218:5000/updateApplication";
+        String url = "https://dominitechnicus.com/updateApplication";
         StringRequest updateApplication = new StringRequest(Request.Method.POST, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -259,7 +261,7 @@ public class UseServer {
     }
 
     void changePassword(HandleResponse callback, String username, String password) {
-        String url = "http://162.243.172.218:5000/changePassword";
+        String url = "https://dominitechnicus.com/changePassword";
         StringRequest changePassword = new StringRequest(Request.Method.POST, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -291,7 +293,7 @@ public class UseServer {
         queue.add(changePassword);
     }
     void logout(HandleResponse callback){
-        String url = "http://162.243.172.218:5000/logout";
+        String url = "https://dominitechnicus.com/logout";
         StringRequest changePassword = new StringRequest(Request.Method.GET, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -309,7 +311,7 @@ public class UseServer {
     }
     // to get the profile of whoever is signed in, pass in empty quotes for username, if you want to get a specific user, pass in their username
     void myAccount(HandleResponse callback, String username){
-        String url = "http://162.243.172.218:5000/myAccount";
+        String url = "https://dominitechnicus.com/myAccount";
         if(!username.equals(""))
             url = "http://162.243.172.218:5000/myAccount?username=" + username;
         StringRequest myAccount = new StringRequest(Request.Method.GET, url,
@@ -332,7 +334,7 @@ public class UseServer {
     // active = ""     : all active jobs
     // active = false  : all inactive jobs
     public void allJobs(HandleResponse callback, String active){
-        String url = "http://162.243.172.218:5000/allJobs";
+        String url = "https://dominitechnicus.com/allJobs";
         if(!active.equals(""))
             url = "http://162.243.172.218:5000/allJobs?active=" + active;
         StringRequest myAccount = new StringRequest(Request.Method.GET, url,
@@ -352,7 +354,7 @@ public class UseServer {
     }
 
     void oneJob(HandleResponse callback, int id){
-        String url = "http://162.243.172.218:5000/oneJob?id=" + id;
+        String url = "https://dominitechnicus.com/oneJob?id=" + id;
         StringRequest oneJob = new StringRequest(Request.Method.GET, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -372,7 +374,7 @@ public class UseServer {
 
     // change jobs "active" status
     void activeJob(HandleResponse callback, int id, boolean active){
-        String url = "http://162.243.172.218:5000/activeJob?id=" + id + "&active=" + active;
+        String url = "https://dominitechnicus.com/activeJob?id=" + id + "&active=" + active;
         StringRequest oneJob = new StringRequest(Request.Method.GET, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -390,7 +392,7 @@ public class UseServer {
     }
 
     void newRating(HandleResponse callback, int reviewer_id, int employer_id, int rating){
-        String url = "http://162.243.172.218:5000/insertRating?employer_id=" + employer_id + "&reviewer_id=" + reviewer_id + "&rating=" + reviewer_id;
+        String url = "https://dominitechnicus.com/insertRating?employer_id=" + employer_id + "&reviewer_id=" + reviewer_id + "&rating=" + reviewer_id;
         StringRequest newRating = new StringRequest(Request.Method.GET, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -408,7 +410,7 @@ public class UseServer {
     }
 
     void companyReviews(HandleResponse callback, int employer_id) {
-        String url = "http://162.243.172.218:5000/companyReviews?employer_id=" + employer_id;
+        String url = "https://dominitechnicus.com/companyReviews?employer_id=" + employer_id;
         StringRequest companyReviews = new StringRequest(Request.Method.GET, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -426,7 +428,7 @@ public class UseServer {
     }
 
     void getUserApplications(HandleResponse callback, int applicant_id) {
-        String url = "http://162.243.172.218:5000/getUserApp?id=" + applicant_id;
+        String url = "https://dominitechnicus.com/getUserApp?id=" + applicant_id;
         StringRequest companyReviews = new StringRequest(Request.Method.GET, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -445,7 +447,7 @@ public class UseServer {
 
     // get all the applications for a specific job posting
     void getEmployerApplications(HandleResponse callback, int job_posting_id) {
-        String url = "http://162.243.172.218:5000/getUserApp?id=" + job_posting_id;
+        String url = "https://dominitechnicus.com/getUserApp?id=" + job_posting_id;
         StringRequest companyReviews = new StringRequest(Request.Method.GET, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -463,7 +465,7 @@ public class UseServer {
     }
 
     void getJobsForCategory(HandleResponse callback, String type) {
-        String url = "http://162.243.172.218:5000/jobCategory?type=" + type.replace(" ", "%20");
+        String url = "https://dominitechnicus.com/jobCategory?type=" + type.replace(" ", "%20");
         StringRequest companyReviews = new StringRequest(Request.Method.GET, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -481,7 +483,7 @@ public class UseServer {
     }
 
     void jobByEmployer(HandleResponse callback, int employer_id) {
-        String url = "http://162.243.172.218:5000/jobByEmployer?employer_id=" + employer_id;
+        String url = "https://dominitechnicus.com/jobByEmployer?employer_id=" + employer_id;
         StringRequest jobByEmployer = new StringRequest(Request.Method.GET, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -489,7 +491,7 @@ public class UseServer {
         queue.add(jobByEmployer);
     }
     void verifyLogin(HandleResponse callback) {
-        String url = "http://162.243.172.218:5000/verifyLogin" ;
+        String url = "https://dominitechnicus.com/verifyLogin" ;
         StringRequest verifyLogin = new StringRequest(Request.Method.GET, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -508,7 +510,7 @@ public class UseServer {
 
 
     void createAccount(HandleResponse callback, String role, String username, String password){
-        String url = "http://162.243.172.218:5000/createUser";
+        String url = "https://dominitechnicus.com/createUser";
         StringRequest createAccountRequest = new StringRequest(Request.Method.POST, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -543,7 +545,7 @@ public class UseServer {
     }
 
     void login(HandleResponse callback, String username, String password){
-        String url = "http://162.243.172.218:5000/login";
+        String url = "https://dominitechnicus.com/login";
         StringRequest createAccountRequest = new StringRequest(Request.Method.POST, url,
                 response -> callback.response(response + "<><>"+session),
                 error -> callback.response(error.getMessage())
@@ -586,7 +588,7 @@ public class UseServer {
     }
 
     void createPosting(HandleResponse callback, int employer_id, String job_title, String description, String salary, String type){
-        String url = "http://162.243.172.218:5000/createPosting";
+        String url = "https://dominitechnicus.com/createPosting";
         StringRequest createAccountRequest = new StringRequest(Request.Method.POST, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())
@@ -632,7 +634,7 @@ public class UseServer {
 
 
     void insertUserInfo(HandleResponse callback, int id, String address, String about_me, String name, String phone, String workHistory, String education, String email){
-        String url = "http://162.243.172.218:5000/insertUserInfo";
+        String url = "https://dominitechnicus.com/insertUserInfo";
         StringRequest createAccountRequest = new StringRequest(Request.Method.POST, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())

@@ -91,6 +91,9 @@ public class CreateAccount extends AppCompatActivity {
                         Log.d("test", "response: " + response);
                         ed.putInt("id", Integer.parseInt(response.split("<><>")[0]));
                         ed.commit();
+                        User.id = Integer.parseInt(response.split("<><>")[0]);
+                        User.session = split[1];
+                        User.username = etUsername1.getText().toString();
                     }
                 }, etUsername1.getText().toString(), etConfirmPassword.getText().toString());
             }, role, etUsername1.getText().toString(), etConfirmPassword.getText().toString() );

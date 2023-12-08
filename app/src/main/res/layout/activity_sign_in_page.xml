@@ -86,18 +86,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
-    <CheckBox
-        android:id="@+id/chkStaySignedIn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Stay signed in?"
-        app:layout_constraintBottom_toTopOf="@+id/tvNoAccount"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSignIn"
-        app:layout_constraintVertical_bias="0.0" />
-
     <EditText
         android:id="@+id/etPassword1"
         android:layout_width="320dp"

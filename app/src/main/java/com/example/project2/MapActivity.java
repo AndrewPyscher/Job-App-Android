@@ -600,11 +600,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         // Create lat and long counters
                         double latCounter = 0, longCounter = 0;
 
+
                         // Split response and cycle through list of jobs pulled from response string
-                        String[] listArray = response.split(formatting.delimiter2);
+                        String[] listArray = response.split(formatting.DELIMITER_2);
                         for (int i = 0; i < listArray.length; i++) {
                             // Job string into id, job title, description, salary, category, LatLng
-                            String[] jobDetails = listArray[i].split(formatting.delimiter);
+                            String[] jobDetails = listArray[i].split(formatting.DELIMITER_1);
 
                             // Split location values by commas
                             String[] cordArray = jobDetails[6].split(",");

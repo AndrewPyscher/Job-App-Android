@@ -59,7 +59,7 @@ public class EnterUserInfo extends AppCompatActivity {
                     "",
                     txtEmailNew.getText().toString()
             );
-            Intent i = new Intent(this, MainActivity.class);
+            Intent i = new Intent(this, activity_jobs.class);
             startActivity(i);
         });
 
