@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -24,6 +25,7 @@ public class EmployerProfile extends AppCompatActivity {
 
     UseServer serverDAO;
 
+    TextView txtProfileCompanyName;
     Button btnNewJob;
     BottomNavigationView botNavBar;
     RecyclerView rvApplications;
@@ -31,18 +33,14 @@ public class EmployerProfile extends AppCompatActivity {
     ArrayList<JobApplication> applications;
 
 
-    int accountID;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employer_profile);
 
-        accountID = getSharedPreferences("user", MODE_PRIVATE).getInt("id", -1);
 
         serverDAO = UseServer.getInstance(this);
 
-        Log.d(TAG, "Account ID: "+accountID);
 
         // Find active account and initialize if necessary
         accountLookup();
@@ -50,16 +48,19 @@ public class EmployerProfile extends AppCompatActivity {
 
         // --------------<<<   GET VIEWS   >>>-------------- \\
 
+        txtProfileCompanyName = findViewById(R.id.txtProfileCompanyName);
         btnNewJob = findViewById(R.id.btnNewJob);
         rvApplications = findViewById(R.id.rvApplications);
         botNavBar = findViewById(R.id.botNavBarEmployerProfile);
 
-        // Basically exists in case nothing is populated
-        applications = new ArrayList<>();
-
-        applicationAdapter = new ApplicationAdapter(this, applications);
         rvApplications.setLayoutManager(new LinearLayoutManager(this));
-        rvApplications.setAdapter(applicationAdapter);
+
+        serverDAO.getCompanyName(response -> txtProfileCompanyName.setText(response), User.id);
+
+
+        // Basically exists in case nothing is populated
+
+
 
 
         // --------------<<<   LISTENERS   >>>-------------- \\
@@ -134,55 +135,57 @@ public class EmployerProfile extends AppCompatActivity {
 
     private void accountLookup() {
 //        String result = "";
+        Log.d(TAG, "UID:"+User.id);
         serverDAO.verifyLogin(loginResponse -> {
             Log.d(TAG, "VERIFY LOGIN : "+loginResponse);
-
+            serverDAO.getEmployerApplications(response -> {
+                Log.d(TAG, "Applications:{" +response+"}");
+                loadApplicants(response);
+            }, User.id);
         });
-
-        serverDAO.jobByEmployer(response -> {
-            Log.d(TAG, response);
-        }, accountID);
-//
-//        serverDAO.myAccount(accountResponse -> {
-//            Log.d(TAG, "serverDAO onCreate: " + accountResponse);
-//            // Check if current user is account owner
-//            loadApplicants();
-//        }, "");
-
-
-
-
-//            accountID = Integer.parseInt(saveResponse.get().split(Formatting.DELIMITER_1)[0]);
-
-
-        // If no information exists
-//        if(accountID != -1 && result = null)
-//            serverDAO.updateProfile(response -> {
-//                Log.d(TAG, "UPDATE:");
-//            },accountID,"","About Me","New User","","","","");
-
-//        return saveResponse.get();
     }
 
-    private void loadApplicants() {
-//        Log.d(TAG,encodedString);
+    private void loadApplicants(String input) {
+        Context context = this;
+
+        applications = new ArrayList<>();
         String[] applicantData;
         try {
-            applicantData = "encodedString".split(Formatting.DELIMITER_1);
+            applicantData = input.split(Formatting.DELIMITER_2);
         } catch (Exception e) {
-            applicantData = new String[]{String.valueOf(accountID),EMPTY_FIELD,EMPTY_FIELD,EMPTY_FIELD,EMPTY_FIELD,EMPTY_FIELD,EMPTY_FIELD,EMPTY_FIELD};
+            applicantData = new String[]{EMPTY_FIELD,EMPTY_FIELD,EMPTY_FIELD,EMPTY_FIELD};
         }
 
         Log.d(TAG, Arrays.toString(applicantData));
 
-        for (String item : applicantData) {
-            Log.d(TAG, "{" + item + "}");
+        for (String application : applicantData) {
+            Log.d(TAG, "{" + application + "}");
+
+            // If no data exists, exit
+            if(application.equals(""))
+                return;
+
+            String[] parsedApplication = application.split(Formatting.DELIMITER_1);
+            if(!parsedApplication[2].equals("pending"))
+                continue;
+
+            serverDAO.oneJob(response -> {
+                Log.d(TAG, "OneJob:"+response);
+                applications.add(new JobApplication(
+                        Integer.parseInt(parsedApplication[0]),
+                        parsedApplication[3],
+                        Integer.parseInt(parsedApplication[1]),
+                        response.split(Formatting.DELIMITER_1)[1]));
+                Log.d(TAG, ""+applications.get(0));
+                applicationAdapter = new ApplicationAdapter(context, applications);
+                rvApplications.setAdapter(applicationAdapter);
+            }, Integer.parseInt(parsedApplication[1]));
+
         }
+        Log.d(TAG,Arrays.toString(applications.toArray()));
 
 
-        // Also address the button
-//        if(!isAccountOwner)
-//            btnEdit.setVisibility(View.INVISIBLE);
+
     }
 
 

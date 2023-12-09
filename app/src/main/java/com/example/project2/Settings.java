@@ -57,6 +57,7 @@ public class Settings extends AppCompatActivity {
         seekRadius.setProgress(radius);
         switchNotifications.setChecked(notifications);
 
+        // switch to change users notification preferences
         switchNotifications.setOnClickListener(e->{
             notifications = switchNotifications.isChecked();
             ed.putBoolean("notifications", notifications);
@@ -75,7 +76,7 @@ public class Settings extends AppCompatActivity {
                 return true;
             }
             else if (id == R.id.profile) {
-                Intent i = new Intent(this, UserProfile.class);
+                Intent i = new Intent(this, (User.role.equals("applicant")) ? UserProfile.class : EmployerProfile.class);
                 startActivity(i);
                 return true;
             } else if(id == R.id.settings){

@@ -7,9 +7,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -26,6 +30,10 @@ public class activity_jobs extends AppCompatActivity {
     UseServer useServer;
     JobListingAdapter adapter;
     Spinner spinner;
+    EditText etSearch;
+
+    String filter ="";
+
 
 
     @Override
@@ -35,6 +43,7 @@ public class activity_jobs extends AppCompatActivity {
         sp = getSharedPreferences("user", MODE_PRIVATE);
         useServer = new UseServer(this, sp.getString("session", ""));
         jobs = new ArrayList<>();
+        etSearch = findViewById(R.id.etSearch);
         getData();
         adapter = new JobListingAdapter(this,jobs);
         lstJobs = findViewById(R.id.lstJobs);
@@ -42,6 +51,7 @@ public class activity_jobs extends AppCompatActivity {
         spinner = findViewById(R.id.spinner);
         botNavBar = findViewById(R.id.botNavBarJobSearch);
         options = new ArrayList<>();
+
 
         botNavBar.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -53,7 +63,7 @@ public class activity_jobs extends AppCompatActivity {
                 startActivity(i);
                 return true;
             } else if (id == R.id.profile) {
-                Intent i = new Intent(this, UserProfile.class);
+                Intent i = new Intent(this, (User.role.equals("applicant")) ? UserProfile.class : EmployerProfile.class);
                 startActivity(i);
                 return true;
             } else if(id == R.id.settings){
@@ -68,6 +78,36 @@ public class activity_jobs extends AppCompatActivity {
             return false;
         });
 
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                filterData();
+            }
+        });
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                filter = spinner.getSelectedItem().toString();
+                filterData();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
     }
 
     @Override
@@ -77,12 +117,16 @@ public class activity_jobs extends AppCompatActivity {
         botNavBar.setSelectedItemId(R.id.home);
     }
 
+    // method that gets the jobs from the database and fills out all the categories
     public void getData(){
         useServer.allJobs(response -> {
+            options.clear();
+            options.add("All");
             if(response.equals(""))
                 return;
             Log.d("test", "getData: " + response);
             ArrayList<JobListing> temp = Formatting.recieveJob(response);
+            // add all the categories to the adapter for the spinner
             for (int i=0; i<temp.size(); i++){
                 if(!options.contains(temp.get(i).category)){
                     options.add(temp.get(i).category);
@@ -91,6 +135,7 @@ public class activity_jobs extends AppCompatActivity {
                 Log.d("test", "getData: " + i);
 
             }
+
             String[] optionArray = options.toArray(new String[0]);
             ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, optionArray);
             adapter2.setDropDownViewResource(android.R.layout.simple_spinner_item);
@@ -98,6 +143,27 @@ public class activity_jobs extends AppCompatActivity {
             adapter.notifyDataSetChanged();
         },"");
 
+    }
+
+    public void filterData(){
+        ArrayList<JobListing> temp = new ArrayList<>();
+        if(filter.equals("All")){
+            Log.d("test", "filterData: ");
+            for (int i = 0; i < jobs.size(); i++) {
+                if (jobs.get(i).title.contains(etSearch.getText().toString())) {
+                    temp.add(jobs.get(i));
+                }
+            }
+        }
+         else {
+            for (int i = 0; i < jobs.size(); i++) {
+                if (jobs.get(i).title.contains(etSearch.getText().toString()) && jobs.get(i).category.contains(filter)) {
+                    temp.add(jobs.get(i));
+                }
+            }
+        }
+        adapter.jobs = temp;
+        adapter.notifyDataSetChanged();
     }
 
 }

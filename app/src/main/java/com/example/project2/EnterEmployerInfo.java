@@ -2,12 +2,15 @@ package com.example.project2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
+
+// class for employers to continue filling out information
 public class EnterEmployerInfo extends AppCompatActivity {
     EditText txtCompanyName, txtStreetName, txtCity, txtState;
     Button btnEmployer;
@@ -34,6 +37,8 @@ public class EnterEmployerInfo extends AppCompatActivity {
 
             server.insertEmployer(response -> {
                 Log.d("test", "onCreate: "+ response);
+                Intent i = new Intent(this, activity_jobs.class);
+                startActivity(i);
             }, sp.getInt("id", -1),txtCompanyName.getText().toString(), coords);
         });
     }
