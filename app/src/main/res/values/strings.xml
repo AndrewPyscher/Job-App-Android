@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Project2</string>
+    <string name="app_name">JobZilla</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
