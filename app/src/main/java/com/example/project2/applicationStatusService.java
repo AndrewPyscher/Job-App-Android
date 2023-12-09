@@ -8,18 +8,15 @@ import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class applicationStatusService extends Service {
 
-    SharedPreferences sp;
-    SharedPreferences.Editor spe;
-    AtomicReference<String> saveResponse = new AtomicReference<>("");
-    ArrayList<String> allApplications = new ArrayList<>();
+    ArrayList<AppStatusObj> allApplications = new ArrayList<>();
     UseServer useServer = UseServer.getInstance(this);
-    Boolean keepChecking;
 
     @Nullable
     @Override
@@ -55,15 +52,31 @@ public class applicationStatusService extends Service {
                     //Do nothing
                     Log.d("test", "Applications: none");
                 } else {
-                    Log.d("test", "Applications: " + response);
+                    //Parse the response
+                    allApplications.clear();
+                    String[] allStatuses = response.split(Formatting.DELIMITER_2);
+                    //loop through all jobs for processing
+                    for (String status : allStatuses) {
+                        //Parse the individual items
+                        String[] statusInfo = status.split(Formatting.DELIMITER_1);
+                        allApplications.add(new AppStatusObj(statusInfo[0],statusInfo[1],statusInfo[2]));
+                    }
+                    updateTheUI();
                 }
             }, User.id);
 
             try {
-                Thread.sleep(60000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    private void updateTheUI() {
+        Intent broadcastIntent = new Intent("ACTION_DATA_UPDATED");
+        broadcastIntent.putParcelableArrayListExtra("appStatuses", allApplications);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+        Log.d("test", "broadcasted " + allApplications);
     }
 }

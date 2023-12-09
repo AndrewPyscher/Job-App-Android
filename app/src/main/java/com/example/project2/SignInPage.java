@@ -125,12 +125,6 @@ public class SignInPage extends AppCompatActivity {
         }
     }
 
-    public void startTrackingService() {
-        Intent i = new Intent(this, applicationStatusService.class);
-        Log.d("test","starting tracking service");
-        startService(i);
-    }
-
     @Override
     protected void onDestroy() {
         use.logout(response -> Log.d("test", "response: " + response));
