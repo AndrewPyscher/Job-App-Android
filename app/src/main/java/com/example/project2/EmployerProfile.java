@@ -107,32 +107,8 @@ public class EmployerProfile extends AppCompatActivity {
     // --------------<<<   UTILITY METHODS   >>>-------------- \\
 
     /**
-     * Set profile into "editing mode" where users can change the information
-     * displayed on their profile page.
+     * Find User's account and populate views accordingly
      */
-    private void setProfileEditable() {
-        // Hide Static Fields
-
-
-        // Display Editable Fields
-
-
-        // Populate fields w/ current text
-    }
-
-    /**
-     * Set profile into "static mode" where elements are uneditable, and are
-     * displayed just as an employer would see the profile.
-     */
-    private void setProfileStatic() {
-        // Display Editable Fields
-
-        // Hide Static Fields
-
-        // Hide keyboard - Signifies editing finished
-        hideKeyboard();
-    }
-
     private void accountLookup() {
 //        String result = "";
         Log.d(TAG, "UID:"+User.id);
@@ -145,10 +121,15 @@ public class EmployerProfile extends AppCompatActivity {
         });
     }
 
+    /**
+     * Load list of pending applications for the employer
+     * @param input Encoded applications string
+     */
     private void loadApplicants(String input) {
         Context context = this;
-
+        // Initialize JobApplication ArrayList (for adapter)
         applications = new ArrayList<>();
+        // Store half-parsed applicant data
         String[] applicantData;
         try {
             applicantData = input.split(Formatting.DELIMITER_2);
@@ -165,12 +146,16 @@ public class EmployerProfile extends AppCompatActivity {
             if(application.equals(""))
                 return;
 
+            // Actually parsed applicant data
             String[] parsedApplication = application.split(Formatting.DELIMITER_1);
+            // If application is complete, don't show it
             if(!parsedApplication[2].equals("pending"))
                 continue;
 
+            // Get job information (just for job title)
             serverDAO.oneJob(response -> {
                 Log.d(TAG, "OneJob:"+response);
+                // Add a new application to recyclerView arraylist
                 applications.add(new JobApplication(
                         Integer.parseInt(parsedApplication[0]),
                         parsedApplication[3],
@@ -183,25 +168,5 @@ public class EmployerProfile extends AppCompatActivity {
 
         }
         Log.d(TAG,Arrays.toString(applications.toArray()));
-
-
-
-    }
-
-
-    private String[] generateEncodedProfileData() {
-        //  ------------------------- Index Table -------------------------  \\
-        // |  id: 0     |  address: 1 |  aboutMe: 2      |  name: 3        | \\
-        // |  phone: 4  |  email: 5   |  workHistory:  6 |  education : 7  | \\
-
-        return new String[1];
-    }
-
-    /**
-     * Hide keyboard if open
-     */
-    private void hideKeyboard() {
-//        InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-//        inputMethodManager.hideSoftInputFromWindow(btnEdit.getApplicationWindowToken(),0);
     }
 }
