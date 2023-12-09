@@ -69,7 +69,7 @@
         android:layout_height="83dp"
         android:layout_marginTop="40dp"
         android:gravity="center"
-        android:text="Really Good App"
+        android:text="JobZilla"
         android:textSize="48sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.461"

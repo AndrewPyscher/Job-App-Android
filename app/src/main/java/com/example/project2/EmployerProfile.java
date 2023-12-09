@@ -149,7 +149,7 @@ public class EmployerProfile extends AppCompatActivity {
             // Actually parsed applicant data
             String[] parsedApplication = application.split(Formatting.DELIMITER_1);
             // If application is complete, don't show it
-            if(!parsedApplication[2].equals("pending"))
+            if(parsedApplication.length<3 || !parsedApplication[2].equals("pending"))
                 continue;
 
             // Get job information (just for job title)
