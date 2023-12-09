@@ -504,7 +504,7 @@ public class UseServer {
 
     // get all the applications for a specific job posting
     void getEmployerApplications(HandleResponse callback, int job_posting_id) {
-        String url = "https://dominitechnicus.com/getUserApp?id=" + job_posting_id;
+        String url = "https://dominitechnicus.com/getEmployerApp?id=" + job_posting_id;
         StringRequest companyReviews = new StringRequest(Request.Method.GET, url,
                 response -> callback.response(response),
                 error -> callback.response(error.getMessage())

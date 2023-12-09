@@ -53,15 +53,14 @@ public class EmployerProfile extends AppCompatActivity {
         rvApplications = findViewById(R.id.rvApplications);
         botNavBar = findViewById(R.id.botNavBarEmployerProfile);
 
+        rvApplications.setLayoutManager(new LinearLayoutManager(this));
+
         serverDAO.getCompanyName(response -> txtProfileCompanyName.setText(response), User.id);
 
 
         // Basically exists in case nothing is populated
-        applications = new ArrayList<>();
 
-        applicationAdapter = new ApplicationAdapter(this, applications);
-        rvApplications.setLayoutManager(new LinearLayoutManager(this));
-        rvApplications.setAdapter(applicationAdapter);
+
 
 
         // --------------<<<   LISTENERS   >>>-------------- \\
@@ -139,24 +138,54 @@ public class EmployerProfile extends AppCompatActivity {
         Log.d(TAG, "UID:"+User.id);
         serverDAO.verifyLogin(loginResponse -> {
             Log.d(TAG, "VERIFY LOGIN : "+loginResponse);
-            serverDAO.getEmployerApplications(response -> Log.d(TAG, "Applications:{" +response+"}"), User.id);
+            serverDAO.getEmployerApplications(response -> {
+                Log.d(TAG, "Applications:{" +response+"}");
+                loadApplicants(response);
+            }, User.id);
         });
     }
 
-    private void loadApplicants() {
-//        Log.d(TAG,encodedString);
+    private void loadApplicants(String input) {
+        Context context = this;
+
+        applications = new ArrayList<>();
         String[] applicantData;
         try {
-            applicantData = "encodedString".split(Formatting.DELIMITER_1);
+            applicantData = input.split(Formatting.DELIMITER_2);
         } catch (Exception e) {
-            applicantData = new String[]{String.valueOf(User.id),EMPTY_FIELD,EMPTY_FIELD,EMPTY_FIELD,EMPTY_FIELD,EMPTY_FIELD,EMPTY_FIELD,EMPTY_FIELD};
+            applicantData = new String[]{EMPTY_FIELD,EMPTY_FIELD,EMPTY_FIELD,EMPTY_FIELD};
         }
 
         Log.d(TAG, Arrays.toString(applicantData));
 
-        for (String item : applicantData) {
-            Log.d(TAG, "{" + item + "}");
+        for (String application : applicantData) {
+            Log.d(TAG, "{" + application + "}");
+
+            // If no data exists, exit
+            if(application.equals(""))
+                return;
+
+            String[] parsedApplication = application.split(Formatting.DELIMITER_1);
+            if(!parsedApplication[2].equals("pending"))
+                continue;
+
+            serverDAO.oneJob(response -> {
+                Log.d(TAG, "OneJob:"+response);
+                applications.add(new JobApplication(
+                        Integer.parseInt(parsedApplication[0]),
+                        parsedApplication[3],
+                        Integer.parseInt(parsedApplication[1]),
+                        response.split(Formatting.DELIMITER_1)[1]));
+                Log.d(TAG, ""+applications.get(0));
+                applicationAdapter = new ApplicationAdapter(context, applications);
+                rvApplications.setAdapter(applicationAdapter);
+            }, Integer.parseInt(parsedApplication[1]));
+
         }
+        Log.d(TAG,Arrays.toString(applications.toArray()));
+
+
+
     }
 
 

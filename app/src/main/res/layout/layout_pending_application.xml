@@ -5,6 +5,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageButton
+        android:id="@+id/btnRejectApplicant"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
+        android:background="@null"
+        android:scaleType="centerInside"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/btnViewProfile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/cancel_button_temp" />
+
+    <ImageButton
+        android:id="@+id/btnHireApplicant"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
+        android:background="@null"
+        android:scaleType="centerInside"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/btnRejectApplicant"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/save_button_temp" />
+
     <View
         android:id="@+id/vertical_line_applcation"
         android:layout_width="2dp"
@@ -32,10 +60,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.2" />
+        app:layout_constraintGuide_begin="160dp" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/txtApplicantName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -46,12 +74,25 @@
         app:layout_constraintStart_toEndOf="@+id/vertical_line_applcation"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/txtApplicantJob"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-light"
+        android:text="Job:"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/vertical_line_applcation"
+        app:layout_constraintTop_toBottomOf="@+id/txtApplicantName" />
+
     <Button
         android:id="@+id/btnViewProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="View Profile"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        tools:layout_editor_absoluteY="82dp" />
+        app:layout_constraintStart_toStartOf="@+id/txtApplicantName"
+        app:layout_constraintTop_toBottomOf="@+id/txtApplicantJob" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

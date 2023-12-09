@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,10 +25,12 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
 
     Context context;
     ArrayList<JobApplication> applications;
+    UseServer serverDAO;
 
     public ApplicationAdapter(Context context, ArrayList<JobApplication> applications) {
         this.context = context;
         this.applications = applications;
+        serverDAO = UseServer.getInstance(context);
     }
 
     @NonNull
@@ -42,11 +45,34 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
 
         JobApplication myApplication = applications.get(position);
 
+        holder.txtApplicantName.setText(myApplication.getApplicantUsername());
+
+        holder.txtApplicantJob.setText(myApplication.getJobTitle());
+
         holder.btnViewProfile.setOnClickListener(v -> {
             Intent i = new Intent(context, UserProfile.class);
             i.putExtra("username", myApplication.getApplicantUsername());
+            context.startActivity(i);
         });
 
+        holder.btnHireApplicant.setOnClickListener(v -> {
+            serverDAO.updateApplication(response -> {
+                Log.d(TAG, "UpdateApplication:"+response);
+                int removedIDX = applications.indexOf(myApplication);
+                applications.remove(myApplication);
+                notifyItemRemoved(removedIDX);
+            }, myApplication.getJobID(), myApplication.getApplicantID(), "You're Hired!","accepted");
+        });
+
+        holder.btnRejectApplicant.setOnClickListener(v -> {
+            serverDAO.updateApplication(response -> {
+                Log.d(TAG, "UpdateApplication:"+response);
+                applications.remove(myApplication);
+                int removedIDX = applications.indexOf(myApplication);
+                applications.remove(myApplication);
+                notifyItemRemoved(removedIDX);
+            }, myApplication.getJobID(), myApplication.getApplicantID(), "You're Hired!","accepted");
+        });
     }
 
     @Override
@@ -57,14 +83,22 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
 
     // stores and recycles views as they are scrolled off screen
     class ViewHolder extends RecyclerView.ViewHolder {
+        TextView txtApplicantName;
+        TextView txtApplicantJob;
         Button btnViewProfile;
+        ImageButton btnHireApplicant;
+        ImageButton btnRejectApplicant;
 
         ViewHolder(View itemView)  {
             super(itemView);
 
             // --------------<<<   GET VIEWS   >>>-------------- \\
 
+            txtApplicantName = itemView.findViewById(R.id.txtApplicantName);
+            txtApplicantJob = itemView.findViewById(R.id.txtApplicantJob);
             btnViewProfile = itemView.findViewById(R.id.btnViewProfile);
+            btnHireApplicant = itemView.findViewById(R.id.btnHireApplicant);
+            btnRejectApplicant = itemView.findViewById(R.id.btnRejectApplicant);
 
             // --------------<<<   SET VIEW VISIBILITY   >>>-------------- \\
 
